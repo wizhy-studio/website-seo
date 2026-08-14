@@ -1,0 +1,40 @@
+# =========================================================
+# WIZHY STUDIO — ROOT .GITIGNORE
+# =========================================================
+
+# 1. Ignore private folders and environment secrets
+"0. Don't Touch"/
+0. Don't Touch/
+Don't Touch/
+"Don't Touch"/
+*.env
+.env
+.env.*
+*.secrets
+*.pem
+*.key
+id_rsa*
+
+# 2. Backups & Archive packages
+*.zip
+"can be deleted"/
+can be deleted/
+can_be_deleted/
+Archive/
+Archive_zip/
+wizhy-studio-v4_1-package/
+
+# 3. OS & System files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# 4. Log files
+*.log
+
+# 5. Node / temporary build folders
+node_modules/
+dist/
+build/

@@ -1,0 +1,36 @@
+# Supabase free-tier keep-alive ping
+#
+# WHY THIS EXISTS: Supabase's free tier automatically PAUSES a project
+# after 7 days with no activity. This tiny workflow pings the project's
+# REST endpoint every 3 days so it never goes idle long enough to pause —
+# it does NOT touch or modify any data, it's a harmless read-only ping.
+#
+# SETUP (Antigravity):
+# 1. Place this file at the repo root path: .github/workflows/supabase-keep-alive.yml
+# 2. In your GitHub repo → Settings → Secrets and variables → Actions, add:
+#      SUPABASE_URL       = https://YOUR-PROJECT-REF.supabase.co
+#      SUPABASE_ANON_KEY  = your project's public "anon" key (NOT the service_role key)
+# 3. Commit + push. GitHub will run this automatically on the schedule below
+#    even if no one opens the repo — that's the whole point.
+#
+# NOTE: This only prevents the free-tier auto-pause. It does NOT increase
+# the 500MB database storage limit or any other free-tier cap. If the
+# project outgrows the free tier, the real fix is upgrading to the
+# Supabase Pro plan (~$25/month), which removes pausing entirely.
+
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 8 */3 * *"   # every 3 days at 08:00 UTC
+  workflow_dispatch: {}        # allows manually triggering a run from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST endpoint
+        run: |
+          curl -s "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -o /dev/null
