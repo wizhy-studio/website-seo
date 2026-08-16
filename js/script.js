@@ -82,24 +82,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTop = document.getElementById('backToTop');
     if (!navbar || !scrollProgress || !backToTop) return;
 
-    const sections = ['home', 'services', 'why-us', 'process', 'testimonials', 'faq', 'contact']
+    const sections = ['home', 'services', 'why-us', 'process', 'faq', 'contact']
       .map(id => document.getElementById(id)).filter(Boolean);
     const navLinks = document.querySelectorAll('.nav-link');
 
     function updateScrollSpy() {
-      let currentId = sections[0] ? sections[0].id : '';
-      const scrollPos = window.scrollY + 140;
+      let currentId = 'home';
+      const scrollPos = window.scrollY + 180;
       sections.forEach(section => {
         if (scrollPos >= section.offsetTop) currentId = section.id;
       });
       navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + currentId);
+        const href = link.getAttribute('href');
+        link.classList.toggle('active', href === '#' + currentId);
       });
     }
 
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
     function onScroll() {
       const scrollY = window.scrollY;
-      navbar.classList.toggle('scrolled', scrollY > 40);
+      navbar.classList.toggle('scrolled', scrollY > 30);
       backToTop.classList.toggle('show', scrollY > 500);
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;

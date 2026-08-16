@@ -74,27 +74,32 @@
 <!-- ============ NAVBAR ============ -->
 <header class="navbar" id="navbar">
   <div class="container navbar__inner">
-    <a href="#home" class="brand">
-      <span class="brand__mark">W</span>
-      <span class="brand__text">Wizhy<em> Studio</em></span>
-    </a>
-
-    <nav class="nav-links" aria-label="Primary">
-      <a href="#home" class="nav-link">Home</a>
+    <!-- Left: Glassmorphic Capsule Nav -->
+    <nav class="nav-pill" id="navPill" aria-label="Primary Navigation">
+      <a href="#home" class="nav-link active">Home</a>
       <a href="#services" class="nav-link">Services</a>
       <a href="#why-us" class="nav-link">Why Us</a>
       <a href="#process" class="nav-link">Process</a>
-      <a href="#testimonials" class="nav-link">Testimonials</a>
       <a href="#faq" class="nav-link">FAQ</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
 
+    <!-- Center: Brand Logo & Name -->
+    <a href="#home" class="brand brand--center">
+      <span class="brand__mark">W</span>
+      <span class="brand__text">Wizhy<em> Studio</em></span>
+    </a>
+
+    <!-- Right: Glassmorphic Search Pill & Controls -->
     <div class="navbar__actions">
+      <a href="#seo-audit" class="nav-search-pill" aria-label="Run free SEO audit or search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Free SEO Audit</span>
+      </a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
       </button>
-      <a href="#contact" class="btn btn--primary btn--sm">Get Free Quote</a>
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -110,7 +115,7 @@
   <a href="#testimonials" class="mobile-link">Testimonials</a>
   <a href="#faq" class="mobile-link">FAQ</a>
   <a href="#contact" class="mobile-link">Contact</a>
-  <a href="#contact" class="btn btn--primary btn--block">Get Free Quote</a>
+  <a href="#seo-audit" class="btn btn--primary btn--block">Run Free Audit</a>
 </div>
 
 <main id="main-content">
