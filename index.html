@@ -90,19 +90,38 @@
       <span class="brand__text">Wizhy<em> Studio</em></span>
     </a>
 
-    <!-- Right: Glassmorphic Search Pill & Controls -->
+    <!-- Right: Search Button + Free SEO Audit Button + Controls -->
     <div class="navbar__actions">
-      <a href="#seo-audit" class="nav-search-pill" aria-label="Run free SEO audit or search">
+      <a href="#seo-audit" class="nav-search-btn" aria-label="Search and Instant SEO Audit">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <span>Free SEO Audit</span>
+        <span class="nav-search-btn__text">Search</span>
       </a>
+
+      <a href="#seo-audit" class="nav-audit-pill btn btn--primary btn--sm" aria-label="Run Free SEO Audit">
+        <span>Free SEO Audit</span>
+        <span class="btn__arrow">⚡</span>
+      </a>
+
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
       </button>
+
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
+    </div>
+  </div>
+
+  <!-- Mobile Quick Jump Bar (Visible on mobile/tablet for instant 1-tap navigation) -->
+  <div class="mobile-quick-bar" id="mobileQuickBar" aria-label="Mobile Quick Jump">
+    <div class="container mobile-quick-bar__inner">
+      <a href="#seo-audit" class="mobile-quick-chip mobile-quick-chip--highlight">⚡ Free Audit</a>
+      <a href="#services" class="mobile-quick-chip">Services</a>
+      <a href="#why-us" class="mobile-quick-chip">Why Us</a>
+      <a href="#process" class="mobile-quick-chip">Process</a>
+      <a href="#faq" class="mobile-quick-chip">FAQ</a>
+      <a href="#contact" class="mobile-quick-chip">Contact</a>
     </div>
   </div>
 </header>
@@ -115,7 +134,7 @@
   <a href="#testimonials" class="mobile-link">Testimonials</a>
   <a href="#faq" class="mobile-link">FAQ</a>
   <a href="#contact" class="mobile-link">Contact</a>
-  <a href="#seo-audit" class="btn btn--primary btn--block">Run Free Audit</a>
+  <a href="#seo-audit" class="btn btn--primary btn--block">Run Free Audit ⚡</a>
 </div>
 
 <main id="main-content">
@@ -524,7 +543,15 @@
           </div>
         </div>
       </div>
-      <div class="testimonial-dots" id="testimonialDots"></div>
+      <div class="testimonial-nav">
+        <button class="slider-arrow slider-arrow--prev" id="prevTestimonial" aria-label="Previous testimonial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="testimonial-dots" id="testimonialDots"></div>
+        <button class="slider-arrow slider-arrow--next" id="nextTestimonial" aria-label="Next testimonial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>

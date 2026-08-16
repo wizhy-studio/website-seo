@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = ['home', 'services', 'why-us', 'process', 'faq', 'contact']
       .map(id => document.getElementById(id)).filter(Boolean);
     const navLinks = document.querySelectorAll('.nav-link');
+    const quickChips = document.querySelectorAll('.mobile-quick-chip:not(.mobile-quick-chip--highlight)');
 
     function updateScrollSpy() {
       let currentId = 'home';
@@ -95,6 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
       navLinks.forEach(link => {
         const href = link.getAttribute('href');
         link.classList.toggle('active', href === '#' + currentId);
+      });
+      quickChips.forEach(chip => {
+        const href = chip.getAttribute('href');
+        chip.style.borderColor = (href === '#' + currentId) ? 'var(--accent-1)' : '';
+        chip.style.color = (href === '#' + currentId) ? 'var(--accent-1)' : '';
       });
     }
 
@@ -292,22 +298,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- 12. Testimonial slider ---------- */
+  /* ---------- 12. Testimonial slider (with Prev/Next arrows & Touch Swipe) ---------- */
   safeRun('testimonial-slider', () => {
     const track = document.getElementById('testimonialTrack');
     const dotsWrap = document.getElementById('testimonialDots');
-    if (!track || !dotsWrap) return;
+    const prevBtn = document.getElementById('prevTestimonial');
+    const nextBtn = document.getElementById('nextTestimonial');
+    if (!track) return;
 
     const slides = track.children;
     let current = 0;
     let autoplayTimer;
 
-    for (let i = 0; i < slides.length; i++) {
-      const dot = document.createElement('span');
-      dot.className = 'dot' + (i === 0 ? ' active' : '');
-      dot.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(dot);
+    if (dotsWrap) {
+      dotsWrap.innerHTML = '';
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+      }
     }
-    const dots = dotsWrap.querySelectorAll('.dot');
+    const dots = dotsWrap ? dotsWrap.querySelectorAll('.dot') : [];
 
     function goTo(index) {
       current = (index + slides.length) % slides.length;
@@ -315,7 +327,15 @@ document.addEventListener('DOMContentLoaded', () => {
       dots.forEach((d, i) => d.classList.toggle('active', i === current));
     }
 
-    function startAutoplay() { autoplayTimer = setInterval(() => goTo(current + 1), 5000); }
+    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
+
+    function resetAutoplay() {
+      stopAutoplay();
+      startAutoplay();
+    }
+
+    function startAutoplay() { autoplayTimer = setInterval(() => goTo(current + 1), 6000); }
     function stopAutoplay() { clearInterval(autoplayTimer); }
     startAutoplay();
 
@@ -326,7 +346,10 @@ document.addEventListener('DOMContentLoaded', () => {
     track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
     track.addEventListener('touchend', (e) => {
       const diff = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(diff) > 50) goTo(current + (diff < 0 ? 1 : -1));
+      if (Math.abs(diff) > 40) {
+        goTo(current + (diff < 0 ? 1 : -1));
+        resetAutoplay();
+      }
     }, { passive: true });
   });
 
