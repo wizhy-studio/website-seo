@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const pct = parseInt(ring.getAttribute('data-pct'), 10) || 0;
       const fill = ring.querySelector('.fill');
       if (!fill) return;
-      const circumference = 301.59;
+      const circumference = 314.16;
       const offset = circumference - (pct / 100) * circumference;
       requestAnimationFrame(() => {
         fill.style.strokeDashoffset = String(offset);
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
      pattern as the v4.0 modules above.
   ========================================================= */
 
-  /* ---------- 15. Cookie consent banner ---------- */
+  /* ---------- 15. Cookie consent banner (Point 1: Show after scrolling past hero) ---------- */
   safeRun('cookie-consent', () => {
     const banner = document.getElementById('cookieBanner');
     if (!banner) return;
@@ -485,16 +485,25 @@ document.addEventListener('DOMContentLoaded', () => {
     try { stored = localStorage.getItem('wizhy-cookie-consent'); } catch (e) { stored = null; }
 
     if (!stored) {
-      setTimeout(() => banner.classList.add('show'), 1200);
+      let bannerShown = false;
+      function checkScroll() {
+        if (bannerShown) return;
+        const hero = document.getElementById('home');
+        const triggerPoint = hero ? (hero.offsetTop + hero.offsetHeight - 120) : 350;
+        if (window.scrollY > triggerPoint) {
+          bannerShown = true;
+          banner.classList.add('show');
+          window.removeEventListener('scroll', checkScroll);
+        }
+      }
+
+      window.addEventListener('scroll', checkScroll, { passive: true });
+      setTimeout(checkScroll, 600);
     }
 
     function setConsent(value) {
       try { localStorage.setItem('wizhy-cookie-consent', value); } catch (e) { /* ignore */ }
       banner.classList.remove('show');
-      /* TODO (Antigravity): if value === 'accepted', this is the hook point to
-         load Google Analytics / any marketing pixels. Keep them OUT of the
-         page entirely until this fires, to stay consent-compliant. e.g.:
-         if (value === 'accepted') { loadAnalyticsScript(); } */
       window.dispatchEvent(new CustomEvent('wizhy:cookie-consent', { detail: { value } }));
     }
 

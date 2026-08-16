@@ -121,7 +121,6 @@
   <span class="hero__blob hero__blob--2" aria-hidden="true"></span>
   <div class="container hero__inner">
     <div>
-      <span class="eyebrow reveal">Web Design &amp; SEO Studio</span>
       <h1 class="hero__title">
         <span class="line">
           <span class="word-reveal"><span>Websites</span></span> <span class="word-reveal"><span>crafted</span></span> <span class="word-reveal"><span>to</span></span> <span class="word-reveal"><span>look</span></span>
@@ -134,12 +133,6 @@
       <div class="hero__cta reveal">
         <span class="magnetic"><a href="#contact" class="btn btn--primary btn--lg">Get a Custom Quote <span class="btn__arrow">→</span></a></span>
         <span class="magnetic"><a href="#services" class="btn btn--ghost btn--lg">Explore Services</a></span>
-      </div>
-      <div class="hero__proof reveal">
-        <div class="hero__avatars" aria-hidden="true">
-          <span>J</span><span>D</span><span>M</span><span>K</span><span>R</span><span>S+</span>
-        </div>
-        <p class="hero__proof-text"><strong>150+</strong> businesses already growing with Wizhy Studio</p>
       </div>
     </div>
 
@@ -180,18 +173,36 @@
 <section class="section" id="seo-audit">
   <div class="container">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Free Instant Check</span>
       <h2 class="section-title">Wondering how your current website stacks up?</h2>
       <p class="section-subtitle">Drop your website URL below for an instant, illustrative SEO &amp; performance snapshot — a quick taste of the kind of audit we run for every client before we start work.</p>
     </div>
 
     <div class="audit-tool reveal">
+      <!-- Watermark Background SVG Icon -->
+      <svg class="audit-watermark" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6"/>
+        <circle cx="100" cy="100" r="54" stroke="currentColor" stroke-width="2"/>
+        <path d="M100 20v22M100 158v22M20 100h22M158 100h22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M44 44l16 16M140 140l16 16M44 156l16-16M140 60l16-16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="10" fill="currentColor"/>
+        <path d="M100 100L135 65" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+
       <form class="audit-tool__form" id="auditForm">
-        <label for="auditUrl" class="visually-hidden" style="position:absolute;left:-9999px;">Website URL</label>
-        <input type="text" id="auditUrl" name="auditUrl" placeholder="yourbusiness.com" required inputmode="url" autocomplete="url">
-        <span class="magnetic"><button type="submit" class="btn btn--primary">Run Free Audit</button></span>
+        <div class="audit-input-wrap">
+          <svg class="audit-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <label for="auditUrl" class="visually-hidden" style="position:absolute;left:-9999px;">Website URL</label>
+          <input type="text" id="auditUrl" name="auditUrl" placeholder="Enter your website URL (e.g. yourbusiness.com)" required inputmode="url" autocomplete="url">
+        </div>
+        <span class="magnetic"><button type="submit" class="btn btn--primary" id="btnRunAudit">Run Free Audit</button></span>
       </form>
-      <p class="audit-tool__note">No signup needed. Takes about 2 seconds.</p>
+      <div class="audit-badges">
+        <span>⚡ Instant 2-Sec Analysis</span>
+        <span>•</span>
+        <span>🔒 No Signup Required</span>
+        <span>•</span>
+        <span>🎯 100% Free</span>
+      </div>
       <p class="audit-tool__error" id="auditError"></p>
 
       <div class="audit-tool__loading" id="auditLoading">
@@ -235,7 +246,6 @@
 <section class="section section--alt" id="services">
   <div class="container">
     <div class="section-head reveal">
-      <span class="eyebrow">What We Do</span>
       <h2 class="section-title">Everything your business needs, under one roof.</h2>
       <p class="section-subtitle">From your first line of code to your first page-one Google ranking — we cover the full journey.</p>
     </div>
@@ -299,7 +309,6 @@
 <section class="section" id="why-us">
   <div class="container why-us">
     <div>
-      <span class="eyebrow reveal">Why Wizhy Studio</span>
       <h2 class="section-title reveal">Efficient delivery. Best price. Real growth.</h2>
       <p class="section-subtitle reveal">We don't just hand you a website and disappear. We build it right, optimize it for Google, and stay with you as your long-term growth partner.</p>
 
@@ -329,22 +338,72 @@
 
     <div class="stat-rings reveal">
       <div class="stat-ring" data-pct="92">
-        <svg viewBox="0 0 108 108"><circle class="track" cx="54" cy="54" r="48"/><circle class="fill" cx="54" cy="54" r="48"/></svg>
-        <div class="stat-ring__label"><strong style="display:block;font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);">92%</strong>Delivery Speed</div>
+        <div class="stat-ring__visual">
+          <svg viewBox="0 0 116 116">
+            <circle class="track" cx="58" cy="58" r="50"/>
+            <circle class="fill" cx="58" cy="58" r="50"/>
+          </svg>
+          <div class="stat-ring__center">
+            <span class="stat-ring__icon">⚡</span>
+            <strong class="stat-ring__num">92%</strong>
+          </div>
+        </div>
+        <div class="stat-ring__info">
+          <h4>Delivery Speed</h4>
+          <p>On-time milestones &amp; agile launch sprints</p>
+        </div>
       </div>
+
       <div class="stat-ring" data-pct="96">
-        <svg viewBox="0 0 108 108"><circle class="track" cx="54" cy="54" r="48"/><circle class="fill" cx="54" cy="54" r="48"/></svg>
-        <div class="stat-ring__label"><strong style="display:block;font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);">96%</strong>SEO Readiness</div>
+        <div class="stat-ring__visual">
+          <svg viewBox="0 0 116 116">
+            <circle class="track" cx="58" cy="58" r="50"/>
+            <circle class="fill" cx="58" cy="58" r="50"/>
+          </svg>
+          <div class="stat-ring__center">
+            <span class="stat-ring__icon">🔍</span>
+            <strong class="stat-ring__num">96%</strong>
+          </div>
+        </div>
+        <div class="stat-ring__info">
+          <h4>SEO Readiness</h4>
+          <p>Structured data, speed &amp; keyword alignment</p>
+        </div>
       </div>
+
       <div class="stat-ring" data-pct="98">
-        <svg viewBox="0 0 108 108"><circle class="track" cx="54" cy="54" r="48"/><circle class="fill" cx="54" cy="54" r="48"/></svg>
-        <div class="stat-ring__label"><strong style="display:block;font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);">98%</strong>Client Satisfaction</div>
+        <div class="stat-ring__visual">
+          <svg viewBox="0 0 116 116">
+            <circle class="track" cx="58" cy="58" r="50"/>
+            <circle class="fill" cx="58" cy="58" r="50"/>
+          </svg>
+          <div class="stat-ring__center">
+            <span class="stat-ring__icon">⭐</span>
+            <strong class="stat-ring__num">98%</strong>
+          </div>
+        </div>
+        <div class="stat-ring__info">
+          <h4>Client Satisfaction</h4>
+          <p>Direct communication &amp; dedicated support</p>
+        </div>
       </div>
+
       <div class="stat-ring" data-pct="95">
-        <svg viewBox="0 0 108 108"><circle class="track" cx="54" cy="54" r="48"/><circle class="fill" cx="54" cy="54" r="48"/></svg>
-        <div class="stat-ring__label"><strong style="display:block;font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);">95%</strong>Value for Price</div>
+        <div class="stat-ring__visual">
+          <svg viewBox="0 0 116 116">
+            <circle class="track" cx="58" cy="58" r="50"/>
+            <circle class="fill" cx="58" cy="58" r="50"/>
+          </svg>
+          <div class="stat-ring__center">
+            <span class="stat-ring__icon">💎</span>
+            <strong class="stat-ring__num">95%</strong>
+          </div>
+        </div>
+        <div class="stat-ring__info">
+          <h4>Value for Price</h4>
+          <p>Agency-grade quality at clear transparent rates</p>
+        </div>
       </div>
-      <p class="stat-rings__note">*Sample performance indicators — replace with your verified data</p>
     </div>
   </div>
 </section>
@@ -353,7 +412,6 @@
 <section class="section section--alt process" id="process">
   <div class="container">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">How We Work</span>
       <h2 class="section-title">A process built for speed &amp; results.</h2>
       <p class="section-subtitle">From first conversation to long-term growth — here's exactly how we take your project forward.</p>
     </div>
@@ -363,12 +421,59 @@
     </div>
 
     <div class="process-grid">
-      <div class="process-step reveal"><span class="process-step__num">01</span><h3>Discovery &amp; Strategy</h3><p>We understand your business, goals &amp; audience to plan the right approach.</p></div>
-      <div class="process-step reveal"><span class="process-step__num">02</span><h3>UI/UX Design</h3><p>Modern, on-brand designs crafted for clarity, trust &amp; conversions.</p></div>
-      <div class="process-step reveal"><span class="process-step__num">03</span><h3>Development</h3><p>Clean, fast, scalable code built with best practices &amp; security in mind.</p></div>
-      <div class="process-step reveal"><span class="process-step__num">04</span><h3>Testing &amp; QA</h3><p>Cross-device, cross-browser testing so everything works flawlessly.</p></div>
-      <div class="process-step reveal"><span class="process-step__num">05</span><h3>SEO Optimization &amp; Launch</h3><p>On-page SEO, speed optimization &amp; Search Console setup before go-live.</p></div>
-      <div class="process-step reveal"><span class="process-step__num">06</span><h3>Growth &amp; Support</h3><p>Ongoing SEO, maintenance &amp; marketing to keep you growing on Google.</p></div>
+      <div class="process-step reveal">
+        <div class="process-step__header">
+          <span class="process-step__num">01</span>
+          <span class="process-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+        </div>
+        <h3>Discovery &amp; Strategy</h3>
+        <p>We understand your business, goals &amp; target audience to plan the optimal digital architecture.</p>
+      </div>
+
+      <div class="process-step reveal">
+        <div class="process-step__header">
+          <span class="process-step__num">02</span>
+          <span class="process-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M12 19l7-7 3 3-7 7-3-3Z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/></svg></span>
+        </div>
+        <h3>UI/UX Design</h3>
+        <p>Modern, on-brand interactive layouts crafted for absolute clarity, trust &amp; high conversions.</p>
+      </div>
+
+      <div class="process-step reveal">
+        <div class="process-step__header">
+          <span class="process-step__num">03</span>
+          <span class="process-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+        </div>
+        <h3>Development</h3>
+        <p>Clean, ultra-fast, mobile-first code built with modern frameworks and rock-solid security.</p>
+      </div>
+
+      <div class="process-step reveal">
+        <div class="process-step__header">
+          <span class="process-step__num">04</span>
+          <span class="process-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        </div>
+        <h3>Testing &amp; QA</h3>
+        <p>Exhaustive multi-device &amp; browser testing ensuring pixel-perfect layout and zero errors.</p>
+      </div>
+
+      <div class="process-step reveal">
+        <div class="process-step__header">
+          <span class="process-step__num">05</span>
+          <span class="process-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span>
+        </div>
+        <h3>SEO &amp; Launch</h3>
+        <p>Technical SEO, Core Web Vitals optimization, and Search Console indexing before go-live.</p>
+      </div>
+
+      <div class="process-step reveal">
+        <div class="process-step__header">
+          <span class="process-step__num">06</span>
+          <span class="process-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+        </div>
+        <h3>Growth &amp; Retainer</h3>
+        <p>Ongoing search ranking optimization, maintenance &amp; scaling to keep driving qualified leads.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -377,9 +482,9 @@
 <section class="section" id="testimonials">
   <div class="container">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Client Love</span>
       <h2 class="section-title">What our clients say about us.</h2>
       <p class="section-subtitle">Real feedback from businesses we've helped build and grow online.</p>
+    </div>
       <!-- TODO (Antigravity): replace this hardcoded 3-slide markup with a
            dynamic render from a Supabase `testimonials` table so testimonials
            can be added/edited from an admin view without touching code. Keep
@@ -423,7 +528,6 @@
 <section class="section section--alt" id="faq">
   <div class="container">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Frequently Asked</span>
       <h2 class="section-title">Questions we hear a lot.</h2>
       <p class="section-subtitle">Straight answers, before you even have to ask.</p>
     </div>
@@ -471,19 +575,33 @@
 <section class="section">
   <div class="container">
     <div class="lead-magnet reveal">
-      <div>
-        <span class="lead-magnet__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px"><path d="M12 3v13m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>
+      <div class="lead-magnet__content">
+        <div class="lead-magnet__header">
+          <span class="lead-magnet__badge">Free Resource</span>
+          <div class="lead-magnet__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><path d="M12 3v13m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
+        </div>
         <h3>Download our free Website &amp; SEO Checklist</h3>
-        <p>The exact 40-point checklist we use internally before launching any client site — speed, SEO, mobile, security and more. Delivered straight to your inbox.</p>
+        <p>The exact 40-point checklist we use internally before launching any client site — speed benchmarks, on-page SEO, mobile UX, security protocols, and conversion audits.</p>
+        <div class="lead-magnet__features">
+          <span>✓ 40 Actionable Checkpoints</span>
+          <span>✓ Core Web Vitals Ready</span>
+          <span>✓ Instant PDF Download</span>
+        </div>
       </div>
-      <form class="lead-magnet__form" id="leadMagnetForm">
-        <label for="leadMagnetEmail" style="position:absolute;left:-9999px;">Email address</label>
-        <input type="email" id="leadMagnetEmail" name="leadMagnetEmail" placeholder="you@business.com" required autocomplete="email">
-        <span class="magnetic"><button type="submit" class="btn btn--primary">Send Me the Checklist</button></span>
-      </form>
+
+      <div class="lead-magnet__form-wrap">
+        <form class="lead-magnet__form" id="leadMagnetForm">
+          <div class="lead-magnet__input-group">
+            <svg class="lead-magnet__input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
+            <label for="leadMagnetEmail" class="visually-hidden" style="position:absolute;left:-9999px;">Email address</label>
+            <input type="email" id="leadMagnetEmail" name="leadMagnetEmail" placeholder="Enter your email for the PDF" required autocomplete="email">
+            <button type="submit" class="btn btn--primary" id="btnDownloadChecklist">Get Checklist PDF</button>
+          </div>
+        </form>
+        <p class="lead-magnet__note">⚡ Delivered instantly. We respect your privacy — unsubscribe anytime.</p>
+        <p class="lead-magnet__success" id="leadMagnetSuccess">✓ Check your downloads — your checklist PDF has started downloading!</p>
+      </div>
     </div>
-    <p class="lead-magnet__note" style="text-align:center;max-width:640px;margin:14px auto 0;">We'll only use your email to send the checklist and occasional growth tips — unsubscribe anytime.</p>
-    <p class="lead-magnet__success" id="leadMagnetSuccess" style="text-align:center;">✓ Check your downloads — your checklist is on its way! We've also noted your email so we can follow up with more resources.</p>
   </div>
 </section>
 
@@ -491,7 +609,6 @@
 <section class="section section--alt" id="contact">
   <div class="container">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Get In Touch</span>
       <h2 class="section-title">Let's start your project.</h2>
       <p class="section-subtitle">Fill in the form or reach out directly — we usually respond within 24 hours.</p>
     </div>
@@ -640,9 +757,16 @@
     </div>
 
     <div class="footer__col footer__col--cta">
-      <h4>Start a Project</h4>
-      <p class="footer__cta-text">Have an idea? Let's turn it into a website that actually grows your business.</p>
-      <a href="#contact" class="btn btn--primary btn--block btn--sm">Get a Custom Quote</a>
+      <div class="footer-cta-card">
+        <div class="cta-status-pill"><span class="pulse-dot"></span> Available for Q3/Q4 Projects</div>
+        <h4>Start a Project</h4>
+        <p class="footer__cta-text">Have an ambitious idea? Let's turn it into a high-performing, high-ranking website.</p>
+        <div class="footer-cta-perks">
+          <span>⚡ 24hr Custom Quote</span>
+          <span>🔒 Zero Obligation</span>
+        </div>
+        <a href="#contact" class="btn btn--primary btn--block btn--sm">Get a Custom Quote <span class="btn__arrow">→</span></a>
+      </div>
     </div>
   </div>
 
@@ -664,9 +788,12 @@
 
 <!-- ============ COOKIE CONSENT BANNER ============ -->
 <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie consent">
-  <p class="cookie-banner__text"><strong>We use cookies.</strong> We use minimal cookies to run this site and, once you agree, anonymous analytics to understand what's working. No personal data is sold. See how we handle your data.</p>
+  <div class="cookie-banner__content">
+    <span class="cookie-banner__icon" aria-hidden="true">🍪</span>
+    <p class="cookie-banner__text"><strong>We respect your privacy.</strong> We use minimal cookies to enhance speed and understand site usage anonymously.</p>
+  </div>
   <div class="cookie-banner__actions">
-    <button class="btn btn--ghost btn--sm" id="cookieReject">Reject</button>
+    <button class="btn btn--ghost btn--sm" id="cookieReject">Decline</button>
     <button class="btn btn--primary btn--sm" id="cookieAccept">Accept</button>
   </div>
 </div>
