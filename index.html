@@ -435,8 +435,21 @@
       <p class="section-subtitle">From first conversation to long-term growth — here's exactly how we take your project forward.</p>
     </div>
 
-    <div class="process__line-wrap" id="processLineWrap">
-      <div class="process__line-fill" id="processLineFill"></div>
+    <!-- Interactive Stepper Journey Tracker (Distinct from top bar) -->
+    <div class="process-journey" aria-hidden="true">
+      <div class="process-journey__nodes">
+        <span class="process-journey__node active" data-step="1">01 <span>Discovery</span></span>
+        <span class="process-journey__connector"></span>
+        <span class="process-journey__node" data-step="2">02 <span>UI/UX</span></span>
+        <span class="process-journey__connector"></span>
+        <span class="process-journey__node" data-step="3">03 <span>Dev</span></span>
+        <span class="process-journey__connector"></span>
+        <span class="process-journey__node" data-step="4">04 <span>QA</span></span>
+        <span class="process-journey__connector"></span>
+        <span class="process-journey__node" data-step="5">05 <span>SEO</span></span>
+        <span class="process-journey__connector"></span>
+        <span class="process-journey__node" data-step="6">06 <span>Scale</span></span>
+      </div>
     </div>
 
     <div class="process-grid">
@@ -633,7 +646,7 @@
 
     <div class="contact-wrap reveal" style="max-width: 780px; margin: 0 auto;">
       <div class="glass-card contact-form">
-        <h3>Request Your Free Quote</h3>
+        <h3>Request Your <span class="highlight-free">Free</span> Quote</h3>
         <form id="contactForm" novalidate>
           <div class="form-row">
             <div class="form-group">
@@ -725,37 +738,25 @@
       <p class="newsletter-success" id="newsletterSuccess">✓ You're subscribed — welcome aboard!</p>
     </div>
 
-    <!-- Col 2: Direct Contact Details (Point 4) -->
+    <!-- Col 2: Direct Contact Details (1 Single Line Inline per Item) -->
     <div class="footer__col footer__col--contact">
       <h4>Contact Details</h4>
       <div class="footer-contact-list">
         <a class="footer-contact-item" href="mailto:techwizhy@gmail.com">
           <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg></span>
-          <div>
-            <strong>Email Us</strong>
-            <span>techwizhy@gmail.com</span>
-          </div>
+          <span><strong>Email:</strong> techwizhy@gmail.com</span>
         </a>
         <a class="footer-contact-item" href="https://wa.me/910000000000" target="_blank" rel="noopener">
           <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.5 8.5 0 0 1-4-1L3 20l1.2-5A8.4 8.4 0 1 1 21 11.5Z"/></svg></span>
-          <div>
-            <strong>WhatsApp &amp; Phone</strong>
-            <span>+91 00000 00000</span>
-          </div>
+          <span><strong>WhatsApp &amp; Phone:</strong> +91 00000 00000</span>
         </a>
         <div class="footer-contact-item">
           <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-          <div>
-            <strong>Location</strong>
-            <span>Bengaluru, India (Serving Worldwide)</span>
-          </div>
+          <span><strong>Location:</strong> Chennai, India</span>
         </div>
         <div class="footer-contact-item">
           <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-          <div>
-            <strong>Business Hours</strong>
-            <span>Mon – Sat, 10 AM – 7 PM IST</span>
-          </div>
+          <span><strong>Hours:</strong> Mon – Sat, 10 AM – 7 PM IST</span>
         </div>
       </div>
     </div>

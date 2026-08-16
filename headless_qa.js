@@ -7,7 +7,7 @@ const chromePath = fs.existsSync('C:\\Program Files\\Google\\Chrome\\Application
   ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
   : 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 
-function captureCDP(port, width, height, isMobile, outPath, scrollToY = 0) {
+function captureCDP(port, width, height, isMobile, outPath, scrollToY = 0, evalCode = '') {
   return new Promise((resolve) => {
     http.get(`http://localhost:${port}/json`, (res) => {
       let data = '';
@@ -32,7 +32,15 @@ function captureCDP(port, width, height, isMobile, outPath, scrollToY = 0) {
             }
           }));
 
-          if (scrollToY > 0) {
+          if (evalCode) {
+            ws.send(JSON.stringify({
+              id: msgId++,
+              method: 'Runtime.evaluate',
+              params: { expression: evalCode }
+            }));
+          }
+
+          if (scrollToY >= 0) {
             ws.send(JSON.stringify({
               id: msgId++,
               method: 'Runtime.evaluate',
@@ -107,8 +115,7 @@ async function runQA() {
               params: {
                 expression: `JSON.stringify({
                   services: document.getElementById('services')?.offsetTop || 0,
-                  testimonials: document.getElementById('testimonials')?.offsetTop || 0,
-                  leadMagnet: document.getElementById('leadMagnetForm')?.closest('section')?.offsetTop || 0,
+                  process: document.getElementById('process')?.offsetTop || 0,
                   contact: document.getElementById('contact')?.offsetTop || 0,
                   footer: document.querySelector('.footer')?.offsetTop || 0
                 })`,
@@ -130,22 +137,25 @@ async function runQA() {
 
     console.log('Section Offsets:', offsets);
 
-    // 1. Desktop Services Screenshot
-    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_services.png'), (offsets.services || 800) - 80);
+    // 1. Desktop Top Banner (Pantry Floating Capsules)
+    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_desktop.png'), 0);
 
-    // 2. Desktop Testimonials Screenshot
-    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_testimonials.png'), (offsets.testimonials || 2600) - 80);
+    // 2. Process Section (Interactive Stepper Tracker)
+    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_process.png'), (offsets.process || 3200) - 80);
 
-    // 3. Desktop Lead Magnet Screenshot
-    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_leadmagnet.png'), (offsets.leadMagnet || 3600) - 80);
+    // 3. Contact Section (Highlighted Free Quote)
+    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_contact.png'), (offsets.contact || 6000) - 80);
 
-    // 4. Desktop Footer Screenshot
-    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_footer.png'), (offsets.footer || 4600) - 80);
+    // 4. Footer Section (1-Line Contact Details & Chennai Location)
+    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_footer.png'), (offsets.footer || 7000) - 80);
 
-    // 5. Mobile Screenshot
-    await captureCDP(9228, 390, 844, true, path.resolve(__dirname, 'screenshot_mobile.png'), 0);
+    // 5. Dark Mode Capture (Full dark theme palette & dark footer)
+    await captureCDP(9228, 1440, 900, false, path.resolve(__dirname, 'screenshot_darkmode.png'), (offsets.footer || 7000) - 80, `document.documentElement.setAttribute('data-theme', 'dark');`);
 
-    // 6. Tablet Screenshot
+    // 6. Mobile Screenshot
+    await captureCDP(9228, 390, 844, true, path.resolve(__dirname, 'screenshot_mobile.png'), 0, `document.documentElement.setAttribute('data-theme', 'light');`);
+
+    // 7. Tablet Screenshot
     await captureCDP(9228, 768, 1024, true, path.resolve(__dirname, 'screenshot_tablet.png'), 0);
 
     child.kill();

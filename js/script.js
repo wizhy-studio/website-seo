@@ -276,28 +276,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ---------- 11. Process section scroll-linked progress line ---------- */
-  safeRun('process-scroll-line', () => {
-    const wrap = document.getElementById('processLineWrap');
-    const fill = document.getElementById('processLineFill');
-    const section = document.getElementById('process');
-    if (!wrap || !fill || !section) return;
+  /* ---------- 11. Process section interactive stepper nodes ---------- */
+  safeRun('process-stepper-tracker', () => {
+    const nodes = document.querySelectorAll('.process-journey__node');
+    const steps = document.querySelectorAll('.process-step');
+    if (!nodes.length) return;
 
-    function update() {
-      const rect = section.getBoundingClientRect();
-      const viewportH = window.innerHeight;
-      const total = rect.height + viewportH;
-      const scrolled = viewportH - rect.top;
-      let ratio = total > 0 ? scrolled / total : 0;
-      ratio = Math.max(0, Math.min(1, ratio));
-      fill.style.width = (ratio * 100) + '%';
+    function updateJourney() {
+      const viewportMid = window.innerHeight * 0.55;
+      let activeIndex = 0;
+      steps.forEach((step, idx) => {
+        const rect = step.getBoundingClientRect();
+        if (rect.top <= viewportMid) {
+          activeIndex = idx;
+        }
+      });
+      nodes.forEach((node, idx) => {
+        node.classList.toggle('active', idx <= activeIndex);
+      });
     }
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+
+    window.addEventListener('scroll', updateJourney, { passive: true });
+    updateJourney();
+
+    nodes.forEach((node, idx) => {
+      node.style.cursor = 'pointer';
+      node.addEventListener('click', () => {
+        if (steps[idx]) {
+          const offset = 100;
+          const top = steps[idx].getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
   });
 
-  /* ---------- 12. Testimonial slider ---------- */
   /* ---------- 12. Testimonial slider (with Prev/Next arrows & Touch Swipe) ---------- */
   safeRun('testimonial-slider', () => {
     const track = document.getElementById('testimonialTrack');
@@ -373,21 +386,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmit = document.getElementById('btnSubmitContact');
     if (!form || !formSuccess) return;
 
-    const PHONE_BLOCKLIST = ['0000000000', '1111111111', '1234567890', '9999999999'];
+    // Strict Indian Mobile Validation Rules
+    function validateIndianMobile(phoneStr) {
+      if (!phoneStr || !phoneStr.trim()) {
+        return { valid: false, message: 'Please enter your mobile number' };
+      }
+      let digits = phoneStr.replace(/\D/g, '');
+      if (digits.length === 12 && digits.startsWith('91')) {
+        digits = digits.slice(2);
+      } else if (digits.length === 11 && digits.startsWith('0')) {
+        digits = digits.slice(1);
+      }
+      if (digits.length !== 10) {
+        return { valid: false, message: 'Mobile number must be exactly 10 digits' };
+      }
+      if (!/^[6-9]/.test(digits)) {
+        return { valid: false, message: 'Must start with 6, 7, 8, or 9 (valid Indian mobile number)' };
+      }
+      if (/^(\d)\1{9}$/.test(digits)) {
+        return { valid: false, message: 'Invalid number: all digits cannot be identical' };
+      }
+      const SEQUENTIAL_PATTERNS = [
+        '0123456789', '1234567890', '2345678901', '3456789012',
+        '4567890123', '5678901234', '6789012345', '7890123456',
+        '8901234567', '9012345678', '9876543210', '0987654321',
+        '8765432109', '7654321098'
+      ];
+      if (SEQUENTIAL_PATTERNS.includes(digits)) {
+        return { valid: false, message: 'Invalid number: sequential number patterns not allowed' };
+      }
+      return { valid: true, cleanNumber: digits };
+    }
 
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    function validateEmail(emailStr) {
+      if (!emailStr || !emailStr.trim()) {
+        return { valid: false, message: 'Please enter your email address' };
+      }
+      const trimmed = emailStr.trim();
+      if (!trimmed.includes('@')) {
+        return { valid: false, message: "Email address must contain '@'" };
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+        return { valid: false, message: 'Please enter a valid email address (e.g. name@company.com)' };
+      }
+      return { valid: true, cleanEmail: trimmed };
     }
-    function isValidPhone(value) {
-      if (!value.trim()) return true; // phone is optional
-      const digits = value.replace(/\D/g, '');
-      const core = digits.length > 10 ? digits.slice(-10) : digits;
-      if (core.length !== 10) return false;
-      if (PHONE_BLOCKLIST.includes(core)) return false;
-      if (/^(\d)\1{9}$/.test(core)) return false;
-      return true;
+
+    function setFieldState(group, valid, customMsg) {
+      if (!group) return;
+      group.classList.toggle('invalid', !valid);
+      if (customMsg) {
+        const errEl = group.querySelector('.error-msg');
+        if (errEl) errEl.textContent = customMsg;
+      }
     }
-    function setFieldState(group, valid) { group.classList.toggle('invalid', !valid); }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -402,24 +454,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let valid = true;
 
+      // 1. Name Validation
       const nameValid = name.value.trim().length >= 2;
-      setFieldState(name.closest('.form-group'), nameValid);
+      setFieldState(name.closest('.form-group'), nameValid, nameValid ? '' : 'Please enter your full name');
       valid = valid && nameValid;
 
-      const emailValid = isValidEmail(email.value);
-      setFieldState(email.closest('.form-group'), emailValid);
-      valid = valid && emailValid;
+      // 2. Email Validation
+      const emailRes = validateEmail(email.value);
+      setFieldState(email.closest('.form-group'), emailRes.valid, emailRes.valid ? '' : emailRes.message);
+      valid = valid && emailRes.valid;
 
-      const phoneValid = isValidPhone(phone.value);
-      setFieldState(phone.closest('.form-group'), phoneValid);
-      valid = valid && phoneValid;
+      // 3. Mobile Number Validation
+      const phoneRes = validateIndianMobile(phone.value);
+      setFieldState(phone.closest('.form-group'), phoneRes.valid, phoneRes.valid ? '' : phoneRes.message);
+      valid = valid && phoneRes.valid;
 
+      // 4. Service Selection
       const serviceValid = service.value.trim().length > 0;
-      setFieldState(service.closest('.form-group'), serviceValid);
+      setFieldState(service.closest('.form-group'), serviceValid, serviceValid ? '' : 'Please select a service');
       valid = valid && serviceValid;
 
-      const messageValid = message.value.trim().length >= 10;
-      setFieldState(message.closest('.form-group'), messageValid);
+      // 5. Message
+      const messageValid = message.value.trim().length >= 8;
+      setFieldState(message.closest('.form-group'), messageValid, messageValid ? '' : 'Please share a few details about your project');
       valid = valid && messageValid;
 
       if (!valid) {
