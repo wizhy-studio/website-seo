@@ -127,24 +127,31 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- 5. Mobile menu ---------- */
+  /* ---------- 5. Mobile menu & Drawer ---------- */
   safeRun('mobile-menu', () => {
     const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (!hamburger || !mobileMenu) return;
+    const mobileMenu = document.getElementById('mobileMenu') || document.getElementById('mobileDrawer');
+    const drawerClose = document.getElementById('drawerClose');
+    if (!hamburger) return;
 
     function closeMobileMenu() {
       hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
+      if (mobileMenu) mobileMenu.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
     }
 
     hamburger.addEventListener('click', () => {
+      if (!mobileMenu) return;
       const isOpen = mobileMenu.classList.toggle('open');
       hamburger.classList.toggle('open', isOpen);
       hamburger.setAttribute('aria-expanded', String(isOpen));
     });
 
-    document.querySelectorAll('.mobile-link, .mobile-menu .btn').forEach(link => {
+    if (drawerClose) {
+      drawerClose.addEventListener('click', closeMobileMenu);
+    }
+
+    document.querySelectorAll('.mobile-link, .drawer-link, .mobile-menu .btn, .mobile-drawer .btn').forEach(link => {
       link.addEventListener('click', closeMobileMenu);
     });
   });
@@ -163,6 +170,38 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top, behavior: 'smooth' });
       });
     });
+
+    const scrollTopBtn = document.getElementById('scrollTop');
+    if (scrollTopBtn) {
+      scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      window.addEventListener('scroll', () => {
+        scrollTopBtn.classList.toggle('show', window.scrollY > 400);
+      }, { passive: true });
+    }
+  });
+
+  /* ---------- Legal Table of Contents ScrollSpy ---------- */
+  safeRun('legal-toc', () => {
+    const tocLinks = document.querySelectorAll('.legal-nav-link');
+    if (!tocLinks.length) return;
+    const headings = Array.from(tocLinks).map(link => {
+      const id = link.getAttribute('href')?.replace('#', '');
+      return id ? document.getElementById(id) : null;
+    }).filter(Boolean);
+
+    function onLegalScroll() {
+      const scrollPos = window.scrollY + 140;
+      let activeId = '';
+      headings.forEach(h => {
+        if (scrollPos >= h.offsetTop) activeId = h.id;
+      });
+      if (activeId) {
+        tocLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + activeId);
+        });
+      }
+    }
+    window.addEventListener('scroll', onLegalScroll, { passive: true });
   });
 
   /* ---------- 7. Magnetic buttons ---------- */
