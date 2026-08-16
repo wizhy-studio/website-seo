@@ -673,7 +673,77 @@ html[data-theme="dark"] .highlight-free {
 .cta-band .btn--primary { background: var(--cta-text); color: var(--cta-bg); box-shadow: 0 14px 34px rgba(0,0,0,.2); }
 .cta-band .btn--primary:hover { background: #fff; }
 
-/* ---------- Contact ---------- */
+/* ---------- Contact & NCOA-Style Background Shape Geometry ---------- */
+.quote-shape-wrap {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+/* Outer overlapping organic shape accent (Right Leaf/Arch shape from NCOA design) */
+.quote-shape-bg-accent {
+  position: absolute;
+  top: -30px;
+  right: -50px;
+  width: 260px;
+  height: 380px;
+  border-radius: 120px 240px 100px 180px;
+  background: radial-gradient(circle at 65% 35%, rgba(190, 85, 45, 0.12) 0%, rgba(217, 131, 36, 0.04) 70%, transparent 100%);
+  border: 1.5px solid rgba(190, 85, 45, 0.15);
+  transform: rotate(12deg);
+  pointer-events: none;
+  z-index: 0;
+  transition: all 0.4s ease;
+}
+
+/* Subtle bottom-left organic shape accent */
+.quote-shape-bg-left {
+  position: absolute;
+  bottom: -25px;
+  left: -40px;
+  width: 200px;
+  height: 260px;
+  border-radius: 180px 90px 160px 120px;
+  background: radial-gradient(circle at 30% 70%, rgba(190, 85, 45, 0.08) 0%, transparent 70%);
+  border: 1.5px solid rgba(190, 85, 45, 0.10);
+  transform: rotate(-8deg);
+  pointer-events: none;
+  z-index: 0;
+  transition: all 0.4s ease;
+}
+
+/* Main Form Card with Signature NCOA Asymmetrical Curved Geometry */
+.quote-shape-card {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 1.5px solid rgba(190, 85, 45, 0.22);
+  border-radius: 36px clamp(70px, 12vw, 150px) 36px 36px !important;
+  padding: 46px 42px;
+  box-shadow: 0 24px 60px -12px rgba(44, 30, 20, 0.08), 0 4px 20px rgba(0, 0, 0, 0.03);
+  backdrop-filter: blur(16px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dark Mode Appearance - crisp borders & warm atmospheric ambient glow */
+html[data-theme="dark"] .quote-shape-bg-accent {
+  background: radial-gradient(circle at 65% 35%, rgba(255, 122, 69, 0.18) 0%, rgba(255, 159, 28, 0.05) 70%, transparent 100%);
+  border: 1.5px solid rgba(255, 122, 69, 0.28);
+  box-shadow: 0 0 35px -8px rgba(255, 122, 69, 0.15);
+}
+
+html[data-theme="dark"] .quote-shape-bg-left {
+  background: radial-gradient(circle at 30% 70%, rgba(255, 122, 69, 0.12) 0%, transparent 70%);
+  border: 1.5px solid rgba(255, 122, 69, 0.18);
+}
+
+html[data-theme="dark"] .quote-shape-card {
+  background: rgba(18, 24, 36, 0.94);
+  border: 1.5px solid rgba(255, 122, 69, 0.32);
+  box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(255, 122, 69, 0.16);
+}
+
 .contact-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: 32px; align-items: start; }
 .glass-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 34px; }
 .contact-info h3, .contact-form h3 { font-size: 1.25rem; margin-bottom: 26px; }

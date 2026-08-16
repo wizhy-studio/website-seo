@@ -73,7 +73,7 @@
       <a href="index.html#why-us" class="mobile-quick-chip">Why Us</a>
       <a href="index.html#process" class="mobile-quick-chip">Process</a>
       <a href="index.html#faq" class="mobile-quick-chip">FAQ</a>
-      <a href="contact.html" class="mobile-quick-chip${activePage === 'contact' ? ' mobile-quick-chip--highlight' : ''}">Contact</a>
+      <a href="contact.html" class="mobile-quick-chip mobile-quick-chip--highlight">Contact</a>
     </div>
   </div>
 </header>
@@ -109,12 +109,16 @@
       <div class="container">
         <div class="contact-page-layout">
           
-          <!-- Left: Contact Form Card -->
-          <div class="contact-form-wrap" style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg,24px);padding:40px 36px;box-shadow:var(--shadow-card);">
-            <h2 class="h3" style="margin-bottom:8px;">Request Your <span class="quote-accent-free">Free</span> Quote</h2>
-            <p style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:28px;">
-              Fill in your project requirements below — our senior digital architects will review and provide a detailed proposal.
-            </p>
+          <!-- Left: Contact Form Card with NCOA Signature Shape -->
+          <div class="contact-form-wrap quote-shape-wrap">
+            <div class="quote-shape-bg-accent" aria-hidden="true"></div>
+            <div class="quote-shape-bg-left" aria-hidden="true"></div>
+
+            <div class="contact-form quote-shape-card">
+              <h2 class="h3" style="margin-bottom:8px;">Request Your <span class="quote-accent-free">Free</span> Quote</h2>
+              <p style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:28px;">
+                Fill in your project requirements below — our senior digital architects will review and provide a detailed proposal.
+              </p>
 
             <form id="contactForm" novalidate>
               <div class="form-row">
