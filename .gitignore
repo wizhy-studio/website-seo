@@ -17,14 +17,19 @@ id_rsa*
 
 # 2. Backups & Archive Packages (Kept locally on Windows only)
 *.zip
+Archive/
+Archive/**
+Archive_zip/
+temp_files/
+temp_files/**
 "can be deleted"/
 can be deleted/
 can_be_deleted/
-Archive/
-Archive_zip/
 wizhy-studio-v4_1-package/
 
 # 3. Local QA Screenshots & Temporary Visual Captures
+temp_files/
+temp_files/**
 screenshot_*.png
 screenshot_*.jpg
 qa_*.png
