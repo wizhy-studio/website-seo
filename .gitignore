@@ -1,8 +1,8 @@
 # =========================================================
-# WIZHY STUDIO — ROOT .GITIGNORE
+# WIZHY STUDIO — PRODUCTION .GITIGNORE
 # =========================================================
 
-# 1. Ignore private folders and environment secrets
+# 1. Private Folders & Environment Secrets
 "0. Don't Touch"/
 0. Don't Touch/
 Don't Touch/
@@ -15,7 +15,7 @@ Don't Touch/
 *.key
 id_rsa*
 
-# 2. Backups & Archive packages
+# 2. Backups & Archive Packages (Kept locally on Windows only)
 *.zip
 "can be deleted"/
 can be deleted/
@@ -24,17 +24,39 @@ Archive/
 Archive_zip/
 wizhy-studio-v4_1-package/
 
-# 3. OS & System files
+# 3. Local QA Screenshots & Temporary Visual Captures
+screenshot_*.png
+screenshot_*.jpg
+qa_*.png
+qa_*.jpg
+/*.png
+/*.jpg
+/*.jpeg
+!assets/
+!assets/**
+
+# 4. Local Utility / Automation / Backup Scripts
+*.ps1
+headless_qa.js
+qa_*.js
+sync_*.js
+test_*.js
+make_*.js
+clean_*.js
+
+# 5. Local Summary & Bundle Markdown Dumps
+wizhy-studio-*.md
+summary_*.md
+
+# 6. OS & System Files
 .DS_Store
 Thumbs.db
 desktop.ini
 .vscode/
 .idea/
 
-# 4. Log files
+# 7. Log files & Runtime Caches
 *.log
-
-# 5. Node / temporary build folders
 node_modules/
 dist/
 build/
