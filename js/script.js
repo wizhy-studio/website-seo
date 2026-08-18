@@ -248,39 +248,120 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- 9. Animated stat counters (hero orbit) ---------- */
-  safeRun('stat-counters', () => {
-    const counters = document.querySelectorAll('.orbit__core .num');
-    if (!counters.length) return;
-    let started = false;
+   /* ---------- 9. Hero Glass Console: Lighthouse ring animation & interactive audit ---------- */
+  safeRun('hero-console-interactions', () => {
+    const consoleEl = document.getElementById('heroConsole');
+    const heroVisual = document.getElementById('heroVisual');
+    const auditForm = document.getElementById('heroAuditForm');
+    const auditInput = document.getElementById('heroAuditInput');
+    const auditStatus = document.getElementById('heroAuditStatus');
+    const scanFill = document.getElementById('heroScanFill');
+    const scanText = document.getElementById('heroScanText');
+    const lhDials = document.querySelectorAll('.hero-lh-dial');
 
-    function animate() {
-      if (started) return;
-      started = true;
-      counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-count'), 10) || 0;
-        const duration = 1500;
-        const startTime = performance.now();
-        function tick(now) {
-          const progress = Math.min((now - startTime) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          counter.textContent = Math.round(eased * target);
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
+    // 1. Subtle 3D mouse parallax tilt on desktop
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    if (consoleEl && !prefersReduced && !isCoarse) {
+      const maxTilt = 4;
+      consoleEl.addEventListener('mousemove', (e) => {
+        const rect = consoleEl.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rx = (0.5 - py) * maxTilt * 2;
+        const ry = (px - 0.5) * maxTilt * 2;
+        consoleEl.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+      });
+      consoleEl.addEventListener('mouseleave', () => {
+        consoleEl.style.transform = '';
       });
     }
 
-    const orbit = document.querySelector('.orbit');
-    if (orbit && 'IntersectionObserver' in window) {
+    // 2. Animate Lighthouse dials when in view
+    let animatedDials = false;
+    function animateLhDials() {
+      if (animatedDials) return;
+      animatedDials = true;
+      lhDials.forEach((dial, idx) => {
+        const circle = dial.querySelector('.hero-lh-circle');
+        const valEl = dial.querySelector('.hero-lh-val');
+        if (!circle || !valEl) return;
+        
+        const circumference = 201.06;
+        circle.style.strokeDashoffset = String(circumference);
+        
+        setTimeout(() => {
+          circle.style.strokeDashoffset = '0';
+          // Count up to 100
+          const duration = 1200;
+          const startTime = performance.now();
+          function tick(now) {
+            const p = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            valEl.textContent = Math.round(eased * 100);
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }, 150 + idx * 120);
+      });
+    }
+
+    if (heroVisual && 'IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) { animate(); io.disconnect(); }
+          if (entry.isIntersecting) { animateLhDials(); io.disconnect(); }
         });
-      }, { threshold: 0.4 });
-      io.observe(orbit);
+      }, { threshold: 0.2 });
+      io.observe(heroVisual);
     } else {
-      animate();
+      animateLhDials();
+    }
+
+    // 3. Interactive In-Hero Audit Form
+    if (auditForm && auditInput) {
+      auditForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let targetUrl = auditInput.value.trim();
+        if (!targetUrl) {
+          targetUrl = 'yourbusiness.com';
+          auditInput.value = targetUrl;
+        }
+
+        if (auditStatus && scanFill && scanText) {
+          auditStatus.style.display = 'block';
+          scanFill.style.width = '0%';
+          scanText.textContent = 'Initiating Core Web Vitals diagnostic for ' + targetUrl + '...';
+
+          setTimeout(() => {
+            scanFill.style.width = '45%';
+            scanText.textContent = 'Inspecting Day-1 Schema JSON-LD & On-Page SEO...';
+          }, 400);
+
+          setTimeout(() => {
+            scanFill.style.width = '85%';
+            scanText.textContent = 'Evaluating Mobile Performance & Accessibility...';
+          }, 850);
+
+          setTimeout(() => {
+            scanFill.style.width = '100%';
+            scanText.textContent = '✓ Scan Complete! Loading full audit breakdown...';
+
+            // Sync with main audit section
+            const mainAuditInput = document.getElementById('auditUrl');
+            const mainAuditForm = document.getElementById('auditForm');
+            if (mainAuditInput && mainAuditForm) {
+              mainAuditInput.value = targetUrl;
+              const seoAuditSection = document.getElementById('seo-audit');
+              if (seoAuditSection) {
+                seoAuditSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(() => {
+                  mainAuditForm.dispatchEvent(new Event('submit', { cancelable: true }));
+                }, 600);
+              }
+            }
+          }, 1300);
+        }
+      });
     }
   });
 

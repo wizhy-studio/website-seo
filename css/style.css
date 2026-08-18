@@ -373,27 +373,486 @@ html[data-theme="dark"] .mobile-quick-chip {
 .hero__avatars span:first-child { margin-left: 0; }
 .hero__proof-text { font-size: .88rem; color: var(--text-secondary); }
 .hero__proof-text strong { color: var(--text-primary); }
-.hero__visual { position: relative; display: flex; align-items: center; justify-content: center; min-height: 420px; }
-.orbit { position: relative; width: 340px; height: 340px; }
-.orbit__ring { position: absolute; inset: 0; animation: spin 26s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.orbit__core {
-  position: absolute; inset: 58px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-strong);
-  box-shadow: var(--shadow-lift); display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 20px;
+.hero__visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  width: 100%;
 }
-.orbit__core .num { font-family: var(--font-display); font-size: 2.7rem; font-weight: 700; color: var(--accent-1); line-height: 1; }
-.orbit__core .label { font-size: .78rem; color: var(--text-secondary); margin-top: 8px; letter-spacing: .04em; }
-.hero__card {
-  position: absolute; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md);
-  padding: 16px 20px; box-shadow: var(--shadow-card); display: flex; align-items: center; gap: 12px; animation: floatCard 6s ease-in-out infinite;
+
+/* Glass Browser & Audit Console Container */
+.hero-console {
+  position: relative;
+  width: 100%;
+  max-width: 530px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1.5px solid rgba(190, 85, 45, 0.22);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px -12px rgba(190, 85, 45, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.95);
+  overflow: hidden;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  z-index: 2;
 }
-.hero__card--1 { top: 6%; right: -6%; animation-delay: -1s; }
-.hero__card--2 { bottom: 8%; left: -10%; animation-delay: -3s; }
-@keyframes floatCard { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-.hero__card .icon-dot { width: 34px; height: 34px; border-radius: 9px; background: var(--accent-2-soft); color: var(--accent-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.hero__card strong { display: block; font-size: .88rem; }
-.hero__card span { font-size: .76rem; color: var(--text-muted); }
+
+html[data-theme="dark"] .hero-console {
+  background: rgba(16, 22, 34, 0.88);
+  border: 1.5px solid rgba(255, 122, 69, 0.32);
+  box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.7), 0 0 35px -5px rgba(255, 122, 69, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+.hero-console:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-1);
+  box-shadow: 0 32px 70px -12px rgba(190, 85, 45, 0.2), 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme="dark"] .hero-console:hover {
+  box-shadow: 0 32px 80px -15px rgba(0, 0, 0, 0.8), 0 0 45px -5px rgba(255, 122, 69, 0.28);
+}
+
+/* Window Header / Mac Controls */
+.hero-console__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+html[data-theme="dark"] .hero-console__header {
+  background: rgba(24, 32, 48, 0.6);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.hero-console__dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.hero-console__dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: block;
+}
+
+.dot-red { background: #FF5F56; }
+.dot-yellow { background: #FFBD2E; }
+.dot-green { background: #27C93F; }
+
+.hero-console__url-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+}
+
+.hero-lock-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--accent-1);
+}
+
+.hero-url-text {
+  font-weight: 500;
+  letter-spacing: .01em;
+}
+
+.hero-console__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #10B981;
+}
+
+html[data-theme="dark"] .hero-console__status {
+  color: #34D399;
+}
+
+.status-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: pulseLive 2s ease-in-out infinite;
+}
+
+@keyframes pulseLive {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(1.25); }
+}
+
+/* Window Body */
+.hero-console__body {
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 1. Interactive Instant Audit Box inside Console */
+.hero-audit-box {
+  background: var(--surface);
+  border: 1.2px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-audit-box__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hero-audit-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.hero-audit-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent-1);
+  background: var(--accent-1-soft);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.hero-audit-input-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: var(--bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 4px 5px 4px 14px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.hero-audit-input-wrap:focus-within {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px var(--accent-1-soft);
+}
+
+.hero-audit-input-icon {
+  font-size: 0.95rem;
+  margin-right: 8px;
+}
+
+.hero-audit-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+}
+
+.hero-audit-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.hero-audit-btn {
+  background: var(--accent-1);
+  color: var(--on-accent);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: all .2s ease;
+  box-shadow: 0 4px 12px var(--accent-1-soft);
+}
+
+.hero-audit-btn:hover {
+  background: var(--accent-1-hover, #A9431D);
+  transform: scale(1.02);
+}
+
+.hero-audit-status {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+.hero-scan-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.hero-scan-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-1), #10B981);
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+
+.hero-scan-text {
+  font-size: 0.72rem;
+  color: var(--accent-1);
+  font-weight: 500;
+  margin: 0;
+}
+
+/* 2. Google Lighthouse 100/100 Matrix */
+.hero-lighthouse-section {
+  background: var(--surface);
+  border: 1.2px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+
+.hero-lh-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.hero-lh-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.hero-lh-metric-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+html[data-theme="dark"] .hero-lh-metric-badge {
+  color: #34D399;
+  background: rgba(52, 211, 153, 0.15);
+}
+
+.hero-lh-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.hero-lh-dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: transform .25s ease, border-color .25s ease;
+}
+
+.hero-lh-dial:hover {
+  transform: translateY(-3px);
+  border-color: #10B981;
+}
+
+.hero-lh-ring-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.hero-lh-svg {
+  width: 52px;
+  height: 52px;
+  transform: rotate(-90deg);
+}
+
+.hero-lh-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 5.5;
+}
+
+.hero-lh-circle {
+  fill: none;
+  stroke: #10B981;
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-dasharray: 201.06;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.2s ease;
+}
+
+html[data-theme="dark"] .hero-lh-circle {
+  stroke: #34D399;
+  filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.6));
+}
+
+.hero-lh-val {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.hero-lh-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.hero-lh-sub {
+  font-size: 0.64rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 3. Live Telemetry Bar */
+.hero-telemetry-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.hero-telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hero-telemetry-item strong {
+  color: var(--text-primary);
+}
+
+.telemetry-icon {
+  color: #10B981;
+  font-weight: 700;
+}
+
+html[data-theme="dark"] .telemetry-icon {
+  color: #34D399;
+}
+
+/* Floating Glass Badges around Console */
+.hero-floating-chip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.2px solid rgba(190, 85, 45, 0.2);
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  color: var(--text-primary);
+  z-index: 3;
+  animation: floatChip 6s ease-in-out infinite;
+}
+
+html[data-theme="dark"] .hero-floating-chip {
+  background: rgba(26, 36, 54, 0.9);
+  border-color: rgba(255, 122, 69, 0.3);
+  box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-floating-chip--top {
+  top: -16px;
+  right: -12px;
+  animation-delay: -1.5s;
+}
+
+.hero-floating-chip--bottom {
+  bottom: -18px;
+  left: -14px;
+  animation-delay: -3.5s;
+}
+
+@keyframes floatChip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero-chip-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+}
+
+.hero-chip-badge {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1024px) {
+  .hero-console { max-width: 100%; margin-top: 15px; }
+  .hero-floating-chip { display: none; }
+}
+
+@media (max-width: 640px) {
+  .hero-console__header { padding: 10px 14px; }
+  .hero-url-text { max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.68rem; }
+  .hero-console__body { padding: 16px 12px; gap: 14px; }
+  .hero-audit-box__header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .hero-audit-input-wrap { flex-direction: column; border-radius: 14px; padding: 0; gap: 8px; border: none; background: transparent; }
+  .hero-audit-input-icon { display: none; }
+  .hero-audit-input { width: 100%; padding: 10px 14px; font-size: 0.82rem; text-align: left; background: var(--bg); border: 1.5px solid var(--border-strong); border-radius: 12px; box-sizing: border-box; }
+  .hero-audit-btn { width: 100%; justify-content: center; padding: 10px 14px; font-size: 0.84rem; }
+  .hero-lh-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .hero-lh-ring-wrap { width: 44px; height: 44px; }
+  .hero-lh-svg { width: 44px; height: 44px; }
+  .hero-lh-circle, .hero-lh-bg { cx: 22; cy: 22; r: 17; stroke-width: 4; stroke-dasharray: 106.81; }
+  .hero-lh-dial:hover { transform: none; }
+  .hero-telemetry-bar { flex-direction: column; gap: 6px; align-items: flex-start; font-size: 0.72rem; }
+}
 
 /* ---------- Marquee ---------- */
 .marquee-section { padding: 36px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); position: relative; z-index: 1; }
