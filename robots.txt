@@ -1,8 +1,8 @@
-# Wizhy Studio — robots.txt
+# Wizhy Web Studio (WWS) — robots.txt
 # Allow all well-behaved crawlers full access to the site.
 
 User-agent: *
 Allow: /
 
-# Sitemap location — update the domain if it changes from wizhy.in
-Sitemap: https://wizhy.in/sitemap.xml
+# Sitemap location
+Sitemap: https://web.wizhy.in/sitemap.xml

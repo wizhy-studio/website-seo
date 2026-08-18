@@ -1,5 +1,5 @@
 /* =========================================================
-   WIZHY STUDIO — script.js (v4.1)
+   WIZHY WEB STUDIO (WWS) — script.js (v4.1)
    Vanilla JS. No dependencies.
 
    ARCHITECTURE (unchanged from v4.0 — still the single most
@@ -16,7 +16,7 @@ function safeRun(label, fn) {
   try {
     fn();
   } catch (err) {
-    console.warn(`[Wizhy Studio] "${label}" module failed to initialize:`, err);
+    console.warn(`[Wizhy Web Studio] "${label}" module failed to initialize:`, err);
   }
 }
 
@@ -610,13 +610,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (supabaseClient) {
           const { error } = await supabaseClient.from('leads').insert([leadData]);
           if (error) {
-            console.warn('[Wizhy Studio] Supabase lead insert note:', error);
+            console.warn('[Wizhy Web Studio] Supabase lead insert note:', error);
           } else {
-            console.info('[Wizhy Studio] Lead saved to Supabase successfully!');
+            console.info('[Wizhy Web Studio] Lead saved to Supabase successfully!');
           }
         }
       } catch (err) {
-        console.warn('[Wizhy Studio] Supabase submission fallback:', err);
+        console.warn('[Wizhy Web Studio] Supabase submission fallback:', err);
       } finally {
         if (btnSubmit) {
           btnSubmit.disabled = false;
@@ -923,9 +923,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (supabaseClient) {
         try {
           await supabaseClient.from('leads').insert([{ email, lead_source: 'checklist_lead_magnet' }]);
-          console.info('[Wizhy Studio] Lead magnet download captured in Supabase!');
+          console.info('[Wizhy Web Studio] Lead magnet download captured in Supabase!');
         } catch (err) {
-          console.warn('[Wizhy Studio] Supabase lead magnet note:', err);
+          console.warn('[Wizhy Web Studio] Supabase lead magnet note:', err);
         }
       }
 
@@ -935,7 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Trigger instant PDF download
       const link = document.createElement('a');
       link.href = 'assets/wizhy-website-checklist.pdf';
-      link.download = 'Wizhy-Studio-Website-SEO-Checklist.pdf';
+      link.download = 'Wizhy-Web-Studio-Website-SEO-Checklist.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -962,9 +962,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (supabaseClient) {
         try {
           await supabaseClient.from('newsletter_subscribers').insert([{ email }]);
-          console.info('[Wizhy Studio] Newsletter subscriber saved to Supabase!');
+          console.info('[Wizhy Web Studio] Newsletter subscriber saved to Supabase!');
         } catch (err) {
-          console.warn('[Wizhy Studio] Supabase newsletter note:', err);
+          console.warn('[Wizhy Web Studio] Supabase newsletter note:', err);
         }
       }
 
@@ -995,9 +995,9 @@ document.addEventListener('DOMContentLoaded', () => {
         key: 'rzp_test_placeholder', // Test Mode Key placeholder
         amount: 500000, // ₹5,000 in paise
         currency: 'INR',
-        name: 'Wizhy Studio',
+        name: 'Wizhy Web Studio (WWS)',
         description: 'Project Advance / Retainer (Test Mode)',
-        image: 'https://wizhy.in/assets/og-image.jpg',
+        image: 'https://web.wizhy.in/assets/og-image.jpg',
         handler: function (response) {
           const successMsg = '✓ Test Payment Successful! Payment ID: ' + response.razorpay_payment_id;
           if (window.__wizhyShowToast) window.__wizhyShowToast(successMsg);
@@ -1032,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         rzp.open();
       } catch (err) {
-        console.warn('[Wizhy Studio] Razorpay test trigger note:', err);
+        console.warn('[Wizhy Web Studio] Razorpay test trigger note:', err);
       }
     });
   });

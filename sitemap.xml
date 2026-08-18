@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Wizhy Studio — sitemap.xml
-
-  The site is currently a single-page (anchor-linked) site, so only the
-  homepage is listed. When the placeholder About Us / FAQ (standalone) /
-  Blog / Privacy Policy pages referenced in the project summary are built
-  as real separate pages, add a <url> entry for each one here, e.g.:
-
-  <url>
-    <loc>https://wizhy.in/blog/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
+  Wizhy Web Studio (WWS) — sitemap.xml
+  Canonical Domain: https://web.wizhy.in/
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wizhy.in/</loc>
+    <loc>https://web.wizhy.in/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://web.wizhy.in/contact.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://web.wizhy.in/privacy-policy.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://web.wizhy.in/terms.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://web.wizhy.in/refund-policy.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://web.wizhy.in/cookie-policy.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://web.wizhy.in/delivery-policy.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
