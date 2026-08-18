@@ -397,38 +397,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- 11. Process section interactive stepper nodes ---------- */
-  safeRun('process-stepper-tracker', () => {
-    const nodes = document.querySelectorAll('.process-journey__node');
+  /* ---------- 11. Process Cards In-View Activation ---------- */
+  safeRun('process-card-activation', () => {
     const steps = document.querySelectorAll('.process-step');
-    if (!nodes.length) return;
+    if (!steps.length) return;
 
-    function updateJourney() {
-      const viewportMid = window.innerHeight * 0.55;
-      let activeIndex = 0;
-      steps.forEach((step, idx) => {
-        const rect = step.getBoundingClientRect();
-        if (rect.top <= viewportMid) {
-          activeIndex = idx;
-        }
-      });
-      nodes.forEach((node, idx) => {
-        node.classList.toggle('active', idx <= activeIndex);
-      });
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, { threshold: 0.25, rootMargin: '0px 0px -50px 0px' });
+
+      steps.forEach(s => io.observe(s));
+    } else {
+      steps.forEach(s => s.classList.add('in-view'));
     }
-
-    window.addEventListener('scroll', updateJourney, { passive: true });
-    updateJourney();
-
-    nodes.forEach((node, idx) => {
-      node.style.cursor = 'pointer';
-      node.addEventListener('click', () => {
-        if (steps[idx]) {
-          const offset = 100;
-          const top = steps[idx].getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top, behavior: 'smooth' });
-        }
-      });
-    });
   });
 
   /* ---------- 12. Testimonial slider (with Prev/Next arrows & Touch Swipe) ---------- */
