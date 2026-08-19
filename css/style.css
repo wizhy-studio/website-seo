@@ -1381,34 +1381,130 @@ html[data-theme="dark"] .stack-card:hover .stack-card__inner {
   gap: 6px;
 }
 
-/* ---------- Testimonials ---------- */
-.testimonial-slider { position: relative; overflow: hidden; }
-.testimonial-track { display: flex; transition: transform .6s var(--ease); }
-.testimonial-slide { flex: 0 0 100%; width: 100%; display: flex; justify-content: center; }
-.testimonial-card { width: 100%; max-width: 680px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 48px; text-align: center; position: relative; }
-.testimonial-card .quote-mark { font-family: var(--font-display); font-size: 4rem; color: var(--accent-1); line-height: 1; margin-bottom: 6px; opacity: .6; }
-.stars { color: var(--gold); font-size: 1.05rem; margin-bottom: 18px; letter-spacing: 2px; }
-.testimonial-card p.quote { font-size: 1.18rem; color: var(--text-primary); margin-bottom: 26px; font-family: var(--font-display); font-style: italic; line-height: 1.5; }
-.testimonial-author { display: flex; align-items: center; justify-content: center; gap: 12px; }
-.avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--accent-2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .85rem; color: var(--on-accent); }
-.testimonial-author div { text-align: left; }
-.testimonial-author strong { display: block; font-size: .95rem; }
-.testimonial-author span { font-size: .8rem; color: var(--text-muted); }
-.testimonial-nav {
-  display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 30px;
+/* ---------- Testimonials: Scattered Overlapping Hover Cards Experience ---------- */
+.testimonials-section {
+  position: relative;
+  overflow: visible;
+  padding: 90px 0;
 }
-.slider-arrow {
-  width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border-strong);
-  background: var(--surface); color: var(--text-primary); display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all .25s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+.testimonials-visual-container {
+  position: relative;
+  width: 100%;
+  max-width: 1140px;
+  height: 560px;
+  margin: 36px auto 0;
 }
-.slider-arrow:hover {
-  background: var(--accent-1); color: var(--on-accent); border-color: var(--accent-1); transform: scale(1.08);
+
+.testimonial-hover-card {
+  position: absolute;
+  width: 330px;
+  padding: 24px 26px;
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  box-shadow: 0 12px 34px -8px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s ease, 
+              border-color 0.35s ease,
+              z-index 0.3s step-start;
+  backdrop-filter: blur(16px);
+  color: var(--text-primary);
 }
-.slider-arrow:active { transform: scale(0.95); }
-.testimonial-dots { display: flex; justify-content: center; gap: 10px; }
-.testimonial-dots .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-strong); cursor: pointer; transition: background .25s ease, transform .25s ease; }
-.testimonial-dots .dot.active { background: var(--accent-1); transform: scale(1.35); }
+
+/* Light & Dark surface styling */
+html[data-theme="dark"] .testimonial-hover-card {
+  background: linear-gradient(135deg, rgba(20, 28, 44, 0.94) 0%, rgba(14, 20, 32, 0.96) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.7);
+}
+
+/* Hover Interaction: scale up, straight rotation, elevate z-index & glow */
+.testimonial-hover-card:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 50 !important;
+  border-color: var(--accent-1);
+  box-shadow: 0 28px 60px -12px rgba(200, 72, 30, 0.22), 0 0 30px rgba(200, 72, 30, 0.12);
+}
+
+html[data-theme="dark"] .testimonial-hover-card:hover {
+  border-color: #ff7a45;
+  box-shadow: 0 28px 65px -12px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 122, 69, 0.3);
+}
+
+.testimonial-quote-mark {
+  position: absolute;
+  right: 22px;
+  top: 16px;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--accent-1);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.card-author-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-avatar-pod {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-1-soft);
+  color: var(--accent-1);
+  border: 1.5px solid var(--accent-1);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-author-info h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  font-family: var(--font-display);
+}
+
+.card-author-info span {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  display: block;
+}
+
+.testimonial-rating-stars {
+  color: #f59e0b;
+  font-size: 0.88rem;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.testimonial-hover-card p {
+  font-size: 0.88rem;
+  line-height: 1.52;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Card scattered positions on Desktop */
+.t-card-1 { left: 4%; top: 20px; transform: rotate(-5deg); z-index: 4; }
+.t-card-2 { left: 36%; top: 80px; transform: rotate(4deg); z-index: 3; }
+.t-card-3 { left: 68%; top: 10px; transform: rotate(-4deg); z-index: 2; }
+.t-card-4 { left: 10%; top: 280px; transform: rotate(4deg); z-index: 3; }
+.t-card-5 { left: 42%; top: 300px; transform: rotate(-5deg); z-index: 5; }
+.t-card-6 { left: 70%; top: 260px; transform: rotate(5deg); z-index: 2; }
 
 /* ---------- CTA band ---------- */
 .cta-band { background: var(--cta-bg); position: relative; overflow: hidden; padding: 100px 0; }
@@ -1823,6 +1919,13 @@ a.footer-contact-item:hover .footer-contact-icon {
     padding: 20px 22px;
     border-radius: 20px;
   }
+
+  /* Testimonials Tablet Scaling */
+  .testimonials-visual-container {
+    transform: scale(0.82);
+    transform-origin: center top;
+    height: 480px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1918,10 +2021,23 @@ a.footer-contact-item:hover .footer-contact-icon {
     font-size: 0.84rem;
   }
 
-  /* Testimonials mobile slide */
-  .testimonial-card { padding: 28px 18px; border-radius: 18px; }
-  .testimonial-card p.quote { font-size: .98rem; line-height: 1.45; margin-bottom: 18px; }
-  .testimonial-card .quote-mark { font-size: 2.8rem; margin-bottom: 0; }
+  /* Testimonials mobile 1-column stack */
+  .testimonials-visual-container {
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+    transform: none !important;
+  }
+  .testimonial-hover-card {
+    position: static;
+    width: 100%;
+    transform: none !important;
+    padding: 22px 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.05) !important;
+  }
 
   /* Lead Magnet & Contact sizing */
   .lead-magnet { padding: 26px 18px; gap: 20px; border-radius: 18px; }

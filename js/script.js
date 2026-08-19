@@ -447,59 +447,18 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCardTransforms();
   });
 
-  /* ---------- 12. Testimonial slider (with Prev/Next arrows & Touch Swipe) ---------- */
-  safeRun('testimonial-slider', () => {
-    const track = document.getElementById('testimonialTrack');
-    const dotsWrap = document.getElementById('testimonialDots');
-    const prevBtn = document.getElementById('prevTestimonial');
-    const nextBtn = document.getElementById('nextTestimonial');
-    if (!track) return;
+  /* ---------- 12. Interactive Scattered Testimonials Hover Cards ---------- */
+  safeRun('testimonials-scattered', () => {
+    const cards = document.querySelectorAll('.testimonial-hover-card');
+    if (!cards.length) return;
 
-    const slides = track.children;
-    let current = 0;
-    let autoplayTimer;
-
-    if (dotsWrap) {
-      dotsWrap.innerHTML = '';
-      for (let i = 0; i < slides.length; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'dot' + (i === 0 ? ' active' : '');
-        dot.addEventListener('click', () => goTo(i));
-        dotsWrap.appendChild(dot);
-      }
-    }
-    const dots = dotsWrap ? dotsWrap.querySelectorAll('.dot') : [];
-
-    function goTo(index) {
-      current = (index + slides.length) % slides.length;
-      track.style.transform = `translateX(-${current * 100}%)`;
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    }
-
-    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
-    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
-
-    function resetAutoplay() {
-      stopAutoplay();
-      startAutoplay();
-    }
-
-    function startAutoplay() { autoplayTimer = setInterval(() => goTo(current + 1), 6000); }
-    function stopAutoplay() { clearInterval(autoplayTimer); }
-    startAutoplay();
-
-    track.parentElement.addEventListener('mouseenter', stopAutoplay);
-    track.parentElement.addEventListener('mouseleave', startAutoplay);
-
-    let touchStartX = 0;
-    track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', (e) => {
-      const diff = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(diff) > 40) {
-        goTo(current + (diff < 0 ? 1 : -1));
-        resetAutoplay();
-      }
-    }, { passive: true });
+    cards.forEach(card => {
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('focus', () => {
+        cards.forEach(c => c.style.zIndex = '');
+        card.style.zIndex = '50';
+      });
+    });
   });
 
   /* ---------- Supabase Client Initialization ---------- */
