@@ -396,25 +396,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ---------- 11. Process section interactive stepper nodes ---------- */
-  /* ---------- 11. Process Cards In-View Activation ---------- */
-  safeRun('process-card-activation', () => {
-    const steps = document.querySelectorAll('.process-step');
-    if (!steps.length) return;
+  /* ---------- 11. Stacking Cards Scroll Physics Animation (TND Formula) ---------- */
+  safeRun('process-stacking-cards', () => {
+    const cards = document.querySelectorAll('.stacking-process-cards .stack-card');
+    if (!cards.length) return;
 
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-          }
-        });
-      }, { threshold: 0.25, rootMargin: '0px 0px -50px 0px' });
+    const totalCards = cards.length;
+    let isTicking = false;
 
-      steps.forEach(s => io.observe(s));
-    } else {
-      steps.forEach(s => s.classList.add('in-view'));
-    }
+    const updateCardTransforms = () => {
+      if (window.innerWidth < 992) {
+        cards.forEach(c => c.style.transform = '');
+        isTicking = false;
+        return;
+      }
+
+      cards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const nextCard = cards[index + 1];
+        if (nextCard) {
+          const nextRect = nextCard.getBoundingClientRect();
+          const cardHeight = rect.height || 290;
+          // Calculate overlap progress
+          const overlap = Math.max(0, rect.bottom - nextRect.top);
+          const progress = Math.min(1, Math.max(0, overlap / cardHeight));
+
+          // Scale down cards smoothly below subsequent cards
+          const maxScaleReduction = (totalCards - 1 - index) * 0.028;
+          const currentScale = 1 - progress * maxScaleReduction;
+
+          card.style.transform = `scale(${currentScale.toFixed(4)})`;
+        } else {
+          card.style.transform = 'scale(1)';
+        }
+      });
+      isTicking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!isTicking) {
+        window.requestAnimationFrame(updateCardTransforms);
+        isTicking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      updateCardTransforms();
+    }, { passive: true });
+
+    updateCardTransforms();
   });
 
   /* ---------- 12. Testimonial slider (with Prev/Next arrows & Touch Swipe) ---------- */
