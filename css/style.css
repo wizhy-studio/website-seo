@@ -238,9 +238,19 @@ html[data-theme="dark"] .brand--center {
   box-shadow: 0 8px 28px -4px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.12);
 }
 .brand__mark {
-  width: 38px; height: 38px; border-radius: 11px; background: var(--accent-1);
+  width: 38px; height: 38px; border-radius: 11px;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--on-accent);
+  overflow: hidden;
+  transition: transform .2s ease;
+}
+.brand__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.brand:hover .brand__mark {
+  transform: scale(1.05);
 }
 .brand__text { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -.01em; color: var(--text-primary); }
 .brand__text em { font-style: italic; color: var(--accent-1); }
@@ -1670,8 +1680,7 @@ html[data-theme="dark"] .footer {
 
 /* Footer Brand styling */
 .brand--footer .brand__mark {
-  background: var(--accent-1);
-  color: #FFF;
+  background: transparent;
 }
 .brand--footer .brand__text {
   color: #FFFFFF;
