@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTop = document.getElementById('backToTop');
     if (!navbar || !scrollProgress || !backToTop) return;
 
-    const sections = ['home', 'services', 'why-us', 'process', 'faq', 'contact']
+    const sections = ['home', 'services', 'pricing', 'why-us', 'process', 'faq', 'contact']
       .map(id => document.getElementById(id)).filter(Boolean);
     const navLinks = document.querySelectorAll('.nav-link');
     const quickChips = document.querySelectorAll('.mobile-quick-chip:not(.mobile-quick-chip--highlight)');
@@ -108,6 +108,23 @@ document.addEventListener('DOMContentLoaded', () => {
       link.addEventListener('click', () => {
         navLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
+      });
+    });
+
+    // Auto-select corresponding service option when clicking pricing / micro-service buttons
+    document.querySelectorAll('[data-select-service]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const serviceName = btn.getAttribute('data-select-service');
+        const serviceSelect = document.getElementById('service');
+        if (serviceSelect && serviceName) {
+          for (let i = 0; i < serviceSelect.options.length; i++) {
+            if (serviceSelect.options[i].value === serviceName || serviceSelect.options[i].text.includes(serviceName)) {
+              serviceSelect.selectedIndex = i;
+              serviceSelect.dispatchEvent(new Event('change'));
+              break;
+            }
+          }
+        }
       });
     });
 
