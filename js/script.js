@@ -1043,4 +1043,228 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ---------- 23. 3D Rotating Spheres Engine (from contact.html) ---------- */
+  safeRun('interactive-3d-spheres', () => {
+    const c1 = document.getElementById('sphereCanvas1');
+    if (!c1) return;
+
+    // Generate seamless equirectangular pastel texture
+    const TEX_W = 512;
+    const TEX_H = 256;
+    const textureCanvas = document.createElement('canvas');
+    textureCanvas.width = TEX_W;
+    textureCanvas.height = TEX_H;
+    const texCtx = textureCanvas.getContext('2d');
+    const texImgData = texCtx.createImageData(TEX_W, TEX_H);
+    const texData = texImgData.data;
+
+    for (let y = 0; y < TEX_H; y++) {
+      const v = y / TEX_H;
+      const tyOffset = y * TEX_W * 4;
+      for (let x = 0; x < TEX_W; x++) {
+        const u = x / TEX_W;
+        
+        const b1 = Math.sin(u * Math.PI * 6 + Math.cos(v * Math.PI * 4) * 2.2);
+        const b2 = Math.sin(u * Math.PI * 10 - Math.sin(v * Math.PI * 5) * 2.6);
+        const b3 = Math.cos(u * Math.PI * 4 + v * Math.PI * 8);
+        const b4 = Math.sin(v * Math.PI * 12) * 0.25;
+        
+        const pattern = b1 * 0.45 + b2 * 0.35 + b3 * 0.2 + b4;
+        const val = 0.5 + 0.5 * Math.tanh(pattern * 2.4);
+
+        let r, g, b;
+        if (val < 0.38) {
+          const t = val / 0.38;
+          // Deep terracotta & espresso bronze base (130, 45, 20) -> (190, 70, 30)
+          r = Math.floor(130 + t * 65);
+          g = Math.floor(45 + t * 30);
+          b = Math.floor(20 + t * 20);
+        } else if (val < 0.72) {
+          const t = (val - 0.38) / 0.34;
+          // Warm vibrant terracotta -> warm amber gold (195, 75, 40) -> (225, 145, 55)
+          r = Math.floor(195 + t * 30);
+          g = Math.floor(75 + t * 70);
+          b = Math.floor(40 + t * 15);
+        } else {
+          const t = (val - 0.72) / 0.28;
+          // Radiant luminous champagne/ivory crest highlights (225, 145, 55) -> (255, 244, 230)
+          r = Math.floor(225 + t * 30);
+          g = Math.floor(145 + t * 99);
+          b = Math.floor(55 + t * 175);
+        }
+
+        const idx = tyOffset + (x * 4);
+        texData[idx] = r;
+        texData[idx + 1] = g;
+        texData[idx + 2] = b;
+        texData[idx + 3] = 255;
+      }
+    }
+
+    class RotatingBall3D {
+      constructor(canvasId, config) {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.tilt = config.tilt || (20 * Math.PI / 180);
+        this.speed = config.speed || 0.04;
+        this.angle = config.initialAngle || 0;
+        this.lightDir = [-0.48, -0.58, 0.65];
+        this.size = 0;
+        
+        const lLen = Math.sqrt(this.lightDir[0]**2 + this.lightDir[1]**2 + this.lightDir[2]**2);
+        this.lightDir[0] /= lLen;
+        this.lightDir[1] /= lLen;
+        this.lightDir[2] /= lLen;
+
+        this.initSize();
+        window.addEventListener('resize', () => this.initSize());
+
+        let isDragging = false;
+        let lastX = 0;
+        this.canvas.addEventListener('pointerdown', (e) => {
+          isDragging = true;
+          lastX = e.clientX;
+          try { this.canvas.setPointerCapture(e.pointerId); } catch(err) {}
+        });
+        window.addEventListener('pointermove', (e) => {
+          if (!isDragging) return;
+          const dx = e.clientX - lastX;
+          lastX = e.clientX;
+          this.angle = (this.angle + dx * 0.004) % 1.0;
+        });
+        window.addEventListener('pointerup', () => { isDragging = false; });
+        window.addEventListener('pointercancel', () => { isDragging = false; });
+      }
+
+      initSize() {
+        if (!this.canvas) return;
+        const rect = this.canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const targetSize = Math.round(rect.width * dpr);
+        const size = targetSize > 10 ? targetSize : Math.round(80 * dpr);
+        
+        if (size === this.size && this.pixels) return;
+        this.size = size;
+        this.canvas.width = size;
+        this.canvas.height = size;
+        this.imgData = this.ctx.createImageData(size, size);
+        this.data = this.imgData.data;
+
+        this.precomputeSphere();
+      }
+
+      precomputeSphere() {
+        const size = this.size;
+        const radius = size / 2;
+        const cx = radius;
+        const cy = radius;
+        const cosT = Math.cos(this.tilt);
+        const sinT = Math.sin(this.tilt);
+
+        this.pixels = [];
+
+        for (let y = 0; y < size; y++) {
+          const dy = (y - cy) / radius;
+          for (let x = 0; x < size; x++) {
+            const dx = (x - cx) / radius;
+            const dist2 = dx * dx + dy * dy;
+
+            if (dist2 <= 1.0) {
+              const dz = Math.sqrt(1.0 - dist2);
+              const rx = dx * cosT - dy * sinT;
+              const ry = dx * sinT + dy * cosT;
+              const rz = dz;
+
+              const uBase = (Math.atan2(rx, rz) / (2 * Math.PI) + 1.0) % 1.0;
+              const v = Math.asin(Math.max(-1.0, Math.min(1.0, ry))) / Math.PI + 0.5;
+              const ty = Math.floor(v * (TEX_H - 1));
+
+              const dotL = Math.max(0.0, dx * this.lightDir[0] + dy * this.lightDir[1] + dz * this.lightDir[2]);
+              const refZ = 2 * dotL * dz - this.lightDir[2];
+              const spec = dotL > 0 ? Math.pow(Math.max(0.0, refZ), 15) * 115 : 0;
+              const lit = 0.42 + dotL * 0.58;
+
+              let alpha = 255;
+              if (dist2 > 0.92) {
+                alpha = Math.floor(255 * (1.0 - dist2) / 0.08);
+              }
+
+              const pixelIndex = (y * size + x) * 4;
+              this.pixels.push({
+                idx: pixelIndex,
+                uBase: uBase,
+                tyOffset: ty * TEX_W * 4,
+                lit: lit,
+                spec: spec,
+                alpha: alpha
+              });
+            }
+          }
+        }
+      }
+
+      render(dt) {
+        if (!this.pixels || this.pixels.length === 0) {
+          this.initSize();
+          if (!this.pixels || this.pixels.length === 0) return;
+        }
+        
+        this.angle = (this.angle + this.speed * dt) % 1.0;
+        const curAngle = this.angle;
+        const targetData = this.data;
+        const pLen = this.pixels.length;
+
+        for (let i = 0; i < pLen; i++) {
+          const p = this.pixels[i];
+          const u = (p.uBase + curAngle) % 1.0;
+          const tx = Math.floor(u * TEX_W);
+          const texIdx = p.tyOffset + (tx * 4);
+
+          const r = texData[texIdx];
+          const g = texData[texIdx + 1];
+          const b = texData[texIdx + 2];
+
+          targetData[p.idx] = Math.min(255, Math.floor(r * p.lit + p.spec));
+          targetData[p.idx + 1] = Math.min(255, Math.floor(g * p.lit + p.spec));
+          targetData[p.idx + 2] = Math.min(255, Math.floor(b * p.lit + p.spec));
+          targetData[p.idx + 3] = p.alpha;
+        }
+
+        this.ctx.putImageData(this.imgData, 0, 0);
+      }
+    }
+
+    const sphere1 = new RotatingBall3D('sphereCanvas1', {
+      tilt: 24 * Math.PI / 180,
+      speed: 0.16,
+      initialAngle: 0.1
+    });
+
+    const sphere2 = new RotatingBall3D('sphereCanvas2', {
+      tilt: 18 * Math.PI / 180,
+      speed: 0.22,
+      initialAngle: 0.45
+    });
+
+    const sphere3 = new RotatingBall3D('sphereCanvas3', {
+      tilt: 28 * Math.PI / 180,
+      speed: 0.28,
+      initialAngle: 0.8
+    });
+
+    let lastTime = performance.now();
+    function animate(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      if (sphere1) sphere1.render(dt);
+      if (sphere2) sphere2.render(dt);
+      if (sphere3) sphere3.render(dt);
+
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  });
+
 });

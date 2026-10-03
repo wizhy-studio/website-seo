@@ -1244,91 +1244,228 @@
 </section>
 
 <!-- ============ CONTACT ============ -->
-<section class="section section--alt" id="contact">
-  <div class="container">
-    <div class="section-head section-head--center reveal">
-      <h2 class="section-title">Let's start your project.</h2>
-      <p class="section-subtitle">Fill in the form below — we'll get back to you with a clear, custom quote within 24 hours.</p>
+<section class="section section--alt contact-experience-section" id="contact">
+  <!-- Background Giant Circle - Rotates like a DVD Disc -->
+  <div class="dvd-disc-container" aria-hidden="true">
+    <div class="dvd-disc">
+      <div class="dvd-reflection-sheen"></div>
+      <div class="dvd-tracks-overlay"></div>
+      <div class="dvd-center-ring"></div>
+      <div class="dvd-center-spindle"></div>
+    </div>
+  </div>
+
+  <div class="container page-contact-container">
+    <!-- LEFT COLUMN: Request Your Free Quote Form -->
+    <div class="form-section reveal">
+      <h2 class="quote-title">Request Your <span class="quote-title-free">Free</span> Quote</h2>
+
+      <form class="quote-form" id="contactForm" novalidate>
+        <!-- Row 1: Full Name & Email -->
+        <div class="form-row-2col">
+          <div class="field-box form-group">
+            <label class="field-label" for="name">Full Name *</label>
+            <input 
+              type="text" 
+              class="field-input" 
+              id="name" 
+              name="name" 
+              autocomplete="name"
+              placeholder="e.g. Rahul Sharma" 
+              required 
+            />
+            <span class="error-msg">Please enter your name</span>
+          </div>
+
+          <div class="field-box form-group">
+            <label class="field-label" for="email">Email *</label>
+            <input 
+              type="email" 
+              class="field-input" 
+              id="email" 
+              name="email" 
+              autocomplete="email"
+              placeholder="you@company.com" 
+              required 
+            />
+            <span class="error-msg">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <!-- Row 2: Phone / WhatsApp & Service Interested In -->
+        <div class="form-row-2col">
+          <div class="field-box form-group">
+            <label class="field-label" for="phone">Phone / WhatsApp Number</label>
+            <input 
+              type="tel" 
+              class="field-input" 
+              id="phone" 
+              name="phone" 
+              autocomplete="tel"
+              placeholder="+91 98765 43210" 
+            />
+            <span class="error-msg">Please enter a valid phone number</span>
+          </div>
+
+          <div class="field-box form-group">
+            <label class="field-label" for="service">Service Interested In *</label>
+            <select class="field-select" id="service" name="service" required>
+              <option value="" disabled selected>Select a service</option>
+              <option value="🎁 First 10 Free Website Offer">🎁 First 10 Free Website Offer (₹0)</option>
+              <option value="1-Page Starter Website (₹999)">1-Page Starter Website (₹999)</option>
+              <option value="Full Business Website (₹4,999)">Full Business Website (₹4,999)</option>
+              <option value="Online Store / E-Commerce (₹9,999)">Online Store / E-Commerce (₹9,999)</option>
+              <option value="Logo Generation (₹99)">Logo Generation (₹99)</option>
+              <option value="Video / Reel Editing (₹499)">Video / Reel Editing (₹499)</option>
+              <option value="Meta & Google Ads Setup (₹1,499)">Meta &amp; Google Ads Setup (₹1,499)</option>
+              <option value="Website Development">Website Development &amp; Design</option>
+              <option value="WordPress & CMS Solutions">WordPress &amp; CMS Solutions</option>
+              <option value="E-commerce Development">E-Commerce Development</option>
+              <option value="SEO & Google Ranking">SEO &amp; Google Ranking</option>
+              <option value="UI/UX & Web Design">UI/UX &amp; Product Design</option>
+              <option value="App & Portal Development">Mobile App &amp; Portal Development</option>
+              <option value="Hosting & Maintenance">Cloud Hosting &amp; Maintenance</option>
+              <option value="Branding & Identity">Branding &amp; Identity</option>
+              <option value="Conversion Optimization (CRO)">Conversion Optimization (CRO)</option>
+              <option value="Motion Graphics / Video Editing">Motion Graphics / Video Editing</option>
+              <option value="Meta & Google Ads">Meta &amp; Google Ads</option>
+              <option value="Custom Project Consulting">Custom Consulting &amp; Full-Stack</option>
+            </select>
+            <span class="error-msg">Please select a service</span>
+          </div>
+        </div>
+
+        <!-- Row 3: Estimated Budget -->
+        <div class="field-box form-group">
+          <label class="field-label" for="budget">Estimated Budget (optional)</label>
+          <input 
+            type="text" 
+            class="field-input" 
+            id="budget" 
+            name="budget" 
+            placeholder="e.g. ₹25,000 – ₹50,000" 
+          />
+        </div>
+
+        <!-- Row 4: Project Details with Voice-to-Text mic feature -->
+        <div class="field-box form-group">
+          <label class="field-label" for="message">Project Details *</label>
+          <div class="field-textarea-wrap textarea-wrap">
+            <textarea 
+              class="field-textarea" 
+              id="message" 
+              name="message" 
+              rows="4"
+              placeholder="Tell us about your project, or tap the mic to speak instead of typing..." 
+              required
+            ></textarea>
+            <button type="button" class="mic-button mic-btn" id="micBtn" aria-label="Dictate project details using your microphone" title="Speak to dictate your project details">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              </svg>
+            </button>
+          </div>
+          <span class="error-msg">Please share a few details about your project</span>
+        </div>
+
+        <!-- Submit Button -->
+        <span class="magnetic" style="display:block;">
+          <button type="submit" class="btn-submit-quote" id="btnSubmitContact">
+            <span>Send Request</span>
+          </button>
+        </span>
+
+        <p class="form-note">Your inquiry is submitted securely. We typically respond within 24 hours.</p>
+
+        <!-- Feedback message -->
+        <div class="submit-feedback form-success" id="formSuccess" role="alert">
+          ✓ Thank you! Your request has been received. We will get back to you shortly at <span id="successEmailDisplay"></span>.
+        </div>
+      </form>
     </div>
 
-    <div class="contact-wrap quote-shape-wrap reveal">
-      <!-- NCOA-Style Background Organic Shape Accents -->
-      <div class="quote-shape-bg-accent" aria-hidden="true"></div>
-      <div class="quote-shape-bg-left" aria-hidden="true"></div>
+    <!-- RIGHT COLUMN: Egg Shaped Figure & 3D Rotating Spheres -->
+    <div class="visual-section reveal" aria-label="Profile and Contact Card">
+      <div class="egg-composition">
 
-      <div class="glass-card contact-form quote-shape-card">
-        <h3>Request Your <span class="quote-accent-free">Free</span> Quote</h3>
-        <form id="contactForm" novalidate>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Full Name *</label>
-              <input type="text" id="name" name="name" autocomplete="name" required placeholder="e.g. Rahul Sharma">
-              <span class="error-msg">Please enter your name</span>
-            </div>
-            <div class="form-group">
-              <label for="email">Email *</label>
-              <input type="email" id="email" name="email" autocomplete="email" required placeholder="you@company.com">
-              <span class="error-msg">Please enter a valid email</span>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="phone">Phone / WhatsApp Number</label>
-              <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+91 98765 43210">
-              <span class="error-msg">Please enter a valid phone number</span>
-            </div>
-            <div class="form-group">
-              <label for="service">Service Interested In *</label>
-              <select id="service" name="service" required>
-                <option value="">Select a service</option>
-                <option value="🎁 First 10 Free Website Offer">🎁 First 10 Free Website Offer (₹0)</option>
-                <option value="1-Page Starter Website (₹999)">1-Page Starter Website (₹999)</option>
-                <option value="Full Business Website (₹4,999)">Full Business Website (₹4,999)</option>
-                <option value="Online Store / E-Commerce (₹9,999)">Online Store / E-Commerce (₹9,999)</option>
-                <option value="Logo Generation (₹99)">Logo Generation (₹99)</option>
-                <option value="Video / Reel Editing (₹499)">Video / Reel Editing (₹499)</option>
-                <option value="Meta & Google Ads Setup (₹1,499)">Meta & Google Ads Setup (₹1,499)</option>
-                <option>Website Development</option>
-                <option>WordPress &amp; CMS Solutions</option>
-                <option>E-commerce Development</option>
-                <option>SEO &amp; Google Ranking</option>
-                <option>UI/UX &amp; Web Design</option>
-                <option>App &amp; Portal Development</option>
-                <option>Hosting &amp; Maintenance</option>
-                <option>Branding &amp; Identity</option>
-                <option>Conversion Optimization (CRO)</option>
-                <option>Motion Graphics / Video Editing</option>
-                <option>Logo Generation</option>
-                <option>Meta &amp; Google Ads</option>
-                <option>Not sure — need guidance</option>
-              </select>
-              <span class="error-msg">Please select a service</span>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="budget">Estimated Budget (optional)</label>
-            <input type="text" id="budget" name="budget" placeholder="e.g. ₹25,000 – ₹50,000">
-          </div>
-          <div class="form-group">
-            <label for="message">Project Details *</label>
-            <div class="textarea-wrap">
-              <textarea id="message" name="message" rows="4" required placeholder="Tell us about your project, or tap the mic to speak instead of typing…"></textarea>
-              <button type="button" class="mic-btn" id="micBtn" aria-label="Dictate project details using your microphone" title="Speak instead of typing">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
-              </button>
-            </div>
-            <span class="error-msg">Please share a few details about your project</span>
-          </div>
-          <span class="magnetic" style="display:block;"><button type="submit" class="btn btn--primary btn--block" id="btnSubmitContact">Send Request</button></span>
-          <p class="form-note">Your inquiry is submitted securely. We typically respond within 24 hours.</p>
-          <p class="form-success" id="formSuccess">✓ Thank you! Your request has been received. We will get back to you shortly at <span id="successEmailDisplay"></span>.</p>
-        </form>
-
-        <div class="payment-card">
-          <p>💳 Book a Project Advance / Retainer</p>
-          <p>Ready to start immediately? Lock in your project sprint securely.</p>
-          <button type="button" class="btn btn--ghost btn--sm" id="btnPayAdvance" style="width:100%;">Pay Project Advance (Test Mode)</button>
+        <!-- 1. Large 3D Rotating Ball (Top-Left of Egg - Rotates in place) -->
+        <div class="rotating-sphere-wrapper sphere-1-large" title="Interactive rotating sphere">
+          <canvas class="sphere-canvas" id="sphereCanvas1"></canvas>
         </div>
+
+        <!-- 2. Medium 3D Rotating Ball (Top Center above Egg - Rotates in place) -->
+        <div class="rotating-sphere-wrapper sphere-2-medium" title="Interactive rotating sphere">
+          <canvas class="sphere-canvas" id="sphereCanvas2"></canvas>
+        </div>
+
+        <!-- 3. Tiny 3D Rotating Ball (Bottom-Left curve of Egg - Rotates in place) -->
+        <div class="rotating-sphere-wrapper sphere-3-tiny" title="Interactive rotating sphere">
+          <canvas class="sphere-canvas" id="sphereCanvas3"></canvas>
+        </div>
+
+        <!-- The Organic Egg Shaped Figure (Vector Bezier Surface) -->
+        <svg class="egg-svg-canvas" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="eggShadow" x="-15%" y="-15%" width="135%" height="135%">
+              <feDropShadow dx="-10" dy="18" stdDeviation="22" flood-color="#468c9f" flood-opacity="0.18" />
+            </filter>
+          </defs>
+          <path 
+            class="egg-path"
+            d="M 490.0 253.4 C 492.0 284.4, 471.8 321.8, 455.3 349.1 C 438.7 376.4, 413.7 398.1, 390.7 417.2 C 367.6 436.4, 343.2 452.0, 317.0 464.1 C 290.7 476.2, 262.0 487.4, 233.0 490.0 C 203.9 492.6, 169.8 491.1, 142.7 479.9 C 115.6 468.6, 90.0 445.2, 70.3 422.4 C 50.7 399.6, 34.9 371.2, 24.8 343.0 C 14.7 314.8, 11.4 283.9, 10.0 253.4 C 8.6 222.9, 9.5 191.8, 16.1 160.0 C 22.7 128.3, 29.6 87.8, 49.6 62.8 C 69.6 37.8, 105.4 16.7, 136.0 10.0 C 166.5 3.3, 203.9 14.6, 233.0 22.9 C 262.0 31.1, 286.2 46.2, 310.2 59.6 C 334.3 73.0, 355.2 86.1, 377.4 103.3 C 399.6 120.5, 424.6 137.8, 443.3 162.8 C 462.1 187.9, 488.0 222.4, 490.0 253.4 Z" 
+            fill="#dcf4ee" 
+            filter="url(#eggShadow)" 
+          />
+        </svg>
+
+        <!-- Information Content inside the Egg -->
+        <div class="egg-inner-content">
+          <div class="emmit-badge-bar" aria-hidden="true"></div>
+          <h3 class="contact-details-heading">Contact Details</h3>
+
+          <div class="contact-card-list">
+            <!-- Email -->
+            <a href="mailto:techwizhy@gmail.com" class="contact-card-item" title="Send Email">
+              <div class="card-icon-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              <span class="card-item-label">techwizhy@gmail.com</span>
+            </a>
+
+            <!-- WhatsApp -->
+            <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" class="contact-card-item" title="Chat on WhatsApp">
+              <div class="card-icon-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.78 14.15c-.24.68-1.2 1.3-1.68 1.37-.48.07-1.11.1-3.23-.74-2.7-1.07-4.46-3.8-4.6-3.98-.13-.18-1.09-1.45-1.09-2.76 0-1.32.69-1.97.94-2.23.25-.26.54-.33.72-.33.18 0 .36.002.52.01.16.008.38-.06.6.46.23.54.78 1.89.85 2.03.07.14.12.31.02.49-.09.18-.14.3-.28.46-.14.16-.3.35-.42.47-.14.14-.29.29-.12.58.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.41.29.14.46.12.63-.07.18-.2.74-.86.94-1.16.2-.29.4-.25.68-.14.28.11 1.78.84 2.09.99.31.15.52.23.59.36.07.13.07.76-.17 1.44z"/>
+                </svg>
+              </div>
+              <span class="card-item-label">+91 00000 00000</span>
+            </a>
+
+            <!-- Location -->
+            <div class="contact-card-item">
+              <div class="card-icon-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+              </div>
+              <span class="card-item-label">Chennai, India</span>
+            </div>
+
+            <!-- Operating Hours -->
+            <div class="contact-card-item">
+              <div class="card-icon-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                </svg>
+              </div>
+              <span class="card-item-label">Mon – Sat, 10 AM – 7 PM IST</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
