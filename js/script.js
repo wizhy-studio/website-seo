@@ -671,11 +671,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         if (supabaseClient) {
-          const { error } = await supabaseClient.from('leads').insert([leadData]);
+          const { error } = await supabaseClient.from('contact_form_leads').insert([leadData]);
           if (error) {
             console.warn('[Wizhy Web Studio] Supabase lead insert note:', error);
           } else {
-            console.info('[Wizhy Web Studio] Lead saved to Supabase successfully!');
+            console.info('[Wizhy Web Studio] Lead saved to contact_form_leads successfully!');
           }
         }
       } catch (err) {
@@ -985,8 +985,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (supabaseClient) {
         try {
-          await supabaseClient.from('leads').insert([{ email, lead_source: 'checklist_lead_magnet' }]);
-          console.info('[Wizhy Web Studio] Lead magnet download captured in Supabase!');
+          await supabaseClient.from('checklist_leads').insert([{ email }]);
+          console.info('[Wizhy Web Studio] Lead magnet download captured in checklist_leads!');
         } catch (err) {
           console.warn('[Wizhy Web Studio] Supabase lead magnet note:', err);
         }
