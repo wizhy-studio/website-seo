@@ -5,11 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wizhy Web Studio (WWS) | Websites, Designed to Grow Your Business</title>
 <meta name="description" content="Wizhy Web Studio (WWS) designs and develops high-performance websites, then powers them with proven SEO so you rank on Google, attract the right customers, and grow — delivered the smart way, at the best price.">
+<meta name="author" content="Wizhy Web Studio">
+<meta name="theme-color" content="#C8481E">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://web.wizhy.in/">
 
+<!-- Resource Hints & DNS Preconnect -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
+
+<!-- Critical Font Preloads -->
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/instrument-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/playfair-latin.woff2" crossorigin>
+
 <!-- Open Graph -->
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_IN">
 <meta property="og:site_name" content="Wizhy Web Studio (WWS)">
 <meta property="og:title" content="Wizhy Web Studio (WWS) | Websites, Designed to Grow Your Business">
 <meta property="og:description" content="High-performance websites + proven SEO, so you rank on Google, attract the right customers, and grow — at the best price.">
@@ -17,14 +28,16 @@
 <meta property="og:image" content="https://web.wizhy.in/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Wizhy Web Studio — Web Design & SEO Agency">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Wizhy Web Studio (WWS) | Websites, Designed to Grow Your Business">
 <meta name="twitter:description" content="High-performance websites + proven SEO, so you rank on Google, attract the right customers, and grow — at the best price.">
 <meta name="twitter:image" content="https://web.wizhy.in/assets/og-image.jpg">
+<meta name="twitter:image:alt" content="Wizhy Web Studio — Web Design & SEO Agency">
 
-<!-- JSON-LD structured data -->
+<!-- JSON-LD Structured Data: Organization & ProfessionalService -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -47,14 +60,89 @@
 }
 </script>
 
+<!-- JSON-LD Structured Data: WebSite & SearchAction -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Wizhy Web Studio",
+  "alternateName": "WWS",
+  "url": "https://web.wizhy.in/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://web.wizhy.in/?s={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- JSON-LD Structured Data: FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does a typical website project take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most business websites take 2-4 weeks from kickoff to launch, depending on scope, number of pages, and how quickly content/feedback comes back to us. E-commerce and custom app builds typically take 4-8 weeks. We'll give you an exact timeline in your custom quote."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you also handle SEO, or just design and development?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SEO is built into every project from day one - not bolted on afterward. That includes technical SEO (site speed, structured data, sitemap, mobile-friendliness) and on-page SEO (titles, meta descriptions, keyword-aligned content). We also offer ongoing SEO & growth retainers after launch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does a project typically cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pricing depends on scope - a simple brochure site costs far less than a full e-commerce store or custom web app. We don't publish a fixed price list because every business's needs are different; instead, we give you a clear, itemized, no-obligation quote after a short discovery call."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will I be able to update the website myself after launch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Depending on the platform we build on (WordPress, Shopify, or a custom CMS), we'll walk you through how to update text, images, and products yourself - plus we're always available for bigger changes or ongoing maintenance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer maintenance and support after the site goes live?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes - we offer ongoing hosting, uptime monitoring, backups, security updates, and SEO/growth retainers so your site keeps performing long after launch. Think of us as your long-term digital partner, not a one-time vendor."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you redesign or improve my existing website instead of building new?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. We regularly audit existing websites (try our free instant audit tool above) and offer redesign, performance, and SEO-focused improvement projects - often faster and cheaper than a full rebuild."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23C8481E'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23FFF8EF' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
 
+<!-- Production Stylesheets -->
 <link rel="stylesheet" href="css/fonts.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.min.css">
 
-<!-- Supabase SDK & Razorpay Checkout -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- Supabase SDK & Razorpay Checkout (Deferred for non-blocking render) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
 <script>
   (function () {
@@ -88,7 +176,13 @@
 
     <!-- Center: Brand Logo & Name -->
     <a href="#home" class="brand brand--center" aria-label="Wizhy Web Studio">
-      <span class="brand__mark"><img src="assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" fetchpriority="high" decoding="async"></span>
+      <span class="brand__mark">
+        <picture>
+          <source srcset="assets/wizhy-studio-logo.avif" type="image/avif">
+          <source srcset="assets/wizhy-studio-logo.webp" type="image/webp">
+          <img src="assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" fetchpriority="high" decoding="async">
+        </picture>
+      </span>
       <span class="brand__text">Wizhy<em> Web Studio</em></span>
     </a>
 
@@ -1537,7 +1631,16 @@
   <div class="container footer__grid">
     <!-- Col 1: Brand & Socials & Newsletter -->
     <div class="footer__col footer__col--brand">
-      <a href="index.html#home" class="brand brand--footer" aria-label="Wizhy Web Studio"><span class="brand__mark"><img src="assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" loading="lazy" decoding="async"></span><span class="brand__text">Wizhy<em> Web Studio</em></span></a>
+      <a href="index.html#home" class="brand brand--footer" aria-label="Wizhy Web Studio">
+        <span class="brand__mark">
+          <picture>
+            <source srcset="assets/wizhy-studio-logo.avif" type="image/avif">
+            <source srcset="assets/wizhy-studio-logo.webp" type="image/webp">
+            <img src="assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="brand__text">Wizhy<em> Web Studio</em></span>
+      </a>
       <p class="footer__tagline">Websites that don't just look good — they get found, rank on Google, and grow your business.</p>
       
       <div class="social-icons">
@@ -1644,6 +1747,6 @@
   </div>
 </div>
 
-<script src="js/script.js"></script>
+<script src="js/script.min.js" defer></script>
 </body>
 </html>

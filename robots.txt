@@ -3,6 +3,8 @@
 
 User-agent: *
 Allow: /
+Disallow: /demo.html
+Disallow: /dynamic_parallax.html
 
 # Sitemap location
 Sitemap: https://web.wizhy.in/sitemap.xml

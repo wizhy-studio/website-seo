@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie Policy | Wizhy Web Studio (WWS) — Transparency & User Choice</title>
+  <meta name="author" content="Wizhy Web Studio">
+  <meta name="theme-color" content="#C8481E">
+  <meta name="robots" content="index, follow">
   <meta name="description" content="Cookie Policy for Wizhy Web Studio (WWS). Understand the minimal, privacy-first cookies we use, how we protect your browsing data, and how to manage your cookie preferences.">
   <link rel="canonical" href="https://web.wizhy.in/cookie-policy.html">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8481E'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='serif' font-size='20' font-weight='bold' fill='%23FFF'%3EW%3C/text%3E%3C/svg%3E">
   
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Critical Font Preloads -->
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/instrument-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/playfair-latin.woff2" crossorigin>
+  <!-- Local Fonts (Self-hosted WOFF2, Zero External CDN) -->
+  <link rel="stylesheet" href="css/fonts.css">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.min.css">
 </head>
 <body>
 
@@ -26,7 +30,8 @@
     <!-- Left: Glassmorphic Capsule Nav -->
     <nav class="nav-pill" id="navPill" aria-label="Primary Navigation">
       <a href="index.html#home" class="nav-link">Home</a>
-      <a href="index.html#services" class="nav-link">Services</a>`n      <a href="index.html#pricing" class="nav-link">Pricing</a>
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="index.html#pricing" class="nav-link">Pricing</a>
       <a href="index.html#why-us" class="nav-link">Why Us</a>
       <a href="index.html#process" class="nav-link">Process</a>
       <a href="index.html#faq" class="nav-link">FAQ</a>
@@ -35,7 +40,13 @@
 
     <!-- Center: Brand Logo & Name -->
     <a href="index.html#home" class="brand brand--center" aria-label="Wizhy Web Studio">
-      <span class="brand__mark"><img src="assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async"></span>
+      <span class="brand__mark">
+        <picture>
+          <source srcset="assets/wizhy-studio-logo.avif" type="image/avif">
+          <source srcset="assets/wizhy-studio-logo.webp" type="image/webp">
+          <img src="assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async">
+        </picture>
+      </span>
       <span class="brand__text">Wizhy<em> Web Studio</em></span>
     </a>
 
@@ -357,6 +368,6 @@
   </div>
 </div>
 
-<script src="js/script.js"></script>
+<script src="js/script.min.js" defer></script>
 </body>
 </html>
