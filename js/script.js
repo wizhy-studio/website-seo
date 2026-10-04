@@ -22,16 +22,72 @@ function safeRun(label, fn) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ---------- 1. Theme toggle (light/dark) ---------- */
+  /* ---------- 1. Theme toggle (light/dark/espresso/lune slider) ---------- */
   safeRun('theme-toggle', () => {
-    const btn = document.getElementById('themeToggle');
-    if (!btn) return;
+    const toggleEl = document.getElementById('themeToggle');
+    if (!toggleEl) return;
     const root = document.documentElement;
-    btn.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme') || 'light';
-      const next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('wizhy-theme', next); } catch (e) { /* localStorage unavailable */ }
+    const optButtons = toggleEl.querySelectorAll('.theme-opt-btn');
+
+    function applyTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      try { localStorage.setItem('wizhy-theme', theme); } catch (e) { /* localStorage unavailable */ }
+      optButtons.forEach(btn => {
+        if (btn.getAttribute('data-set-theme') === theme) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Set initial active button based on current theme
+    const initialTheme = root.getAttribute('data-theme') || 'light';
+    applyTheme(initialTheme);
+
+    // Option buttons direct click
+    optButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const selected = btn.getAttribute('data-set-theme');
+        if (selected) {
+          applyTheme(selected);
+          // Collapse slider immediately back to single circle
+          toggleEl.classList.remove('expanded');
+          toggleEl.classList.add('just-selected');
+          btn.blur();
+          if (document.activeElement) document.activeElement.blur();
+        }
+      });
+    });
+
+    // Reset just-selected once user moves their mouse away from toggle container
+    const wrapEl = toggleEl.closest('.theme-toggle-wrap') || toggleEl;
+    wrapEl.addEventListener('mouseleave', () => {
+      toggleEl.classList.remove('just-selected');
+    });
+
+    // Fallback click on toggle capsule (e.g. mobile tap or quick cycling)
+    toggleEl.addEventListener('click', (e) => {
+      if (e.target.closest('.theme-opt-btn')) return;
+      toggleEl.classList.remove('just-selected');
+      // On mobile or narrow screens, toggle the expanded class
+      if (window.innerWidth <= 768) {
+        toggleEl.classList.toggle('expanded');
+      } else {
+        const current = root.getAttribute('data-theme') || 'light';
+        const themes = ['light', 'dark', 'espresso', 'lune'];
+        const nextIdx = (themes.indexOf(current) + 1) % themes.length;
+        applyTheme(themes[nextIdx]);
+      }
+    });
+
+    // Close expanded on click outside (touch devices)
+    document.addEventListener('click', (e) => {
+      if (!toggleEl.contains(e.target)) {
+        toggleEl.classList.remove('expanded');
+        toggleEl.classList.remove('just-selected');
+      }
     });
   });
 
@@ -597,9 +653,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      const btnText = btnSubmit ? btnSubmit.querySelector('span') : null;
       if (btnSubmit) {
         btnSubmit.disabled = true;
-        btnSubmit.textContent = 'Sending Request...';
+        if (btnText) btnText.textContent = 'Sending Request...';
       }
 
       const leadData = {
@@ -626,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } finally {
         if (btnSubmit) {
           btnSubmit.disabled = false;
-          btnSubmit.textContent = 'Send Request';
+          if (btnText) btnText.textContent = 'Send Request';
         }
       }
 
