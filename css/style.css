@@ -1765,19 +1765,24 @@ html[data-theme="espresso"] .discount-pill {
 .pricing-card__perks li {
   font-size: .84rem;
   color: var(--text-primary);
-  line-height: 1.4;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  line-height: 1.45;
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  text-align: left;
 }
 .pricing-card__perks li strong {
   font-weight: 600;
+  display: inline;
 }
 .perk-check {
   color: var(--accent-1);
   font-weight: 700;
   font-size: .92rem;
-  line-height: 1.2;
+  line-height: 1.45;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .pricing-card__cta {
   margin-top: auto;
@@ -4549,4 +4554,45 @@ a.footer-contact-item:hover .footer-contact-icon--wa {
   .footer-compliance-links {
     gap: 10px 14px;
   }
+}
+
+/* =========================================================
+   INTL-TEL-INPUT CUSTOM THEME INTEGRATION
+   ========================================================= */
+.iti {
+  width: 100% !important;
+  display: block !important;
+}
+
+.iti__country-list {
+  background: var(--surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-body) !important;
+  z-index: 100 !important;
+}
+
+.iti__country {
+  padding: 8px 12px !important;
+  transition: background .15s ease !important;
+}
+
+.iti__country:hover,
+.iti__country.iti__highlight {
+  background: var(--surface-2) !important;
+}
+
+.iti__dial-code {
+  color: var(--text-muted) !important;
+}
+
+.iti__selected-country {
+  padding-left: 12px !important;
+}
+
+.field-box .iti input#phone,
+.form-group .iti input#phone {
+  width: 100% !important;
 }

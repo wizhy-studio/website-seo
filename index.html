@@ -141,6 +141,13 @@
 <link rel="stylesheet" href="css/style.min.css">
 <link rel="stylesheet" href="css/chat.css">
 
+<!-- intl-tel-input CSS & JS (Zero friction international phone formatting) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.min.css">
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js" defer></script>
+
+<!-- Cloudflare Turnstile (Invisible Spam Protection) -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <!-- Supabase SDK & Razorpay Checkout (Deferred for non-blocking render) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
@@ -1483,6 +1490,9 @@
           <span class="error-msg">Please share a few details about your project</span>
         </div>
 
+        <!-- Cloudflare Turnstile Invisible Spam Protection Widget -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFTEabzr1Zx1u_kG" data-size="invisible" data-theme="auto" id="cfTurnstileWidget"></div>
+
         <!-- Submit Button -->
         <span class="magnetic" style="display:block;">
           <button type="submit" class="btn-submit-quote" id="btnSubmitContact">
@@ -1759,7 +1769,7 @@
       </div>
       <div class="wizhy-chat-header__titles">
         <span class="wizhy-chat-header__name">WizAI</span>
-        <span class="wizhy-chat-header__status">Online • Instant Answers</span>
+        <span class="wizhy-chat-header__status">Online</span>
       </div>
     </div>
     <button class="wizhy-chat-header__close" id="wizhyChatClose" aria-label="Close Chat">✕</button>

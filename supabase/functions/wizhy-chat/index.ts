@@ -163,6 +163,19 @@ serve(async (req) => {
               lead_source: "ai_chat_assistant"
             }
           ]);
+          // Instant Telegram Admin Notification
+          const tgToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
+          const tgChatId = Deno.env.get("TELEGRAM_CHAT_ID");
+          if (tgToken && tgChatId) {
+            try {
+              const tgText = `🔔 NEW AI CHAT LEAD on web.wizhy.in!\n• Contact: ${phoneMatch ? phoneMatch[0] : (emailMatch ? emailMatch[0] : 'Provided in chat')}\n• Message: ${lastUserMsg}`;
+              fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: tgChatId, text: tgText })
+              }).catch(() => {});
+            } catch (_) {}
+          }
           leadSaved = true;
         } catch (dbErr) {
           console.warn("Could not save AI lead to Supabase:", dbErr);

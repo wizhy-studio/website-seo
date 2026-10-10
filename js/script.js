@@ -554,36 +554,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmit = document.getElementById('btnSubmitContact');
     if (!form || !formSuccess) return;
 
-    // Strict Indian Mobile Validation Rules
-    function validateIndianMobile(phoneStr) {
-      if (!phoneStr || !phoneStr.trim()) {
-        return { valid: false, message: 'Please enter your mobile number' };
+    // Initialize intl-tel-input on phone field
+    const phoneInput = form.querySelector('#phone');
+    let iti = null;
+    if (phoneInput && window.intlTelInput) {
+      try {
+        iti = window.intlTelInput(phoneInput, {
+          initialCountry: 'in',
+          separateDialCode: true,
+          strictMode: true,
+          utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js'
+        });
+      } catch (e) {
+        console.warn('[intl-tel-input] init note:', e);
       }
-      let digits = phoneStr.replace(/\D/g, '');
-      if (digits.length === 12 && digits.startsWith('91')) {
-        digits = digits.slice(2);
-      } else if (digits.length === 11 && digits.startsWith('0')) {
-        digits = digits.slice(1);
+    }
+
+    // Phone Validation (intl-tel-input + fallback)
+    function validatePhone() {
+      if (!phoneInput) return { valid: true, cleanNumber: null };
+      const val = phoneInput.value.trim();
+      if (!val) {
+        return { valid: false, message: 'Please enter your phone number' };
       }
-      if (digits.length !== 10) {
-        return { valid: false, message: 'Mobile number must be exactly 10 digits' };
+      if (iti) {
+        if (!iti.isValidNumber()) {
+          return { valid: false, message: 'Please enter a valid phone number for the selected country' };
+        }
+        return { valid: true, cleanNumber: iti.getNumber() };
       }
-      if (!/^[6-9]/.test(digits)) {
-        return { valid: false, message: 'Must start with 6, 7, 8, or 9 (valid Indian mobile number)' };
+      // Fallback 10-digit check
+      let digits = val.replace(/\D/g, '');
+      if (digits.length < 7 || digits.length > 15) {
+        return { valid: false, message: 'Please enter a valid phone number' };
       }
-      if (/^(\d)\1{9}$/.test(digits)) {
-        return { valid: false, message: 'Invalid number: all digits cannot be identical' };
-      }
-      const SEQUENTIAL_PATTERNS = [
-        '0123456789', '1234567890', '2345678901', '3456789012',
-        '4567890123', '5678901234', '6789012345', '7890123456',
-        '8901234567', '9012345678', '9876543210', '0987654321',
-        '8765432109', '7654321098'
-      ];
-      if (SEQUENTIAL_PATTERNS.includes(digits)) {
-        return { valid: false, message: 'Invalid number: sequential number patterns not allowed' };
-      }
-      return { valid: true, cleanNumber: digits };
+      return { valid: true, cleanNumber: val };
     }
 
     function validateEmail(emailStr) {
@@ -615,7 +620,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const name = form.querySelector('#name');
       const email = form.querySelector('#email');
-      const phone = form.querySelector('#phone');
       const service = form.querySelector('#service');
       const message = form.querySelector('#message');
       const budget = form.querySelector('#budget');
@@ -632,9 +636,9 @@ document.addEventListener('DOMContentLoaded', () => {
       setFieldState(email.closest('.form-group'), emailRes.valid, emailRes.valid ? '' : emailRes.message);
       valid = valid && emailRes.valid;
 
-      // 3. Mobile Number Validation
-      const phoneRes = validateIndianMobile(phone.value);
-      setFieldState(phone.closest('.form-group'), phoneRes.valid, phoneRes.valid ? '' : phoneRes.message);
+      // 3. Mobile Number Validation via intl-tel-input
+      const phoneRes = validatePhone();
+      setFieldState(phoneInput.closest('.form-group'), phoneRes.valid, phoneRes.valid ? '' : phoneRes.message);
       valid = valid && phoneRes.valid;
 
       // 4. Service Selection
@@ -653,16 +657,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // 6. Turnstile Verification Token
+      let turnstileToken = '';
+      if (window.turnstile) {
+        try {
+          turnstileToken = window.turnstile.getResponse();
+        } catch (_) {}
+      }
+
       const btnText = btnSubmit ? btnSubmit.querySelector('span') : null;
       if (btnSubmit) {
         btnSubmit.disabled = true;
         if (btnText) btnText.textContent = 'Sending Request...';
       }
 
+      const finalPhone = phoneRes.cleanNumber || phoneInput.value.trim();
+
       const leadData = {
         name: name.value.trim(),
         email: email.value.trim(),
-        phone: phone.value.trim() || null,
+        phone: finalPhone || null,
         service: service.value,
         budget: budget.value.trim() || null,
         message: message.value.trim(),
@@ -1481,7 +1495,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         if (typingEl && typingEl.parentNode) typingEl.remove();
         console.warn('[Wizhy AI Chat] Fetch error:', err);
-        appendMessage('bot', "I'm temporarily experiencing high demand. Please WhatsApp us directly using the green WhatsApp button on the bottom left, or try again in a moment!");
+        appendMessage('bot', "I'm temporarily experiencing high demand. Please WhatsApp us directly using the WhatsApp button on the bottom left, or try again in a moment!");
       }
     }
 

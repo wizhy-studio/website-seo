@@ -40,6 +40,13 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.min.css">
   
+  <!-- intl-tel-input CSS & JS (Zero friction international phone formatting) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js" defer></script>
+
+  <!-- Cloudflare Turnstile (Invisible Spam Protection) -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
   <!-- Supabase Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 </head>
@@ -227,6 +234,9 @@
                 </div>
                 <div class="error-msg">Please describe your project</div>
               </div>
+
+              <!-- Cloudflare Turnstile Invisible Spam Protection Widget -->
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAFTEabzr1Zx1u_kG" data-size="invisible" data-theme="auto" id="cfTurnstileWidgetContact"></div>
 
               <button type="submit" class="btn btn--primary btn--full btn--lg" id="btnSubmitContact">
                 Submit Inquiry →
