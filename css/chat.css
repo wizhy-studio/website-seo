@@ -1,0 +1,436 @@
+/* =========================================================
+   WIZHY WEB STUDIO — AI CHATBOT WIDGET (css/chat.css)
+   Seamlessly adapts to all 4 Themes (Light, Dark, Espresso, Lune)
+   Zero external dependencies. Pure vanilla CSS tokens.
+========================================================= */
+
+/* Floating Launcher Button */
+.wizhy-chat-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  height: 52px;
+  padding: 0 20px 0 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+  z-index: 550;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .3s ease;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.wizhy-chat-fab:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--accent-1);
+  box-shadow: 0 16px 42px var(--accent-1-soft);
+}
+
+.wizhy-chat-fab__icon-wrap {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizhy-chat-fab__icon-wrap svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.wizhy-chat-fab__status-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981; /* active emerald */
+  border: 1.5px solid var(--surface);
+  animation: chatPulse 2s infinite;
+}
+
+@keyframes chatPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.wizhy-chat-fab__label {
+  white-space: nowrap;
+}
+
+/* Adjust Back-to-Top when chat fab is present */
+.back-to-top.show {
+  bottom: 92px !important;
+  right: 32px !important;
+}
+
+/* Chat Window Modal */
+.wizhy-chat-window {
+  position: fixed;
+  bottom: 95px;
+  right: 30px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 120px);
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 22px;
+  box-shadow: var(--shadow-lift);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 560;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.94);
+  transform-origin: bottom right;
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+  font-family: var(--font-body);
+}
+
+.wizhy-chat-window.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Window Header */
+.wizhy-chat-header {
+  padding: 16px 20px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wizhy-chat-header__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wizhy-chat-header__avatar {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wizhy-chat-header__avatar img,
+.wizhy-chat-fab__icon-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.wizhy-chat-header__avatar svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.wizhy-chat-header__titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.wizhy-chat-header__name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.wizhy-chat-header__status {
+  font-size: 0.76rem;
+  color: #10B981;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wizhy-chat-header__status::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.wizhy-chat-header__close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-size: 1.2rem;
+}
+
+.wizhy-chat-header__close:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+/* Chat Messages Stream */
+.wizhy-chat-messages {
+  flex: 1;
+  padding: 20px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+}
+
+.wizhy-chat-messages::-webkit-scrollbar {
+  width: 5px;
+}
+.wizhy-chat-messages::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+/* Individual Message Bubble */
+.wizhy-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 82%;
+  animation: msgFadeIn 0.25s var(--ease);
+}
+
+@keyframes msgFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wizhy-msg--bot {
+  align-self: flex-start;
+}
+
+.wizhy-msg--user {
+  align-self: flex-end;
+}
+
+.wizhy-msg__bubble {
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.wizhy-msg--bot .wizhy-msg__bubble {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+.wizhy-msg--bot .wizhy-msg__bubble strong {
+  color: var(--accent-1);
+}
+
+.wizhy-msg--user .wizhy-msg__bubble {
+  background: var(--accent-1);
+  color: var(--on-accent);
+  border-bottom-right-radius: 4px;
+}
+
+.wizhy-msg__time {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.wizhy-msg--user .wizhy-msg__time {
+  align-self: flex-end;
+}
+
+/* Typing Indicator Animation */
+.wizhy-typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
+  width: fit-content;
+}
+
+.wizhy-typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.wizhy-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.wizhy-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-5px); opacity: 1; background: var(--accent-1); }
+}
+
+/* Quick Prompt Suggestions */
+.wizhy-chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px 12px 16px;
+  background: var(--surface);
+  border-top: 1px dashed var(--border);
+}
+
+.wizhy-chat-chip {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .2s ease;
+  white-space: nowrap;
+}
+
+.wizhy-chat-chip:hover {
+  background: var(--accent-1);
+  color: var(--on-accent);
+  border-color: var(--accent-1);
+  transform: translateY(-1px);
+}
+
+/* Input Area */
+.wizhy-chat-footer {
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+}
+
+.wizhy-chat-input-bar {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 4px 6px 4px 16px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.wizhy-chat-input-bar:focus-within {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px var(--accent-1-soft);
+}
+
+.wizhy-chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  padding: 8px 0;
+}
+
+.wizhy-chat-input::placeholder {
+  color: var(--text-muted);
+}
+
+.wizhy-chat-send {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  color: var(--on-accent);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .2s ease, background .2s ease;
+  flex-shrink: 0;
+}
+
+.wizhy-chat-send:hover {
+  transform: scale(1.06);
+}
+
+.wizhy-chat-send svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  transform: translateX(1px);
+}
+
+.wizhy-chat-badge {
+  text-align: center;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .wizhy-chat-fab {
+    bottom: 20px;
+    right: 18px;
+    padding: 0 12px;
+    height: 48px;
+  }
+  .wizhy-chat-fab__label {
+    display: none;
+  }
+  .wizhy-chat-window {
+    bottom: 76px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    height: calc(100vh - 110px);
+  }
+  .wizhy-chat-input {
+    font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+  }
+  .back-to-top.show {
+    bottom: 76px !important;
+    right: 18px !important;
+  }
+}

@@ -1324,4 +1324,182 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(animate);
   });
 
+  /* ---------- 25. Wizhy Studio AI Chat Assistant ---------- */
+  safeRun('wizhy-ai-chat-widget', () => {
+    const fab = document.getElementById('wizhyChatFab');
+    const win = document.getElementById('wizhyChatWindow');
+    const closeBtn = document.getElementById('wizhyChatClose');
+    const messagesEl = document.getElementById('wizhyChatMessages');
+    const form = document.getElementById('wizhyChatForm');
+    const input = document.getElementById('wizhyChatInput');
+    const suggestions = document.getElementById('wizhyChatSuggestions');
+
+    if (!fab || !win || !form || !input || !messagesEl) return;
+
+    const chatHistory = [];
+
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function toggleChat(open) {
+      const isOpen = open !== undefined ? open : !win.classList.contains('open');
+      win.classList.toggle('open', isOpen);
+      fab.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      win.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      if (isOpen) {
+        setTimeout(() => input.focus(), 250);
+        scrollToBottom();
+      }
+    }
+
+    fab.addEventListener('click', () => toggleChat());
+    if (closeBtn) closeBtn.addEventListener('click', () => toggleChat(false));
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && win.classList.contains('open')) {
+        toggleChat(false);
+      }
+    });
+
+    function formatText(text) {
+      if (!text) return '';
+      // Escape HTML
+      const escaped = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      // Format bold (**text** or __text__)
+      const bolded = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // Format newlines
+      return bolded.replace(/\n/g, '<br>');
+    }
+
+    function appendMessage(sender, text) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `wizhy-msg wizhy-msg--${sender}`;
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'wizhy-msg__bubble';
+      bubble.innerHTML = formatText(text);
+      msgDiv.appendChild(bubble);
+
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'wizhy-msg__time';
+      const now = new Date();
+      timeSpan.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      msgDiv.appendChild(timeSpan);
+
+      messagesEl.appendChild(msgDiv);
+      scrollToBottom();
+      return msgDiv;
+    }
+
+    function showTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'wizhy-msg wizhy-msg--bot wizhy-typing-msg';
+      typingDiv.innerHTML = `
+        <div class="wizhy-typing-indicator">
+          <span class="wizhy-typing-dot"></span>
+          <span class="wizhy-typing-dot"></span>
+          <span class="wizhy-typing-dot"></span>
+        </div>
+      `;
+      messagesEl.appendChild(typingDiv);
+      scrollToBottom();
+      return typingDiv;
+    }
+
+    // Direct leads auto-capture to Supabase
+    async function captureLeadFromChat(userText) {
+      try {
+        const phoneMatch = userText.match(/[6-9]\d{9}/);
+        const emailMatch = userText.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/);
+
+        if ((phoneMatch || emailMatch) && supabaseClient) {
+          await supabaseClient.from('leads').insert([{
+            phone: phoneMatch ? phoneMatch[0] : null,
+            email: emailMatch ? emailMatch[0] : null,
+            message: `[AI Chat Lead]: ${userText}`,
+            lead_source: 'ai_chat_assistant'
+          }]);
+          console.info('[Wizhy Studio] AI Chat lead captured directly to Supabase!');
+        }
+      } catch (err) {
+        console.warn('[Wizhy Studio] AI Chat lead capture note:', err);
+      }
+    }
+
+    async function handleSendMessage(text) {
+      const cleanText = text.trim();
+      if (!cleanText) return;
+
+      appendMessage('user', cleanText);
+      chatHistory.push({ sender: 'user', text: cleanText });
+      input.value = '';
+
+      // Check if lead info was submitted
+      captureLeadFromChat(cleanText);
+
+      const typingEl = showTypingIndicator();
+
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      let endpoint;
+      if (isLocalHost) {
+        endpoint = window.location.port === '3000' ? '/api/chat' : 'http://localhost:3000/api/chat';
+      } else if (window.location.protocol === 'file:') {
+        endpoint = 'http://localhost:3000/api/chat';
+      } else {
+        endpoint = 'https://qfoziccqtyvnjxsjjmds.supabase.co/functions/v1/wizhy-chat';
+      }
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 18000);
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: chatHistory }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const reply = data.reply || "I'm here to help! Could you please share a few more details about your project?";
+
+        if (typingEl && typingEl.parentNode) typingEl.remove();
+        appendMessage('bot', reply);
+        chatHistory.push({ sender: 'model', text: reply });
+      } catch (err) {
+        if (typingEl && typingEl.parentNode) typingEl.remove();
+        console.warn('[Wizhy AI Chat] Fetch error:', err);
+        appendMessage('bot', "I'm temporarily experiencing high demand. Please WhatsApp us directly using the green WhatsApp button on the bottom left, or try again in a moment!");
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleSendMessage(input.value);
+    });
+
+    if (suggestions) {
+      suggestions.addEventListener('click', (e) => {
+        const chip = e.target.closest('.wizhy-chat-chip');
+        if (!chip) return;
+        const prompt = chip.getAttribute('data-prompt');
+        if (prompt) {
+          handleSendMessage(prompt);
+        }
+      });
+    }
+  });
+
 });
