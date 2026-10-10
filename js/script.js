@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-copy]').forEach(el => {
       el.addEventListener('click', (e) => {
         const value = el.getAttribute('data-copy');
-        if (!value || value.includes('00000')) return;
+        if (!value) return;
         if (navigator.clipboard) {
           e.preventDefault();
           navigator.clipboard.writeText(value).then(() => showToast('Copied: ' + value));
