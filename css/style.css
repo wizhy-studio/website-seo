@@ -4183,7 +4183,7 @@ html[data-theme="lune"] .lead-magnet__input-group:focus-within {
    LEGAL & POLICY PAGES & DEDICATED CONTACT PAGE STYLES
 ========================================================= */
 .page-hero {
-  padding: 160px 0 60px;
+  padding: 108px 0 32px;
   position: relative;
   background: radial-gradient(circle at 50% 10%, rgba(200, 72, 30, 0.08) 0%, transparent 65%);
 }
@@ -4401,12 +4401,28 @@ html[data-theme="espresso"] .breadcrumbs {
   border-radius: 2px;
 }
 
-/* Contact Page Grid */
+/* Contact Page Grid & Form Card Styling */
 .contact-page-layout {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 40px;
-  padding-bottom: 120px;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 36px;
+  align-items: start;
+  padding-bottom: 90px;
+}
+.contact-form-wrap {
+  width: 100%;
+}
+.contact-form {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg, 24px);
+  padding: 40px 36px;
+  box-shadow: var(--shadow-card);
+}
+.contact-form .btn-submit-quote,
+.contact-form button[type="submit"] {
+  margin-top: 8px;
+  width: 100%;
 }
 .contact-info-card {
   background: var(--surface);

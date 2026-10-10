@@ -39,6 +39,7 @@
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/chat.css">
 </head>
 <body>
 
@@ -358,6 +359,64 @@
 
 <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 <div class="toast" id="toast"></div>
+
+<!-- ============ WIZAI CHAT ASSISTANT ============ -->
+<button class="wizhy-chat-fab" id="wizhyChatFab" aria-label="Open WizAI Assistant" aria-expanded="false">
+  <div class="wizhy-chat-fab__icon-wrap">
+    <picture>
+      <source srcset="assets/wizai-avatar-sm.webp" type="image/webp">
+      <img src="assets/wizai-avatar.png" alt="WizAI Logo" width="28" height="28" loading="lazy" decoding="async">
+    </picture>
+    <span class="wizhy-chat-fab__status-dot"></span>
+  </div>
+  <span class="wizhy-chat-fab__label">Ask WizAI</span>
+</button>
+
+<div class="wizhy-chat-window" id="wizhyChatWindow" role="dialog" aria-label="WizAI Strategist Chat" aria-hidden="true">
+  <div class="wizhy-chat-header">
+    <div class="wizhy-chat-header__info">
+      <div class="wizhy-chat-header__avatar">
+        <picture>
+          <source srcset="assets/wizai-avatar-sm.webp" type="image/webp">
+          <img src="assets/wizai-avatar.png" alt="WizAI Logo" width="38" height="38" loading="lazy" decoding="async">
+        </picture>
+      </div>
+      <div class="wizhy-chat-header__titles">
+        <span class="wizhy-chat-header__name">WizAI</span>
+        <span class="wizhy-chat-header__status">Online</span>
+      </div>
+    </div>
+    <button class="wizhy-chat-header__close" id="wizhyChatClose" aria-label="Close Chat">✕</button>
+  </div>
+
+  <div class="wizhy-chat-messages" id="wizhyChatMessages">
+    <div class="wizhy-msg wizhy-msg--bot">
+      <div class="wizhy-msg__bubble">
+        Hi there! 👋 I am <strong>WizAI</strong>, your AI assistant at <strong>Wizhy Web Studio</strong>.<br><br>
+        Looking to claim our <strong>Free Website Offer</strong>, explore pricing packages, or run a free SEO audit? How can I help you today?
+      </div>
+      <span class="wizhy-msg__time">Just now</span>
+    </div>
+  </div>
+
+  <!-- Quick Suggestion Prompts -->
+  <div class="wizhy-chat-suggestions" id="wizhyChatSuggestions">
+    <button class="wizhy-chat-chip" data-prompt="Tell me about the First 10 Free Website offer!">🎁 Free Website Offer</button>
+    <button class="wizhy-chat-chip" data-prompt="What are your website packages & pricing?">💰 Website Packages</button>
+    <button class="wizhy-chat-chip" data-prompt="How does your 100/100 Google Lighthouse guarantee work?">⚡ 100/100 Speed</button>
+    <button class="wizhy-chat-chip" data-prompt="I want to discuss my project with you!">📞 Contact Team</button>
+  </div>
+
+  <div class="wizhy-chat-footer">
+    <form class="wizhy-chat-input-bar" id="wizhyChatForm">
+      <input type="text" class="wizhy-chat-input" id="wizhyChatInput" placeholder="Ask about websites, pricing, SEO..." autocomplete="off">
+      <button type="submit" class="wizhy-chat-send" id="wizhyChatSend" aria-label="Send Message">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </form>
+    <p class="wizhy-chat-badge">WizAI can make mistakes, so double-check it.</p>
+  </div>
+</div>
 
 <!-- ============ COOKIE CONSENT BANNER ============ -->
 <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie consent">
