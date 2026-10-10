@@ -1,7 +1,7 @@
 // =========================================================
 // WIZHY WEB STUDIO — SUPABASE EDGE FUNCTION: wizhy-chat
 // Secure serverless backend calling Google Gemini Flash API
-// Multi-model resilience pool: instant response, zero downtime
+// Multi-model resilience pool + Lead Management & Telegram In-Place Edit
 // =========================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -35,17 +35,19 @@ KEY INFORMATION ABOUT WIZHY WEB STUDIO:
   1. Single Page Starter: ₹999 (1 conversion-focused landing page, sub-second speed, contact form, WhatsApp button, basic SEO).
   2. Multi-Page Growth: ₹2,499 (Up to 5 pages, local SEO & Google Business optimization, schema markup, animations).
   3. Full Business / E-Commerce Elite: ₹4,999 (Complete bespoke web solution, Razorpay/Stripe payment gateway, advanced SEO architecture, priority 24/7 support).
-- Free Tools on Site:
-  - Instant SEO & Performance Audit Tool on the website.
-  - Free 40-Point Website & SEO Checklist PDF.
 - Turnaround Time: 3 to 7 business days depending on project scope.
-- Contact: Form at #contact on the site, or WhatsApp chat.
 
-YOUR GOALS:
-1. Answer visitor questions accurately and concisely (2–3 sentences max per response).
-2. Avoid long walls of text. Be direct, crisp, and conversational.
-3. If the visitor is interested in a website, offer, or SEO audit, proactively invite them to share their Name and Phone number (or Email) so our lead strategist can reach out on WhatsApp.
-4. When they share their contact details, warmly thank them and confirm that our team will reach out within a few hours!
+CONVERSATIONAL LEAD INTAKE FLOW (VERY IMPORTANT):
+1. Keep replies short (2–3 sentences max). Never overwhelm the visitor with a wall of questions.
+2. Step 1 (Contact Capture): When a user shows interest in a website, pricing, or the free offer, invite them to share their Name and WhatsApp number (or email) first.
+3. Step 2 (Progressive Details): When they provide their contact details:
+   - Warmly acknowledge them by their Name.
+   - Mention that their initial request is noted and our team will connect with them.
+   - Then naturally ask the next quick question to understand their needs:
+     "To help us prepare the best proposal, which package or service are you interested in (e.g. Free 1-page offer, Starter ₹999, or Full Business ₹4,999)?"
+4. Step 3 (Requirements & Timeline): Once they name a service or idea, ask:
+   "Awesome choice! What kind of business or website are you building, and do you have a target launch date in mind?"
+5. Step 4 (Wrap-up): When all details are gathered, celebrate and confirm that everything is logged and our senior strategist will message them on WhatsApp shortly!
 `;
 
 const CANDIDATE_MODELS = [
@@ -82,13 +84,90 @@ async function callModelWithTimeout(modelName: string, apiKey: string, bodyJson:
   }
 }
 
+// Generate Date-based tracking code: YYYYMM-XXXX
+function generateTrackingCode(): string {
+  const d = new Date();
+  const yy = String(d.getFullYear()).slice(-2);
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const rand = Math.floor(1000 + Math.random() * 9000);
+  return `${yy}${mm}-${rand}`;
+}
+
+// Extract name, phone, email, service from conversation
+function parseLeadData(messages: Array<{ sender: string; text: string }>) {
+  let phone = "";
+  let email = "";
+  let name = "";
+  let projectService = "";
+  let allUserText = "";
+
+  for (const m of messages) {
+    if (m.sender === "user") {
+      const txt = m.text;
+      allUserText += (allUserText ? " | " : "") + txt;
+
+      if (!phone) {
+        const pMatch = txt.match(/(?:\+?91[\s-]?)?[6-9]\d{9}/);
+        if (pMatch) phone = pMatch[0].replace(/\s+/g, "");
+      }
+
+      if (!email) {
+        const eMatch = txt.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/);
+        if (eMatch) email = eMatch[0];
+      }
+
+      // Try detecting name if patterns like "name is X" or "I am X" or "My name is X"
+      if (!name) {
+        const nameMatch = txt.match(/(?:my name is|i am|this is|name\s*[:\-])\s+([A-Za-z]{2,20}(?:\s+[A-Za-z]{2,20})?)/i);
+        if (nameMatch) {
+          name = nameMatch[1].trim();
+        }
+      }
+
+      // Detect service interest
+      const lower = txt.toLowerCase();
+      if (!projectService) {
+        if (lower.includes("free") || lower.includes("first 10") || lower.includes("offer")) {
+          projectService = "🎁 Free 1-Page Website Offer (₹0)";
+        } else if (lower.includes("starter") || lower.includes("999") || lower.includes("single page")) {
+          projectService = "1-Page Starter Website (₹999)";
+        } else if (lower.includes("growth") || lower.includes("2499") || lower.includes("2,499") || lower.includes("multi")) {
+          projectService = "Multi-Page Growth (₹2,499)";
+        } else if (lower.includes("ecommerce") || lower.includes("store") || lower.includes("shop") || lower.includes("4999") || lower.includes("business")) {
+          projectService = "Full Business / E-Commerce (₹4,999)";
+        } else if (lower.includes("seo") || lower.includes("audit")) {
+          projectService = "SEO & Google Ranking";
+        }
+      }
+    }
+  }
+
+  // Fallback name heuristic: If user said "Rahul and 9876543210" or "Rahul 9876543210"
+  if (!name && phone) {
+    for (const m of messages) {
+      if (m.sender === "user" && m.text.includes(phone.slice(-6))) {
+        const cleaned = m.text.replace(phone, "").replace(/(and|my|number|phone|whatsapp|no|\:)/gi, "").trim();
+        const words = cleaned.split(/\s+/).filter(w => /^[A-Za-z]{2,20}$/.test(w));
+        if (words.length >= 1 && words.length <= 3) {
+          name = words.join(" ");
+          break;
+        }
+      }
+    }
+  }
+
+  const isComplete = Boolean((phone || email) && projectService && messages.filter(m => m.sender === "user").length >= 2);
+
+  return { phone, email, name, projectService, allUserText, isComplete };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const { messages, userContact } = await req.json();
+    const { messages, leadSession } = await req.json();
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return new Response(
@@ -105,9 +184,10 @@ serve(async (req) => {
       );
     }
 
+    // Build Gemini context
     const geminiContents = [
       { role: "user", parts: [{ text: SYSTEM_INSTRUCTION }] },
-      { role: "model", parts: [{ text: "Understood. I am Wizhy Studio's AI assistant." }] }
+      { role: "model", parts: [{ text: "Understood. I am WizAI, Wizhy Studio's AI assistant." }] }
     ];
 
     for (const msg of messages) {
@@ -142,49 +222,123 @@ serve(async (req) => {
       throw new Error(lastErr?.message || "Service temporarily busy. Please try again.");
     }
 
-    // Automatically detect phone or email in user's message to capture lead
-    const lastUserMsg = messages[messages.length - 1]?.text || "";
-    const phoneMatch = lastUserMsg.match(/[6-9]\d{9}/);
-    const emailMatch = lastUserMsg.match(/[\w.-]+@[\w.-]+\.\w+/);
+    // Parse lead information across the entire conversation
+    const parsed = parseLeadData(messages);
+    let updatedLeadSession = leadSession || null;
 
-    let leadSaved = false;
-    if (phoneMatch || emailMatch || userContact) {
+    if (parsed.phone || parsed.email) {
+      const codeSeq = leadSession?.codeSeq || generateTrackingCode();
+      const currentInquiryId = parsed.isComplete ? `INQ-${codeSeq}` : `REF-${codeSeq}`;
+      const statusLabel = parsed.isComplete ? "COMPLETE INQUIRY" : "INQUIRY IN PROGRESS (Partial Details)";
+
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
       const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_ANON_KEY");
+      const tgToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
+      const tgChatId = Deno.env.get("TELEGRAM_CHAT_ID");
 
+      // Save / Update to Supabase contact_form_leads table
       if (supabaseUrl && supabaseServiceKey) {
         try {
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
-          await supabase.from("leads").insert([
-            {
-              phone: phoneMatch ? phoneMatch[0] : (userContact?.phone || null),
-              email: emailMatch ? emailMatch[0] : (userContact?.email || null),
-              message: `[AI Chat Inquiry]: ${lastUserMsg}`,
-              lead_source: "ai_chat_assistant"
+          const leadPayload = {
+            name: parsed.name || "WizAI Chat Visitor",
+            email: parsed.email || null,
+            phone: parsed.phone || null,
+            service: parsed.projectService || "Chat Discussion",
+            message: `[${currentInquiryId}] User Transcript: ${parsed.allUserText}`,
+            lead_source: parsed.isComplete ? "ai_chat_completed" : "ai_chat_partial"
+          };
+
+          if (leadSession?.dbRowId) {
+            // Update existing row
+            await supabase.from("contact_form_leads").update(leadPayload).eq("id", leadSession.dbRowId);
+          } else {
+            // Insert initial row
+            const { data } = await supabase.from("contact_form_leads").insert([leadPayload]).select("id").single();
+            if (data?.id) {
+              updatedLeadSession = { ...(updatedLeadSession || {}), dbRowId: data.id };
             }
-          ]);
-          // Instant Telegram Admin Notification
-          const tgToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
-          const tgChatId = Deno.env.get("TELEGRAM_CHAT_ID");
-          if (tgToken && tgChatId) {
-            try {
-              const tgText = `🔔 NEW AI CHAT LEAD on web.wizhy.in!\n• Contact: ${phoneMatch ? phoneMatch[0] : (emailMatch ? emailMatch[0] : 'Provided in chat')}\n• Message: ${lastUserMsg}`;
-              fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: tgChatId, text: tgText })
-              }).catch(() => {});
-            } catch (_) {}
           }
-          leadSaved = true;
         } catch (dbErr) {
-          console.warn("Could not save AI lead to Supabase:", dbErr);
+          console.warn("[Supabase Edge] Lead update note:", dbErr);
         }
+      }
+
+      // Handle Telegram: editMessageText for single notification, or sendMessage if first time
+      if (tgToken && tgChatId) {
+        try {
+          const tgText = parsed.isComplete
+            ? `✅ <b>${statusLabel}: #${currentInquiryId}</b>\n\n` +
+              `👤 <b>Name:</b> ${parsed.name || "Client"}\n` +
+              `📞 <b>Phone:</b> ${parsed.phone || "Not provided"}\n` +
+              `✉️ <b>Email:</b> ${parsed.email || "Not provided"}\n` +
+              `💼 <b>Service:</b> ${parsed.projectService}\n` +
+              `💬 <b>Details:</b> ${parsed.allUserText}\n` +
+              `🌐 <b>Source:</b> WizAI Chat Assistant\n` +
+              `⏰ <b>Status:</b> Qualified Lead (All details filled)`
+            : `⏳ <b>${statusLabel}: #${currentInquiryId}</b>\n\n` +
+              `👤 <b>Name:</b> ${parsed.name || "Visitor"}\n` +
+              `📞 <b>Phone:</b> ${parsed.phone || "Not provided"}\n` +
+              `✉️ <b>Email:</b> ${parsed.email || "Not provided"}\n` +
+              `💼 <b>Service:</b> ${parsed.projectService || "Under discussion"}\n` +
+              `💬 <b>Current Input:</b> ${parsed.allUserText}\n` +
+              `🌐 <b>Source:</b> WizAI Chat Assistant\n` +
+              `⚠️ <i>Status: Saved. WizAI is asking for service requirements...</i>`;
+
+          const existingTgMsgId = leadSession?.tgMessageId;
+
+          if (existingTgMsgId) {
+            // OPTION 1: Edit the existing Telegram message in-place!
+            const editRes = await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                chat_id: tgChatId,
+                message_id: existingTgMsgId,
+                text: tgText,
+                parse_mode: "HTML"
+              })
+            });
+            const editData = await editRes.json();
+            if (!editData.ok) {
+              console.warn("[Telegram Edit note]:", editData.description);
+            }
+          } else {
+            // First notification: Send original message and capture its message_id
+            const sendRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                chat_id: tgChatId,
+                text: tgText,
+                parse_mode: "HTML"
+              })
+            });
+            const sendData = await sendRes.json();
+            if (sendData.ok && sendData.result?.message_id) {
+              updatedLeadSession = {
+                ...(updatedLeadSession || {}),
+                tgMessageId: sendData.result.message_id,
+                codeSeq: codeSeq,
+                inquiryId: currentInquiryId
+              };
+            }
+          }
+        } catch (tgErr) {
+          console.warn("[Telegram Bot Error]:", tgErr);
+        }
+      }
+
+      if (!updatedLeadSession) {
+        updatedLeadSession = { codeSeq, inquiryId: currentInquiryId };
+      } else {
+        updatedLeadSession.codeSeq = codeSeq;
+        updatedLeadSession.inquiryId = currentInquiryId;
       }
     }
 
     return new Response(
-      JSON.stringify({ reply, leadSaved }),
+      JSON.stringify({ reply, leadSession: updatedLeadSession }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {

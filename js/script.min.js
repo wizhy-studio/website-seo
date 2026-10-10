@@ -673,13 +673,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const finalPhone = phoneRes.cleanNumber || phoneInput.value.trim();
 
+      const d = new Date();
+      const yy = String(d.getFullYear()).slice(-2);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const inqId = 'INQ-' + yy + mm + '-' + Math.floor(1000 + Math.random() * 9000);
+
       const leadData = {
         name: name.value.trim(),
         email: email.value.trim(),
         phone: finalPhone || null,
         service: service.value,
         budget: budget.value.trim() || null,
-        message: message.value.trim(),
+        message: `[${inqId}] ${message.value.trim()}`,
         lead_source: 'contact_form'
       };
 
@@ -689,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (error) {
             console.warn('[Wizhy Web Studio] Supabase lead insert note:', error);
           } else {
-            console.info('[Wizhy Web Studio] Lead saved to contact_form_leads successfully!');
+            console.info('[Wizhy Web Studio] Lead saved to contact_form_leads successfully! ID:', inqId);
           }
         }
       } catch (err) {
@@ -704,9 +709,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (successEmailDisplay) {
         successEmailDisplay.textContent = email.value.trim();
       }
+      const inqDisplay = document.getElementById('inquiryIdDisplay');
+      if (inqDisplay) {
+        inqDisplay.textContent = inqId;
+      }
       formSuccess.classList.add('show');
       form.reset();
-      setTimeout(() => formSuccess.classList.remove('show'), 8000);
+      setTimeout(() => formSuccess.classList.remove('show'), 12000);
     });
 
     form.querySelectorAll('input, select, textarea').forEach(field => {
@@ -1425,25 +1434,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return typingDiv;
     }
 
-    // Direct leads auto-capture to Supabase
-    async function captureLeadFromChat(userText) {
-      try {
-        const phoneMatch = userText.match(/[6-9]\d{9}/);
-        const emailMatch = userText.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/);
-
-        if ((phoneMatch || emailMatch) && supabaseClient) {
-          await supabaseClient.from('leads').insert([{
-            phone: phoneMatch ? phoneMatch[0] : null,
-            email: emailMatch ? emailMatch[0] : null,
-            message: `[AI Chat Lead]: ${userText}`,
-            lead_source: 'ai_chat_assistant'
-          }]);
-          console.info('[Wizhy Studio] AI Chat lead captured directly to Supabase!');
-        }
-      } catch (err) {
-        console.warn('[Wizhy Studio] AI Chat lead capture note:', err);
-      }
-    }
+    let activeLeadSession = null;
 
     async function handleSendMessage(text) {
       const cleanText = text.trim();
@@ -1452,9 +1443,6 @@ document.addEventListener('DOMContentLoaded', () => {
       appendMessage('user', cleanText);
       chatHistory.push({ sender: 'user', text: cleanText });
       input.value = '';
-
-      // Check if lead info was submitted
-      captureLeadFromChat(cleanText);
 
       const typingEl = showTypingIndicator();
 
@@ -1475,7 +1463,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: chatHistory }),
+          body: JSON.stringify({ 
+            messages: chatHistory,
+            leadSession: activeLeadSession 
+          }),
           signal: controller.signal
         });
 
@@ -1487,6 +1478,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const data = await res.json();
+        if (data.leadSession) {
+          activeLeadSession = data.leadSession;
+        }
+
         const reply = data.reply || "I'm here to help! Could you please share a few more details about your project?";
 
         if (typingEl && typingEl.parentNode) typingEl.remove();
