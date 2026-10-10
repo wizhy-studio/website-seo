@@ -18,6 +18,8 @@ wordpress-telegram-notifier.php
 *.php
 
 # 2. Backups & Archive Packages (Kept locally on Windows only)
+irrelevant/
+irrelevant/**
 *.zip
 Archive/
 Archive/**
