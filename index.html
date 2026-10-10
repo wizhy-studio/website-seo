@@ -206,6 +206,12 @@
         <span class="btn__arrow">⚡</span>
       </a>
 
+      <!-- Currency Switcher Toggle in Navbar -->
+      <div class="nav-curr-switch" id="navCurrSwitch" title="Switch Currency (INR ₹ / USD $)">
+        <button type="button" class="nav-curr-btn active" data-curr="INR" aria-label="INR">₹</button>
+        <button type="button" class="nav-curr-btn" data-curr="USD" aria-label="USD">$</button>
+      </div>
+
       <div class="theme-toggle-wrap">
         <div class="theme-toggle" id="themeToggle" role="region" aria-label="Theme selector">
           <div class="theme-toggle__active-icon" aria-hidden="true">
@@ -633,6 +639,16 @@
       </div>
       <h2 class="section-title">Simple &amp; Honest Pricing. No Hidden Fees.</h2>
       <p class="section-subtitle">Pick the plan that fits your business. Clean code, fast delivery, and prices made for real growth.</p>
+
+      <!-- Currency Switcher Pill -->
+      <div class="pricing-currency-switch" id="pricingCurrencySwitch" role="group" aria-label="Select Currency">
+        <button type="button" class="curr-pill-btn active" data-curr="INR" aria-pressed="true">
+          <span class="curr-flag">🇮🇳</span> <strong>INR (₹)</strong>
+        </button>
+        <button type="button" class="curr-pill-btn" data-curr="USD" aria-pressed="false">
+          <span class="curr-flag">🇺🇸</span> <strong>USD ($)</strong>
+        </button>
+      </div>
     </div>
 
     <!-- Pricing Grid (4 Cards: Free Founding Partner + 3 Transparent Tiers) -->
@@ -649,11 +665,11 @@
 
         <div class="pricing-card__price-box">
           <div class="pricing-card__amount">
-            <span class="pricing-card__currency">₹</span>
-            <span class="pricing-card__value">0</span>
+            <span class="pricing-card__currency" data-curr-sym>₹</span>
+            <span class="pricing-card__value" data-price-inr="0" data-price-usd="0">0</span>
             <span class="pricing-card__term">/ Free</span>
           </div>
-          <div class="pricing-card__strikethrough">Original: <del>₹4,999</del> (100% OFF)</div>
+          <div class="pricing-card__strikethrough">Original: <del data-del-inr="₹4,999" data-del-usd="$149">₹4,999</del> (100% OFF)</div>
         </div>
 
         <ul class="pricing-card__perks">
@@ -669,7 +685,7 @@
         </div>
       </div>
 
-      <!-- Card 1: 🚀 Single Page Website (₹999) -->
+      <!-- Card 1: 🚀 Single Page Website (₹999 / $29) -->
       <div class="pricing-card pricing-card--highlight reveal">
         <div class="pricing-card__badge pricing-card__badge--popular">🔥 MOST POPULAR</div>
         <div class="pricing-card__head">
@@ -680,10 +696,10 @@
 
         <div class="pricing-card__price-box">
           <div class="pricing-card__amount">
-            <span class="pricing-card__currency">₹</span>
-            <span class="pricing-card__value">999</span>
+            <span class="pricing-card__currency" data-curr-sym>₹</span>
+            <span class="pricing-card__value" data-price-inr="999" data-price-usd="29">999</span>
           </div>
-          <div class="pricing-card__strikethrough">Original: <del>₹4,999</del> <span class="discount-pill">80% OFF</span></div>
+          <div class="pricing-card__strikethrough">Original: <del data-del-inr="₹4,999" data-del-usd="$79">₹4,999</del> <span class="discount-pill">80% OFF</span></div>
         </div>
 
         <ul class="pricing-card__perks">
@@ -695,11 +711,11 @@
         </ul>
 
         <div class="pricing-card__cta">
-          <a href="#contact" class="btn btn--primary btn--block" data-select-service="1-Page Starter Website (₹999)">Get Started at ₹999 →</a>
+          <a href="#contact" class="btn btn--primary btn--block" data-select-service-inr="1-Page Starter Website (₹999)" data-select-service-usd="1-Page Starter Website ($29)" data-cta-inr="Get Started at ₹999 →" data-cta-usd="Get Started at $29 →" data-select-service="1-Page Starter Website (₹999)">Get Started at ₹999 →</a>
         </div>
       </div>
 
-      <!-- Card 2: 💼 Complete Multi-Page Website (₹4,999) -->
+      <!-- Card 2: 💼 Complete Multi-Page Website (₹4,999 / $129) -->
       <div class="pricing-card reveal">
         <div class="pricing-card__head">
           <span class="pricing-card__slot-tag">🚀 5-Day Delivery</span>
@@ -709,10 +725,10 @@
 
         <div class="pricing-card__price-box">
           <div class="pricing-card__amount">
-            <span class="pricing-card__currency">₹</span>
-            <span class="pricing-card__value">4,999</span>
+            <span class="pricing-card__currency" data-curr-sym>₹</span>
+            <span class="pricing-card__value" data-price-inr="4,999" data-price-usd="129">4,999</span>
           </div>
-          <div class="pricing-card__strikethrough">Original: <del>₹12,499</del> <span class="discount-pill">60% OFF</span></div>
+          <div class="pricing-card__strikethrough">Original: <del data-del-inr="₹12,499" data-del-usd="$349">₹12,499</del> <span class="discount-pill">60% OFF</span></div>
         </div>
 
         <ul class="pricing-card__perks">
@@ -724,11 +740,11 @@
         </ul>
 
         <div class="pricing-card__cta">
-          <a href="#contact" class="btn btn--ghost btn--block" data-select-service="Full Business Website (₹4,999)">Choose Business Plan →</a>
+          <a href="#contact" class="btn btn--ghost btn--block" data-select-service-inr="Full Business Website (₹4,999)" data-select-service-usd="Full Business Website ($129)" data-cta-inr="Choose Business Plan →" data-cta-usd="Choose Business Plan ($129) →" data-select-service="Full Business Website (₹4,999)">Choose Business Plan →</a>
         </div>
       </div>
 
-      <!-- Card 3: 🛍️ E-Commerce Online Store (₹9,999) -->
+      <!-- Card 3: 🛍️ E-Commerce Online Store (₹9,999 / $249) -->
       <div class="pricing-card reveal">
         <div class="pricing-card__head">
           <span class="pricing-card__slot-tag">🛍️ 7–10 Day Delivery</span>
@@ -738,10 +754,10 @@
 
         <div class="pricing-card__price-box">
           <div class="pricing-card__amount">
-            <span class="pricing-card__currency">₹</span>
-            <span class="pricing-card__value">9,999</span>
+            <span class="pricing-card__currency" data-curr-sym>₹</span>
+            <span class="pricing-card__value" data-price-inr="9,999" data-price-usd="249">9,999</span>
           </div>
-          <div class="pricing-card__strikethrough">Original: <del>₹24,999</del> <span class="discount-pill">60% OFF</span></div>
+          <div class="pricing-card__strikethrough">Original: <del data-del-inr="₹24,999" data-del-usd="$599">₹24,999</del> <span class="discount-pill">60% OFF</span></div>
         </div>
 
         <ul class="pricing-card__perks">
@@ -753,7 +769,7 @@
         </ul>
 
         <div class="pricing-card__cta">
-          <a href="#contact" class="btn btn--ghost btn--block" data-select-service="Online Store / E-Commerce (₹9,999)">Start Your Store →</a>
+          <a href="#contact" class="btn btn--ghost btn--block" data-select-service-inr="Online Store / E-Commerce (₹9,999)" data-select-service-usd="Online Store / E-Commerce ($249)" data-cta-inr="Start Your Store →" data-cta-usd="Start Your Store ($249) →" data-select-service="Online Store / E-Commerce (₹9,999)">Start Your Store →</a>
         </div>
       </div>
 
@@ -768,7 +784,7 @@
 
       <div class="micro-services-grid">
 
-        <!-- Micro 1: Logo Generation (₹99) -->
+        <!-- Micro 1: Logo Generation (₹99 / $9) -->
         <div class="micro-card">
           <div class="micro-card__top">
             <span class="micro-card__icon">🎨</span>
@@ -778,14 +794,14 @@
           <p>3 distinct vector logo concepts with transparent background and favicon files.</p>
           <div class="micro-card__bottom">
             <div class="micro-card__price">
-              <span class="price-val">₹99</span>
-              <del>₹999</del>
+              <span class="price-val" data-price-inr="₹99" data-price-usd="$9">₹99</span>
+              <del data-del-inr="₹999" data-del-usd="$29">₹999</del>
             </div>
-            <a href="#contact" class="btn btn--ghost btn--xs" data-select-service="Logo Generation (₹99)">Book for ₹99 →</a>
+            <a href="#contact" class="btn btn--ghost btn--xs" data-select-service-inr="Logo Generation (₹99)" data-select-service-usd="Logo Generation ($9)" data-cta-inr="Book for ₹99 →" data-cta-usd="Book for $9 →" data-select-service="Logo Generation (₹99)">Book for ₹99 →</a>
           </div>
         </div>
 
-        <!-- Micro 2: Video Editing (₹499) -->
+        <!-- Micro 2: Video Editing (₹499 / $19) -->
         <div class="micro-card">
           <div class="micro-card__top">
             <span class="micro-card__icon">🎬</span>
@@ -795,14 +811,14 @@
           <p>Up to 30-sec high-retention social reel or product video with modern captions and sound.</p>
           <div class="micro-card__bottom">
             <div class="micro-card__price">
-              <span class="price-val">₹499</span>
-              <del>₹1,999</del>
+              <span class="price-val" data-price-inr="₹499" data-price-usd="$19">₹499</span>
+              <del data-del-inr="₹1,999" data-del-usd="$49">₹1,999</del>
             </div>
-            <a href="#contact" class="btn btn--ghost btn--xs" data-select-service="Video / Reel Editing (₹499)">Book for ₹499 →</a>
+            <a href="#contact" class="btn btn--ghost btn--xs" data-select-service-inr="Video / Reel Editing (₹499)" data-select-service-usd="Video / Reel Editing ($19)" data-cta-inr="Book for ₹499 →" data-cta-usd="Book for $19 →" data-select-service="Video / Reel Editing (₹499)">Book for ₹499 →</a>
           </div>
         </div>
 
-        <!-- Micro 3: Meta & Google Ads Setup (₹1,499) -->
+        <!-- Micro 3: Meta & Google Ads Setup (₹1,499 / $49) -->
         <div class="micro-card">
           <div class="micro-card__top">
             <span class="micro-card__icon">🎯</span>
@@ -812,10 +828,10 @@
           <p>Full ad campaign creation, pixel tracking setup, audience targeting, and 2 ad creatives.</p>
           <div class="micro-card__bottom">
             <div class="micro-card__price">
-              <span class="price-val">₹1,499</span>
-              <del>₹4,999</del>
+              <span class="price-val" data-price-inr="₹1,499" data-price-usd="$49">₹1,499</span>
+              <del data-del-inr="₹4,999" data-del-usd="$149">₹4,999</del>
             </div>
-            <a href="#contact" class="btn btn--ghost btn--xs" data-select-service="Meta & Google Ads Setup (₹1,499)">Book for ₹1,499 →</a>
+            <a href="#contact" class="btn btn--ghost btn--xs" data-select-service-inr="Meta & Google Ads Setup (₹1,499)" data-select-service-usd="Meta & Google Ads Setup ($49)" data-cta-inr="Book for ₹1,499 →" data-cta-usd="Book for $49 →" data-select-service="Meta & Google Ads Setup (₹1,499)">Book for ₹1,499 →</a>
           </div>
         </div>
 

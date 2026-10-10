@@ -1123,6 +1123,149 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ---------- 22B. Dynamic Multi-Currency Pricing Engine (Zero-Dependency) ---------- */
+  safeRun('multi-currency-engine', () => {
+    let currentCurrency = 'INR';
+
+    function applyCurrency(curr, animate = true) {
+      currentCurrency = curr;
+      try {
+        localStorage.setItem('wizhy_currency', curr);
+      } catch (_) {}
+
+      const isUsd = curr === 'USD';
+      const sym = isUsd ? '$' : '₹';
+
+      // 1. Update active states on switcher buttons
+      document.querySelectorAll('#pricingCurrencySwitch .curr-pill-btn, #navCurrSwitch .nav-curr-btn').forEach(btn => {
+        const btnCurr = btn.getAttribute('data-curr');
+        const isActive = btnCurr === curr;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+
+      // 2. Update currency symbol elements
+      document.querySelectorAll('[data-curr-sym]').forEach(el => {
+        el.textContent = sym;
+      });
+
+      // 3. Update main pricing cards amounts
+      document.querySelectorAll('.pricing-card__value[data-price-inr]').forEach(el => {
+        const newVal = isUsd ? el.getAttribute('data-price-usd') : el.getAttribute('data-price-inr');
+        if (newVal !== null) {
+          if (animate) {
+            el.style.opacity = '0';
+            setTimeout(() => {
+              el.textContent = newVal;
+              el.style.opacity = '1';
+            }, 120);
+          } else {
+            el.textContent = newVal;
+          }
+        }
+      });
+
+      // 4. Update strikethrough original prices
+      document.querySelectorAll('[data-del-inr]').forEach(el => {
+        const newDel = isUsd ? el.getAttribute('data-del-usd') : el.getAttribute('data-del-inr');
+        if (newDel !== null) el.textContent = newDel;
+      });
+
+      // 5. Update Micro-services prices
+      document.querySelectorAll('.price-val[data-price-inr]').forEach(el => {
+        const newVal = isUsd ? el.getAttribute('data-price-usd') : el.getAttribute('data-price-inr');
+        if (newVal !== null) el.textContent = newVal;
+      });
+
+      // 6. Update CTA button text and data-select-service targets
+      document.querySelectorAll('[data-select-service-inr]').forEach(btn => {
+        const newService = isUsd ? btn.getAttribute('data-select-service-usd') : btn.getAttribute('data-select-service-inr');
+        const newCta = isUsd ? btn.getAttribute('data-cta-usd') : btn.getAttribute('data-cta-inr');
+        if (newService) btn.setAttribute('data-select-service', newService);
+        if (newCta) btn.textContent = newCta;
+      });
+
+      // 7. Update Contact Form service select dropdown options
+      const serviceSelect = document.getElementById('service');
+      if (serviceSelect) {
+        for (let opt of serviceSelect.options) {
+          if (opt.value.includes('1-Page Starter')) {
+            opt.text = isUsd ? '1-Page Starter Website ($29)' : '1-Page Starter Website (₹999)';
+            opt.value = isUsd ? '1-Page Starter Website ($29)' : '1-Page Starter Website (₹999)';
+          } else if (opt.value.includes('Full Business Website')) {
+            opt.text = isUsd ? 'Full Business Website ($129)' : 'Full Business Website (₹4,999)';
+            opt.value = isUsd ? 'Full Business Website ($129)' : 'Full Business Website (₹4,999)';
+          } else if (opt.value.includes('Online Store / E-Commerce')) {
+            opt.text = isUsd ? 'Online Store / E-Commerce ($249)' : 'Online Store / E-Commerce (₹9,999)';
+            opt.value = isUsd ? 'Online Store / E-Commerce ($249)' : 'Online Store / E-Commerce (₹9,999)';
+          } else if (opt.value.includes('Logo Generation')) {
+            opt.text = isUsd ? 'Logo Generation ($9)' : 'Logo Generation (₹99)';
+            opt.value = isUsd ? 'Logo Generation ($9)' : 'Logo Generation (₹99)';
+          } else if (opt.value.includes('Video / Reel Editing')) {
+            opt.text = isUsd ? 'Video / Reel Editing ($19)' : 'Video / Reel Editing (₹499)';
+            opt.value = isUsd ? 'Video / Reel Editing ($19)' : 'Video / Reel Editing (₹499)';
+          } else if (opt.value.includes('Meta & Google Ads Setup')) {
+            opt.text = isUsd ? 'Meta & Google Ads Setup ($49)' : 'Meta & Google Ads Setup (₹1,499)';
+            opt.value = isUsd ? 'Meta & Google Ads Setup ($49)' : 'Meta & Google Ads Setup (₹1,499)';
+          }
+        }
+      }
+    }
+
+    // Attach click handlers to currency buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('#pricingCurrencySwitch .curr-pill-btn, #navCurrSwitch .nav-curr-btn');
+      if (!btn) return;
+      const targetCurr = btn.getAttribute('data-curr');
+      if (targetCurr && targetCurr !== currentCurrency) {
+        applyCurrency(targetCurr, true);
+        if (window.__wizhyShowToast) {
+          window.__wizhyShowToast(`Currency updated to ${targetCurr === 'USD' ? 'USD ($)' : 'INR (₹)'}`);
+        }
+      }
+    });
+
+    // Check cached location or detect automatically via IP geolocation
+    let cachedCurr = null;
+    try {
+      cachedCurr = localStorage.getItem('wizhy_currency');
+    } catch (_) {}
+
+    if (cachedCurr === 'USD' || cachedCurr === 'INR') {
+      applyCurrency(cachedCurr, false);
+    } else {
+      // Lightweight, resilient IP Geolocation lookup
+      const geoEndpoints = [
+        'https://ipapi.co/json/',
+        'https://freeipapi.com/api/json'
+      ];
+
+      async function detectCountry() {
+        for (const url of geoEndpoints) {
+          try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 3500);
+            const res = await fetch(url, { signal: controller.signal });
+            clearTimeout(timer);
+            if (res.ok) {
+              const data = await res.json();
+              const countryCode = data.country_code || data.country || data.countryCode;
+              if (countryCode) {
+                const detected = countryCode.toUpperCase() === 'IN' ? 'INR' : 'USD';
+                applyCurrency(detected, false);
+                return;
+              }
+            }
+          } catch (_) {}
+        }
+        // Fallback default: INR
+        applyCurrency('INR', false);
+      }
+
+      detectCountry();
+    }
+  });
+
   /* ---------- 23. 3D Rotating Spheres Engine (from contact.html) ---------- */
   safeRun('interactive-3d-spheres', () => {
     const c1 = document.getElementById('sphereCanvas1');
