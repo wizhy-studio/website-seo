@@ -133,13 +133,54 @@
   height: 38px;
   border-radius: 50%;
   background: var(--accent-1);
-  color: var(--on-accent);
+  color: var(--on-accent, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
+/* Fallback Text: Displayed crisply when avatar image is loading or fails */
+.wizhy-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  font-family: var(--font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.wizhy-chat-header__avatar .wizhy-avatar-fallback {
+  font-size: 0.65rem;
+  letter-spacing: -0.02em;
+}
+
+.wizhy-chat-fab__icon-wrap .wizhy-avatar-fallback {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+/* Picture overlay above fallback text */
+.wizhy-avatar-pic {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: block;
+}
+
+.wizhy-avatar-pic img,
 .wizhy-chat-header__avatar img,
 .wizhy-chat-fab__icon-wrap img {
   width: 100%;

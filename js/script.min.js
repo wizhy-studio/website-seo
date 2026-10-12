@@ -1590,42 +1590,58 @@ document.addEventListener('DOMContentLoaded', () => {
       const typingEl = showTypingIndicator();
 
       const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      let endpoint;
+      let endpoints = [];
       if (isLocalHost) {
-        endpoint = window.location.port === '3000' ? '/api/chat' : 'http://localhost:3000/api/chat';
+        endpoints = [window.location.port === '3000' ? '/api/chat' : 'http://localhost:3000/api/chat'];
       } else if (window.location.protocol === 'file:') {
-        endpoint = 'http://localhost:3000/api/chat';
+        endpoints = ['http://localhost:3000/api/chat'];
       } else {
-        endpoint = 'https://qfoziccqtyvnjxsjjmds.supabase.co/functions/v1/wizhy-chat';
+        endpoints = [
+          '/wp-json/wizhy/v1/chat',
+          'https://qfoziccqtyvnjxsjjmds.supabase.co/functions/v1/wizhy-chat'
+        ];
       }
 
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 18000);
+        let reply = null;
+        let lastError = null;
 
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            messages: chatHistory,
-            leadSession: activeLeadSession 
-          }),
-          signal: controller.signal
-        });
+        for (const ep of endpoints) {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-        clearTimeout(timeoutId);
+            const res = await fetch(ep, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                messages: chatHistory,
+                leadSession: activeLeadSession 
+              }),
+              signal: controller.signal
+            });
 
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.error || `HTTP ${res.status}`);
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+              const data = await res.json();
+              if (data.leadSession) {
+                activeLeadSession = data.leadSession;
+              }
+              reply = data.reply || "I'm here to help! Could you please share a few more details about your project?";
+              break;
+            } else {
+              const errData = await res.json().catch(() => ({}));
+              lastError = new Error(errData.error || `HTTP ${res.status}`);
+            }
+          } catch (e) {
+            lastError = e;
+          }
         }
 
-        const data = await res.json();
-        if (data.leadSession) {
-          activeLeadSession = data.leadSession;
+        if (!reply) {
+          throw lastError || new Error("Failed to get response");
         }
-
-        const reply = data.reply || "I'm here to help! Could you please share a few more details about your project?";
 
         if (typingEl && typingEl.parentNode) typingEl.remove();
         appendMessage('bot', reply);

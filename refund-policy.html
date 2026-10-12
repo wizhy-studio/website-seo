@@ -379,9 +379,10 @@
 <!-- ============ WIZAI CHAT ASSISTANT ============ -->
 <button class="wizhy-chat-fab" id="wizhyChatFab" aria-label="Open WizAI Assistant" aria-expanded="false">
   <div class="wizhy-chat-fab__icon-wrap">
-    <picture>
+    <span class="wizhy-avatar-fallback">WA</span>
+    <picture class="wizhy-avatar-pic">
       <source srcset="assets/wizai-avatar-sm.webp" type="image/webp">
-      <img src="assets/wizai-avatar.png" alt="WizAI Logo" width="28" height="28" loading="lazy" decoding="async">
+      <img src="assets/wizai-avatar.png" alt="WizAI Logo" width="28" height="28" loading="lazy" decoding="async" onerror="if(this.closest)this.closest('.wizhy-avatar-pic').style.display='none';else this.style.display='none';">
     </picture>
     <span class="wizhy-chat-fab__status-dot"></span>
   </div>
@@ -392,9 +393,10 @@
   <div class="wizhy-chat-header">
     <div class="wizhy-chat-header__info">
       <div class="wizhy-chat-header__avatar">
-        <picture>
+        <span class="wizhy-avatar-fallback">WizAI</span>
+        <picture class="wizhy-avatar-pic">
           <source srcset="assets/wizai-avatar-sm.webp" type="image/webp">
-          <img src="assets/wizai-avatar.png" alt="WizAI Logo" width="38" height="38" loading="lazy" decoding="async">
+          <img src="assets/wizai-avatar.png" alt="WizAI Logo" width="38" height="38" loading="lazy" decoding="async" onerror="if(this.closest)this.closest('.wizhy-avatar-pic').style.display='none';else this.style.display='none';">
         </picture>
       </div>
       <div class="wizhy-chat-header__titles">
