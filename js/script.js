@@ -614,6 +614,149 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Progressive Lead Session State (REF-YYYYMM-XXXX -> INQ-YYYYMM-XXXX)
+    let formCodeSeq = null;
+    let formTgMessageId = null;
+    let formPartialSaved = false;
+    let formPartialAdminEmailed = false;
+    let formCompleted = false;
+    let lastPartialSignature = '';
+
+    function getOrCreateFormCodeSeq() {
+      if (!formCodeSeq) {
+        const d = new Date();
+        const yyyy = String(d.getFullYear());
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        formCodeSeq = yyyy + mm + '-' + Math.floor(1000 + Math.random() * 9000);
+      }
+      return formCodeSeq;
+    }
+
+    async function capturePartialFormLead(sendAdminEmailNow = false) {
+      if (formCompleted) return;
+      const nameEl = form.querySelector('#name');
+      const emailEl = form.querySelector('#email');
+      const serviceEl = form.querySelector('#service');
+      const budgetEl = form.querySelector('#budget');
+      const messageEl = form.querySelector('#message');
+
+      const nameVal = nameEl ? nameEl.value.trim() : '';
+      const emailVal = emailEl ? emailEl.value.trim() : '';
+      const phoneRes = validatePhone();
+      const phoneVal = phoneRes.valid ? (phoneRes.cleanNumber || phoneInput.value.trim()) : '';
+      const serviceVal = serviceEl ? serviceEl.value.trim() : '';
+      const budgetVal = budgetEl ? budgetEl.value.trim() : '';
+      const messageVal = messageEl ? messageEl.value.trim() : '';
+
+      const emailValid = validateEmail(emailVal).valid;
+      // Trigger REF capture once visitor has entered Name + (valid Phone OR valid Email)
+      if (nameVal.length < 2 || (!phoneVal && !emailValid)) {
+        return;
+      }
+
+      const sig = `${nameVal}|${emailValid ? emailVal : ''}|${phoneVal}|${serviceVal}|${budgetVal}`;
+      if (sig === lastPartialSignature && !sendAdminEmailNow) return;
+      lastPartialSignature = sig;
+
+      const seq = getOrCreateFormCodeSeq();
+      const refId = 'REF-' + seq;
+      const sourceKey = 'form_session_' + seq;
+
+      const partialDbPayload = {
+        name: nameVal,
+        email: emailValid ? emailVal : null,
+        phone: phoneVal || null,
+        service: serviceVal || 'In Progress (Partial)',
+        budget: budgetVal || null,
+        message: `[${refId}] ${messageVal || 'Visitor is filling the form...'}`,
+        lead_source: sourceKey
+      };
+
+      // 1. Save or Overwrite in Supabase DB
+      if (supabaseClient) {
+        try {
+          if (!formPartialSaved) {
+            formPartialSaved = true;
+            await supabaseClient.from('contact_form_leads').insert([partialDbPayload]);
+          } else {
+            await supabaseClient.from('contact_form_leads').update(partialDbPayload).eq('lead_source', sourceKey);
+          }
+        } catch (e) {
+          console.warn('[Wizhy Web Studio] Partial DB update note:', e);
+        }
+      }
+
+      // 2. Send or Overwrite Telegram Message (and send Admin Email if requested)
+      const shouldEmailAdmin = sendAdminEmailNow && !formPartialAdminEmailed;
+      if (shouldEmailAdmin) formPartialAdminEmailed = true;
+
+      try {
+        const res = await fetch('/wp-json/wizhy/v1/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'contact_form_partial',
+            name: nameVal,
+            email: emailValid ? emailVal : '',
+            phone: phoneVal,
+            service: serviceVal || 'Selecting...',
+            budget: budgetVal,
+            message: messageVal,
+            inquiry_id: refId,
+            tg_message_id: formTgMessageId,
+            send_admin_email: shouldEmailAdmin
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.tg_message_id) {
+            formTgMessageId = data.tg_message_id;
+          }
+        }
+      } catch (e) {
+        console.warn('[Wizhy Web Studio] Partial notify note:', e);
+      }
+    }
+
+    // Listen for field completion (blur/change) to trigger REF-YYYYMM-XXXX capture
+    form.querySelectorAll('input, select, textarea').forEach(field => {
+      field.addEventListener('blur', () => capturePartialFormLead(false));
+      field.addEventListener('change', () => capturePartialFormLead(false));
+    });
+
+    // If visitor leaves/closes tab after partial fill without submitting, send Admin the REF email
+    window.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && formPartialSaved && !formCompleted && !formPartialAdminEmailed) {
+        formPartialAdminEmailed = true;
+        const nameVal = (form.querySelector('#name')?.value || '').trim();
+        const emailVal = (form.querySelector('#email')?.value || '').trim();
+        const phoneRes = validatePhone();
+        const phoneVal = phoneRes.valid ? (phoneRes.cleanNumber || phoneInput.value.trim()) : '';
+        const serviceVal = (form.querySelector('#service')?.value || '').trim();
+        const budgetVal = (form.querySelector('#budget')?.value || '').trim();
+        const messageVal = (form.querySelector('#message')?.value || '').trim();
+        const seq = getOrCreateFormCodeSeq();
+        const payload = JSON.stringify({
+          type: 'contact_form_partial',
+          name: nameVal,
+          email: validateEmail(emailVal).valid ? emailVal : '',
+          phone: phoneVal,
+          service: serviceVal || 'Abandoned before submit',
+          budget: budgetVal,
+          message: messageVal,
+          inquiry_id: 'REF-' + seq,
+          tg_message_id: formTgMessageId,
+          send_admin_email: true
+        });
+        fetch('/wp-json/wizhy/v1/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          keepalive: true
+        }).catch(() => {});
+      }
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       formSuccess.classList.remove('show');
@@ -671,12 +814,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnText) btnText.textContent = 'Sending Request...';
       }
 
+      formCompleted = true;
       const finalPhone = phoneRes.cleanNumber || phoneInput.value.trim();
 
-      const d = new Date();
-      const yy = String(d.getFullYear()).slice(-2);
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const inqId = 'INQ-' + yy + mm + '-' + Math.floor(1000 + Math.random() * 9000);
+      // Upgrade the same sequence number from REF-YYYYMM-XXXX to INQ-YYYYMM-XXXX!
+      const seq = getOrCreateFormCodeSeq();
+      const inqId = 'INQ-' + seq;
+      const sourceKey = 'form_session_' + seq;
 
       const leadData = {
         name: name.value.trim(),
@@ -688,17 +832,48 @@ document.addEventListener('DOMContentLoaded', () => {
         lead_source: 'contact_form'
       };
 
+      const emailPayload = {
+        type: 'contact_form',
+        name: name.value.trim(),
+        email: email.value.trim(),
+        phone: finalPhone || '',
+        service: service.value,
+        budget: budget.value.trim() || '',
+        message: message.value.trim(),
+        inquiry_id: inqId,
+        tg_message_id: formTgMessageId
+      };
+
       try {
+        const tasks = [];
         if (supabaseClient) {
-          const { error } = await supabaseClient.from('contact_form_leads').insert([leadData]);
-          if (error) {
-            console.warn('[Wizhy Web Studio] Supabase lead insert note:', error);
+          if (formPartialSaved) {
+            // Overwrite existing partial REF entry in DB into completed INQ entry!
+            tasks.push(
+              supabaseClient.from('contact_form_leads').update(leadData).eq('lead_source', sourceKey).then(({ error }) => {
+                if (error) console.warn('[Wizhy Web Studio] Supabase lead overwrite note:', error);
+                else console.info('[Wizhy Web Studio] Partial REF overwritten to INQ in DB! ID:', inqId);
+              })
+            );
           } else {
-            console.info('[Wizhy Web Studio] Lead saved to contact_form_leads successfully! ID:', inqId);
+            tasks.push(
+              supabaseClient.from('contact_form_leads').insert([leadData]).then(({ error }) => {
+                if (error) console.warn('[Wizhy Web Studio] Supabase lead insert note:', error);
+                else console.info('[Wizhy Web Studio] Lead saved to contact_form_leads successfully! ID:', inqId);
+              })
+            );
           }
         }
+        tasks.push(
+          fetch('/wp-json/wizhy/v1/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(emailPayload)
+          }).catch((e) => console.warn('[Wizhy Web Studio] Email notify note:', e))
+        );
+        await Promise.allSettled(tasks);
       } catch (err) {
-        console.warn('[Wizhy Web Studio] Supabase submission fallback:', err);
+        console.warn('[Wizhy Web Studio] Submission fallback:', err);
       } finally {
         if (btnSubmit) {
           btnSubmit.disabled = false;
@@ -715,6 +890,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       formSuccess.classList.add('show');
       form.reset();
+
+      // Reset session for any future submission
+      formCodeSeq = null;
+      formTgMessageId = null;
+      formPartialSaved = false;
+      formPartialAdminEmailed = false;
+      formCompleted = false;
+      lastPartialSignature = '';
+
       setTimeout(() => formSuccess.classList.remove('show'), 12000);
     });
 
@@ -1015,6 +1199,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      fetch('/wp-json/wizhy/v1/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'checklist', email })
+      }).catch((e) => console.warn('[Wizhy Web Studio] Checklist email notify note:', e));
+
       successEl.classList.add('show');
       form.reset();
 
@@ -1053,6 +1243,12 @@ document.addEventListener('DOMContentLoaded', () => {
           console.warn('[Wizhy Web Studio] Supabase newsletter note:', err);
         }
       }
+
+      fetch('/wp-json/wizhy/v1/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'newsletter', email })
+      }).catch((e) => console.warn('[Wizhy Web Studio] Newsletter email notify note:', e));
 
       successEl.classList.add('show');
       form.reset();
@@ -1097,6 +1293,17 @@ document.addEventListener('DOMContentLoaded', () => {
               currency: 'INR'
             }]).catch(() => {});
           }
+
+          fetch('/wp-json/wizhy/v1/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'payment',
+              payment_id: response.razorpay_payment_id,
+              amount: '5,000',
+              currency: 'INR'
+            })
+          }).catch(() => {});
         },
         prefill: {
           name: 'Prospective Client',
@@ -1578,6 +1785,89 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let activeLeadSession = null;
+    let chatCodeSeq = null;
+    let chatTgMessageId = null;
+    let chatRefEmailSent = false;
+    let chatInqEmailSent = false;
+    let chatUserEmailSent = false;
+
+    function getOrCreateChatCodeSeq() {
+      if (activeLeadSession && activeLeadSession.codeSeq) {
+        chatCodeSeq = activeLeadSession.codeSeq;
+      }
+      if (!chatCodeSeq) {
+        const d = new Date();
+        const yyyy = String(d.getFullYear());
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        chatCodeSeq = yyyy + mm + '-' + Math.floor(1000 + Math.random() * 9000);
+      }
+      return chatCodeSeq;
+    }
+
+    function parseChatLeadLocally(messages) {
+      let phone = '';
+      let email = '';
+      let name = '';
+      let service = '';
+      const userParts = [];
+
+      for (const m of messages) {
+        if (m.sender !== 'user') continue;
+        const txt = m.text || '';
+        userParts.push(txt);
+
+        if (!phone) {
+          const pMatch = txt.match(/(?:\+?\d{1,3}[\s-]?)?[6-9]\d{9}|\+?\d[\d\s-]{8,14}\d/);
+          if (pMatch) phone = pMatch[0].replace(/\s+/g, '');
+        }
+        if (!email) {
+          const eMatch = txt.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/);
+          if (eMatch) email = eMatch[0];
+        }
+        if (!name) {
+          const nameMatch = txt.match(/(?:my name is|i am|this is|name\s*[:\-])\s+([A-Za-z]{2,20}(?:\s+[A-Za-z]{2,20})?)/i);
+          if (nameMatch) name = nameMatch[1].trim();
+        }
+        const lower = txt.toLowerCase();
+        if (!service) {
+          if (lower.includes('free') || lower.includes('first 10') || lower.includes('offer')) {
+            service = '🎁 Free 1-Page Website Offer (₹0)';
+          } else if (lower.includes('starter') || lower.includes('999') || lower.includes('single page')) {
+            service = '1-Page Starter Website (₹999)';
+          } else if (lower.includes('growth') || lower.includes('2499') || lower.includes('2,499') || lower.includes('multi')) {
+            service = 'Multi-Page Growth (₹2,499)';
+          } else if (lower.includes('ecommerce') || lower.includes('store') || lower.includes('shop') || lower.includes('4999') || lower.includes('business')) {
+            service = 'Full Business / E-Commerce (₹4,999)';
+          } else if (lower.includes('seo') || lower.includes('audit')) {
+            service = 'SEO & Google Ranking';
+          }
+        }
+      }
+
+      if (!name && phone) {
+        for (const m of messages) {
+          if (m.sender === 'user' && m.text.includes(phone.slice(-6))) {
+            const cleaned = m.text.replace(phone, '').replace(/(and|my|number|phone|whatsapp|no|\:)/gi, '').trim();
+            const words = cleaned.split(/\s+/).filter(w => /^[A-Za-z]{2,20}$/.test(w));
+            if (words.length >= 1 && words.length <= 3) {
+              name = words.join(' ');
+              break;
+            }
+          }
+        }
+      }
+
+      const isComplete = Boolean((phone || email) && service && userParts.length >= 2);
+
+      return {
+        name: name || 'WizAI Chat Visitor',
+        phone,
+        email,
+        service: service || 'Under discussion',
+        transcript: userParts.join(' | '),
+        isComplete
+      };
+    }
 
     async function handleSendMessage(text) {
       const cleanText = text.trim();
@@ -1646,6 +1936,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typingEl && typingEl.parentNode) typingEl.remove();
         appendMessage('bot', reply);
         chatHistory.push({ sender: 'model', text: reply });
+
+        // Trigger REF-YYYYMM-XXXX (partial) and INQ-YYYYMM-XXXX (complete) email & Telegram notifications
+        const parsedLead = parseChatLeadLocally(chatHistory);
+        if (parsedLead.phone || parsedLead.email) {
+          const seq = getOrCreateChatCodeSeq();
+          const currentId = (parsedLead.isComplete ? 'INQ-' : 'REF-') + seq;
+          const shouldSendRefEmail = !parsedLead.isComplete && !chatRefEmailSent;
+          const shouldSendInqEmail = parsedLead.isComplete && !chatInqEmailSent;
+          const shouldSendUserEmail = Boolean(parsedLead.email && !chatUserEmailSent && (parsedLead.isComplete || !chatRefEmailSent));
+
+          if (shouldSendRefEmail || shouldSendInqEmail || shouldSendUserEmail) {
+            if (shouldSendRefEmail) chatRefEmailSent = true;
+            if (shouldSendInqEmail) chatInqEmailSent = true;
+            if (shouldSendUserEmail) chatUserEmailSent = true;
+
+            fetch('/wp-json/wizhy/v1/notify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'ai_chat_lead',
+                name: parsedLead.name,
+                phone: parsedLead.phone,
+                email: parsedLead.email,
+                service: parsedLead.service,
+                transcript: parsedLead.transcript,
+                is_complete: parsedLead.isComplete,
+                code_seq: seq,
+                inquiry_id: currentId,
+                send_user_email: shouldSendUserEmail,
+                tg_message_id: (activeLeadSession && activeLeadSession.tgMessageId) || chatTgMessageId,
+                skip_telegram: Boolean(activeLeadSession && activeLeadSession.tgMessageId)
+              })
+            }).then(r => r.json()).then(d => {
+              if (d && d.tg_message_id) chatTgMessageId = d.tg_message_id;
+            }).catch((e) => console.warn('[Wizhy AI Chat] Lead email notify note:', e));
+          }
+        }
       } catch (err) {
         if (typingEl && typingEl.parentNode) typingEl.remove();
         console.warn('[Wizhy AI Chat] Fetch error:', err);

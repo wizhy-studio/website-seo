@@ -30,29 +30,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Supabase REST & Auth Health Endpoints
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          URL="${{ secrets.SUPABASE_URL }}"
-          KEY="${{ secrets.SUPABASE_ANON_KEY }}"
-
-          # If secrets are not set in GitHub repository settings, fall back to project URL
-          if [ -z "$URL" ]; then
-            URL="https://qfoziccqtyvnjxsjjmds.supabase.co"
+          # SECURITY: Secrets MUST be configured in GitHub repo → Settings → Secrets → Actions
+          # Never hardcode credentials here — GitGuardian and similar scanners will flag them.
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "⚠️ SUPABASE_URL or SUPABASE_ANON_KEY not set in GitHub Secrets."
+            echo "Please configure them in: GitHub → Settings → Secrets and variables → Actions"
+            exit 0
           fi
 
-          if [ -z "$KEY" ]; then
-            KEY="sb_publishable_9bwM47LVotLdcmJDUCKwjQ_L5WUCmzT"
-          fi
-
-          echo "Pinging Supabase project at $URL..."
+          echo "Pinging Supabase project..."
           
           # Ping 1: Auth Health endpoint (always returns 200 OK)
-          HTTP_STATUS_AUTH=$(curl -s -o /dev/null -w "%{http_code}" "$URL/auth/v1/health" -H "apikey: $KEY")
+          HTTP_STATUS_AUTH=$(curl -s -o /dev/null -w "%{http_code}" "$SUPABASE_URL/auth/v1/health" -H "apikey: $SUPABASE_ANON_KEY")
           echo "Auth health ping response: $HTTP_STATUS_AUTH"
 
           # Ping 2: REST query ping (keeps Postgres database active)
-          HTTP_STATUS_REST=$(curl -s -o /dev/null -w "%{http_code}" "$URL/rest/v1/contact_form_leads?select=id&limit=1" \
-            -H "apikey: $KEY" \
-            -H "Authorization: Bearer $KEY")
+          HTTP_STATUS_REST=$(curl -s -o /dev/null -w "%{http_code}" "$SUPABASE_URL/rest/v1/contact_form_leads?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
           echo "Database REST ping response: $HTTP_STATUS_REST"
 
           if [ "$HTTP_STATUS_AUTH" -eq 200 ] || [ "$HTTP_STATUS_REST" -eq 200 ]; then

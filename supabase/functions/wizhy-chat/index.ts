@@ -88,10 +88,10 @@ async function callModelWithTimeout(modelName: string, apiKey: string, bodyJson:
 // Generate Date-based tracking code: YYYYMM-XXXX
 function generateTrackingCode(): string {
   const d = new Date();
-  const yy = String(d.getFullYear()).slice(-2);
+  const yyyy = String(d.getFullYear());
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const rand = Math.floor(1000 + Math.random() * 9000);
-  return `${yy}${mm}-${rand}`;
+  return `${yyyy}${mm}-${rand}`;
 }
 
 // Extract name, phone, email, service from conversation
