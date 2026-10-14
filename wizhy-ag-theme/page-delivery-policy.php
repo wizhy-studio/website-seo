@@ -71,9 +71,9 @@
     <a href="index.html#home" class="brand brand--center" aria-label="Wizhy Web Studio">
       <span class="brand__mark">
         <picture>
-          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.avif" type="image/avif">
-          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.webp" type="image/webp">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async">
+          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo-sm.avif" type="image/avif">
+          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo-sm.webp" type="image/webp">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo-sm.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async">
         </picture>
       </span>
       <span class="brand__text">Wizhy<em> Web Studio</em></span>
@@ -258,7 +258,7 @@
   <div class="container footer__grid">
     <!-- Col 1: Brand & Socials & Newsletter -->
     <div class="footer__col footer__col--brand">
-      <a href="index.html#home" class="brand brand--footer" aria-label="Wizhy Web Studio"><span class="brand__mark"><img src="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async"></span><span class="brand__text">Wizhy<em> Web Studio</em></span></a>
+      <a href="index.html#home" class="brand brand--footer" aria-label="Wizhy Web Studio"><span class="brand__mark"><img src="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo-sm.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async"></span><span class="brand__text">Wizhy<em> Web Studio</em></span></a>
       <p class="footer__tagline">Websites that don't just look good — they get found, rank on Google, and grow your business.</p>
       
       <div class="social-icons">

@@ -868,8 +868,8 @@ html[data-theme="espresso"] .mobile-quick-chip {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: rgba(200, 72, 30, 0.09);
-  border: 1.5px solid rgba(200, 72, 30, 0.35);
+  background: var(--surface);
+  border: 1.5px solid rgba(200, 72, 30, 0.45);
   padding: 8px 20px 8px 8px;
   border-radius: 999px;
   text-decoration: none;
@@ -881,27 +881,27 @@ html[data-theme="espresso"] .mobile-quick-chip {
 }
 .hero-free-pill:hover {
   transform: translateY(-2px);
-  background: rgba(200, 72, 30, 0.16);
+  background: var(--surface-2);
   border-color: var(--accent-1);
   box-shadow: 0 8px 28px -4px rgba(200, 72, 30, 0.32);
 }
 html[data-theme="dark"] .hero-free-pill {
-  background: rgba(255, 107, 74, 0.14);
-  border-color: rgba(255, 107, 74, 0.42);
+  background: var(--surface);
+  border-color: rgba(255, 107, 74, 0.48);
   box-shadow: 0 4px 20px -2px rgba(255, 107, 74, 0.2);
 }
 html[data-theme="espresso"] .hero-free-pill {
-  background: rgba(196, 138, 90, 0.16);
-  border-color: rgba(196, 138, 90, 0.46);
+  background: var(--surface);
+  border-color: rgba(196, 138, 90, 0.5);
   box-shadow: 0 4px 20px -2px rgba(196, 138, 90, 0.2);
 }
 html[data-theme="lune"] .hero-free-pill {
-  background: rgba(228, 113, 31, 0.12);
-  border-color: rgba(228, 113, 31, 0.4);
+  background: var(--surface);
+  border-color: rgba(228, 113, 31, 0.45);
   box-shadow: 0 4px 20px -2px rgba(228, 113, 31, 0.18);
 }
 .hero-free-pill__badge {
-  background: var(--accent-1);
+  background: #A73200;
   color: #FFF;
   font-size: .84rem;
   font-weight: 700;
@@ -910,7 +910,7 @@ html[data-theme="lune"] .hero-free-pill {
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(200, 72, 30, 0.35);
+  box-shadow: 0 2px 10px rgba(167, 50, 0, 0.35);
 }
 .hero-free-pill__text {
   font-size: 1.04rem;
@@ -919,22 +919,32 @@ html[data-theme="lune"] .hero-free-pill {
   letter-spacing: -0.01em;
 }
 .hero-free-pill__text strong {
-  color: #A8320B;
+  color: #8C2500;
   font-weight: 750;
 }
 html[data-theme="dark"] .hero-free-pill__text strong {
   color: #FFA375;
 }
+html[data-theme="espresso"] .hero-free-pill__text strong {
+  color: #FFC299;
+}
 .hero-free-pill__arrow {
   font-size: .95rem;
-  font-weight: 600;
-  color: var(--accent-1);
+  font-weight: 700;
+  color: #8C2500;
   margin-left: 2px;
   transition: transform .2s ease;
+}
+html[data-theme="dark"] .hero-free-pill__arrow {
+  color: #FFA375;
+}
+html[data-theme="espresso"] .hero-free-pill__arrow {
+  color: #FFC299;
 }
 .hero-free-pill:hover .hero-free-pill__arrow {
   transform: translateX(4px);
 }
+
 
 .hero__inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; }
 .hero__title { font-size: clamp(2.4rem, 5vw, 4.1rem); font-weight: 600; line-height: 1.08; letter-spacing: -.02em; margin-bottom: 26px; }
@@ -1592,15 +1602,20 @@ html[data-theme="lune"] .bento-card:hover {
   right: 20px;
   font-family: var(--font-display);
   font-size: 2.4rem;
-  color: var(--text-muted);
-  font-weight: 600;
+  color: #695A50;
+  font-weight: 700;
   line-height: 1;
-  opacity: .6;
+  opacity: 1;
   transition: color .35s ease, opacity .35s ease, transform .35s ease;
+}
+html[data-theme="dark"] .bento-card__num {
+  color: #C2B4AB;
+}
+html[data-theme="espresso"] .bento-card__num {
+  color: #D6CBC4;
 }
 .bento-card:hover .bento-card__num {
   color: var(--accent-1);
-  opacity: .6;
   transform: scale(1.08);
 }
 
@@ -1678,7 +1693,8 @@ html[data-theme="dark"] .pricing-banner-pill {
   box-shadow: 0 3px 10px rgba(200, 72, 30, 0.35);
 }
 .pricing-card__badge--popular {
-  background: #E85D04;
+  background: #A73200;
+  color: #FFFFFF;
 }
 .pricing-card__slot-tag {
   display: inline-block;
@@ -2312,15 +2328,18 @@ html[data-theme="espresso"] .stack-card:hover .stack-card__inner {
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw, 42px);
   font-weight: 800;
-  color: var(--card-accent);
-  opacity: 0.32;
+  color: #8C2500;
+  opacity: 1;
   line-height: 1;
   transition: opacity 0.3s ease;
 }
-
-.stack-card:hover .stack-card__number {
-  opacity: 1;
+html[data-theme="dark"] .stack-card__number {
+  color: #FF9B70;
 }
+html[data-theme="espresso"] .stack-card__number {
+  color: #E29B63;
+}
+
 
 .stack-card__info {
   display: flex;
@@ -3993,8 +4012,15 @@ html[data-theme="lune"] .audit-suggestion {
 }
 .audit-badges {
   display: flex; justify-content: center; align-items: center; gap: 12px;
-  margin-top: 14px; font-size: .8rem; color: var(--text-muted); flex-wrap: wrap;
+  margin-top: 14px; font-size: .84rem; color: #4B3E36; flex-wrap: wrap; font-weight: 550;
 }
+html[data-theme="dark"] .audit-badges {
+  color: #D6CBC4;
+}
+html[data-theme="espresso"] .audit-badges {
+  color: #E7D6C1;
+}
+
 .audit-tool__error { display: none; font-size: .84rem; color: #C0392B; margin-top: 12px; }
 .audit-tool__error.show { display: block; }
 .audit-tool__loading { display: none; align-items: center; justify-content: center; gap: 12px; margin-top: 26px; color: var(--text-secondary); font-size: .92rem; }

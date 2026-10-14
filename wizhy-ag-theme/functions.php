@@ -1935,5 +1935,20 @@ function wizhy_scheduled_uptime_check() {
 }
 add_action('wizhy_uptime_health_check_event', 'wizhy_scheduled_uptime_check');
 
+/**
+ * Defer non-critical third-party scripts (e.g. Google Site Kit / GTM / Hostinger Embed) to reduce main-thread blocking
+ */
+add_filter('script_loader_tag', function($tag, $handle, $src) {
+    if (is_admin()) {
+        return $tag;
+    }
+    if (strpos($src, 'googletagmanager.com') !== false || strpos($src, 'gtag') !== false || strpos($src, 'cdn-reach.hostinger.com') !== false) {
+        if (strpos($tag, 'defer') === false && strpos($tag, 'async') === false) {
+            $tag = str_replace('<script ', '<script defer ', $tag);
+        }
+    }
+    return $tag;
+}, 10, 3);
+
 
 
