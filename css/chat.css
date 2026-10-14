@@ -98,15 +98,17 @@
   overflow: hidden;
   z-index: 560;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(20px) scale(0.94);
   transform-origin: bottom right;
-  transition: opacity .35s var(--ease), transform .35s var(--ease);
+  transition: opacity .35s var(--ease), transform .35s var(--ease), visibility .35s;
   font-family: var(--font-body);
 }
 
 .wizhy-chat-window.open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateY(0) scale(1);
 }

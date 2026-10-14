@@ -484,25 +484,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const nextCard = cards[index + 1];
-        if (nextCard) {
-          const nextRect = nextCard.getBoundingClientRect();
+      // 1. Batch Read
+      const rects = [];
+      for (let i = 0; i < totalCards; i++) {
+        rects.push(cards[i].getBoundingClientRect());
+      }
+
+      // 2. Batch Write
+      for (let i = 0; i < totalCards; i++) {
+        const nextRect = rects[i + 1];
+        if (nextRect) {
+          const rect = rects[i];
           const cardHeight = rect.height || 290;
-          // Calculate overlap progress
           const overlap = Math.max(0, rect.bottom - nextRect.top);
           const progress = Math.min(1, Math.max(0, overlap / cardHeight));
-
-          // Scale down cards smoothly below subsequent cards
-          const maxScaleReduction = (totalCards - 1 - index) * 0.028;
+          const maxScaleReduction = (totalCards - 1 - i) * 0.028;
           const currentScale = 1 - progress * maxScaleReduction;
-
-          card.style.transform = `scale(${currentScale.toFixed(4)})`;
+          cards[i].style.transform = `scale(${currentScale.toFixed(4)})`;
         } else {
-          card.style.transform = 'scale(1)';
+          cards[i].style.transform = 'scale(1)';
         }
-      });
+      }
       isTicking = false;
     };
 
@@ -534,9 +536,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- Supabase Client Initialization ---------- */
+  /* ---------- Async Third-Party Script Loaders (On-Demand / Non-blocking) ---------- */
+  function loadScriptOnce(src, checkFn, callback) {
+    if (checkFn && checkFn()) {
+      if (callback) callback();
+      return;
+    }
+    let s = document.querySelector(`script[src="${src}"]`);
+    if (s) {
+      if (callback) s.addEventListener('load', callback, { once: true });
+      return;
+    }
+    s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    if (callback) s.onload = callback;
+    document.head.appendChild(s);
+  }
+
   let supabaseClient = null;
-  safeRun('supabase-init', () => {
+  function initSupabaseClient() {
+    if (supabaseClient) return;
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       const SUPABASE_URL = 'https://qfoziccqtyvnjxsjjmds.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_9bwM47LVotLdcmJDUCKwjQ_L5WUCmzT';
@@ -544,7 +564,36 @@ document.addEventListener('DOMContentLoaded', () => {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
     }
-  });
+  }
+
+  function ensureSupabase(callback) {
+    if (supabaseClient) {
+      if (callback) callback();
+      return;
+    }
+    if (window.supabase) {
+      initSupabaseClient();
+      if (callback) callback();
+      return;
+    }
+    loadScriptOnce('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', () => typeof window.supabase !== 'undefined', () => {
+      initSupabaseClient();
+      if (callback) callback();
+    });
+  }
+
+  function ensureTurnstile() {
+    loadScriptOnce('https://challenges.cloudflare.com/turnstile/v0/api.js', () => typeof window.turnstile !== 'undefined');
+  }
+
+  function ensureRazorpay(callback) {
+    if (typeof Razorpay !== 'undefined') {
+      if (callback) callback();
+      return;
+    }
+    if (window.__wizhyShowToast) window.__wizhyShowToast('Securing payment checkout...');
+    loadScriptOnce('https://checkout.razorpay.com/v1/checkout.js', () => typeof Razorpay !== 'undefined', callback);
+  }
 
   /* ---------- 13. Contact form validation + Supabase submission ---------- */
   safeRun('contact-form', () => {
@@ -554,10 +603,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmit = document.getElementById('btnSubmitContact');
     if (!form || !formSuccess) return;
 
-    // Initialize intl-tel-input on phone field
+    // Initialize intl-tel-input on phone field lazily
     const phoneInput = form.querySelector('#phone');
     let iti = null;
-    if (phoneInput && window.intlTelInput) {
+
+    function initPhoneIti() {
+      if (!phoneInput || iti || !window.intlTelInput) return;
       try {
         iti = window.intlTelInput(phoneInput, {
           initialCountry: 'in',
@@ -569,6 +620,32 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('[intl-tel-input] init note:', e);
       }
     }
+
+    function lazyLoadContactDependencies() {
+      ensureTurnstile();
+      ensureSupabase();
+      if (phoneInput && !iti) {
+        loadScriptOnce('https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js', () => typeof window.intlTelInput !== 'undefined', () => {
+          initPhoneIti();
+        });
+      }
+    }
+
+    // Lazy load when scrolling near contact section or when user interacts
+    const contactSection = document.getElementById('contact');
+    if (contactSection && 'IntersectionObserver' in window) {
+      const contactIO = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            lazyLoadContactDependencies();
+            contactIO.disconnect();
+          }
+        });
+      }, { rootMargin: '350px' });
+      contactIO.observe(contactSection);
+    }
+
+    form.addEventListener('focusin', () => lazyLoadContactDependencies(), { once: true });
 
     // Phone Validation (intl-tel-input + fallback)
     function validatePhone() {
@@ -1262,71 +1339,68 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!fab) return;
   });
 
-  /* ---------- 22. Razorpay Test Mode Checkout ---------- */
+  /* ---------- 22. Razorpay Test Mode Checkout (On-Demand) ---------- */
   safeRun('razorpay-checkout', () => {
     const btnPayAdvance = document.getElementById('btnPayAdvance');
     if (!btnPayAdvance) return;
 
     btnPayAdvance.addEventListener('click', () => {
-      if (typeof Razorpay === 'undefined') {
-        if (window.__wizhyShowToast) window.__wizhyShowToast('Payment gateway initializing... please check your connection.');
-        return;
-      }
+      ensureRazorpay(() => {
+        const options = {
+          key: 'rzp_test_placeholder', // Test Mode Key placeholder
+          amount: 500000, // ₹5,000 in paise
+          currency: 'INR',
+          name: 'Wizhy Web Studio (WWS)',
+          description: 'Project Advance / Retainer (Test Mode)',
+          image: 'https://web.wizhy.in/assets/og-image.jpg',
+          handler: function (response) {
+            const successMsg = '✓ Test Payment Successful! Payment ID: ' + response.razorpay_payment_id;
+            if (window.__wizhyShowToast) window.__wizhyShowToast(successMsg);
+            console.info(successMsg);
 
-      const options = {
-        key: 'rzp_test_placeholder', // Test Mode Key placeholder
-        amount: 500000, // ₹5,000 in paise
-        currency: 'INR',
-        name: 'Wizhy Web Studio (WWS)',
-        description: 'Project Advance / Retainer (Test Mode)',
-        image: 'https://web.wizhy.in/assets/og-image.jpg',
-        handler: function (response) {
-          const successMsg = '✓ Test Payment Successful! Payment ID: ' + response.razorpay_payment_id;
-          if (window.__wizhyShowToast) window.__wizhyShowToast(successMsg);
-          console.info(successMsg);
+            if (supabaseClient) {
+              supabaseClient.from('payments').insert([{
+                payment_id: response.razorpay_payment_id,
+                status: 'captured_test',
+                amount: 5000,
+                currency: 'INR'
+              }]).catch(() => {});
+            }
 
-          if (supabaseClient) {
-            supabaseClient.from('payments').insert([{
-              payment_id: response.razorpay_payment_id,
-              status: 'captured_test',
-              amount: 5000,
-              currency: 'INR'
-            }]).catch(() => {});
+            fetch('/wp-json/wizhy/v1/notify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'payment',
+                payment_id: response.razorpay_payment_id,
+                amount: '5,000',
+                currency: 'INR'
+              })
+            }).catch(() => {});
+          },
+          prefill: {
+            name: 'Prospective Client',
+            email: 'techwizhy@gmail.com',
+            contact: '9999999999'
+          },
+          notes: {
+            project: 'Website / SEO Retainer'
+          },
+          theme: {
+            color: '#B83A10'
           }
+        };
 
-          fetch('/wp-json/wizhy/v1/notify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'payment',
-              payment_id: response.razorpay_payment_id,
-              amount: '5,000',
-              currency: 'INR'
-            })
-          }).catch(() => {});
-        },
-        prefill: {
-          name: 'Prospective Client',
-          email: 'techwizhy@gmail.com',
-          contact: '9999999999'
-        },
-        notes: {
-          project: 'Website / SEO Retainer'
-        },
-        theme: {
-          color: '#C8481E'
+        try {
+          const rzp = new Razorpay(options);
+          rzp.on('payment.failed', function (response) {
+            if (window.__wizhyShowToast) window.__wizhyShowToast('Payment cancelled or test failed.');
+          });
+          rzp.open();
+        } catch (err) {
+          console.warn('[Wizhy Web Studio] Razorpay test trigger note:', err);
         }
-      };
-
-      try {
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-          if (window.__wizhyShowToast) window.__wizhyShowToast('Payment cancelled or test failed.');
-        });
-        rzp.open();
-      } catch (err) {
-        console.warn('[Wizhy Web Studio] Razorpay test trigger note:', err);
-      }
+      });
     });
   });
 
@@ -1683,8 +1757,12 @@ document.addEventListener('DOMContentLoaded', () => {
       initialAngle: 0.8
     });
 
+    let isSphereActive = false;
+    let sphereRafId = null;
     let lastTime = performance.now();
+
     function animate(now) {
+      if (!isSphereActive) return;
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
@@ -1692,9 +1770,30 @@ document.addEventListener('DOMContentLoaded', () => {
       if (sphere2) sphere2.render(dt);
       if (sphere3) sphere3.render(dt);
 
+      sphereRafId = requestAnimationFrame(animate);
+    }
+
+    const sphereContainer = document.getElementById('sphereCanvas1') ? (document.getElementById('sphereCanvas1').closest('.contact-experience-section') || document.getElementById('sphereCanvas1')) : null;
+    if (sphereContainer && 'IntersectionObserver' in window) {
+      const sphereIO = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!isSphereActive) {
+              isSphereActive = true;
+              lastTime = performance.now();
+              sphereRafId = requestAnimationFrame(animate);
+            }
+          } else {
+            isSphereActive = false;
+            if (sphereRafId) cancelAnimationFrame(sphereRafId);
+          }
+        });
+      }, { threshold: 0.05 });
+      sphereIO.observe(sphereContainer);
+    } else {
+      isSphereActive = true;
       requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
   });
 
   /* ---------- 25. Wizhy Studio AI Chat Assistant ---------- */
@@ -1709,6 +1808,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!fab || !win || !form || !input || !messagesEl) return;
 
+    // Ensure chat window starts with inert when closed
+    win.inert = true;
+
     const chatHistory = [];
 
     function scrollToBottom() {
@@ -1720,6 +1822,7 @@ document.addEventListener('DOMContentLoaded', () => {
       win.classList.toggle('open', isOpen);
       fab.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       win.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      win.inert = !isOpen;
       if (isOpen) {
         setTimeout(() => input.focus(), 250);
         scrollToBottom();
