@@ -15,7 +15,9 @@ Don't Touch/
 *.key
 id_rsa*
 wordpress-telegram-notifier.php
-*.php
+/*.php
+!wizhy-ag-theme/
+!wizhy-ag-theme/**
 
 # 2. Backups & Archive Packages (Kept locally on Windows only)
 irrelevant/

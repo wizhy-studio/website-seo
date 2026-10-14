@@ -1,0 +1,466 @@
+<?php
+/**
+ * Template Name: Cookie Policy Template
+ *
+ * @package Wizhy_AG_Theme
+ */
+?>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy | Wizhy Web Studio (WWS) — Transparency & User Choice</title>
+  <meta name="author" content="Wizhy Web Studio">
+  <meta name="theme-color" content="#C8481E">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Cookie Policy for Wizhy Web Studio (WWS). Understand the minimal, privacy-first cookies we use, how we protect your browsing data, and how to manage your cookie preferences.">
+  <link rel="canonical" href="https://web.wizhy.in/cookie-policy.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:site_name" content="Wizhy Web Studio (WWS)">
+  <meta property="og:title" content="Cookie Policy | Wizhy Web Studio (WWS) — Transparency & User Choice">
+  <meta property="og:description" content="Cookie Policy for Wizhy Web Studio (WWS). Understand how we use cookies and tracking technologies transparently to respect user privacy and enhance site performance.">
+  <meta property="og:url" content="https://web.wizhy.in/cookie-policy.html">
+  <meta property="og:image" content="https://web.wizhy.in/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Wizhy Web Studio">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cookie Policy | Wizhy Web Studio (WWS) — Transparency & User Choice">
+  <meta name="twitter:description" content="Cookie Policy for Wizhy Web Studio (WWS). Understand how we use cookies and tracking technologies transparently to respect user privacy and enhance site performance.">
+  <meta name="twitter:image" content="https://web.wizhy.in/assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="Wizhy Web Studio">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8481E'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='serif' font-size='20' font-weight='bold' fill='%23FFF'%3EW%3C/text%3E%3C/svg%3E">
+  
+  <!-- Critical Font Preloads -->
+  <link rel="preload" as="font" type="font/woff2" href="<?php echo get_template_directory_uri(); ?>/assets/fonts/instrument-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="<?php echo get_template_directory_uri(); ?>/assets/fonts/playfair-latin.woff2" crossorigin>
+  <!-- Local Fonts (Self-hosted WOFF2, Zero External CDN) -->
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/fonts.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/style.min.css">
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/chat.css">
+<?php wp_head(); ?>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <!-- Left: Glassmorphic Capsule Nav -->
+    <nav class="nav-pill" id="navPill" aria-label="Primary Navigation">
+      <a href="index.html#home" class="nav-link">Home</a>
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="index.html#pricing" class="nav-link">Pricing</a>
+      <a href="index.html#why-us" class="nav-link">Why Us</a>
+      <a href="index.html#process" class="nav-link">Process</a>
+      <a href="index.html#faq" class="nav-link">FAQ</a>
+      <a href="<?php echo home_url('/contact/'); ?>" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- Center: Brand Logo & Name -->
+    <a href="index.html#home" class="brand brand--center" aria-label="Wizhy Web Studio">
+      <span class="brand__mark">
+        <picture>
+          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.avif" type="image/avif">
+          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.webp" type="image/webp">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async">
+        </picture>
+      </span>
+      <span class="brand__text">Wizhy<em> Web Studio</em></span>
+    </a>
+
+    <!-- Right: Search Button + Free SEO Audit Button + Controls -->
+    <div class="navbar__actions">
+      <a href="index.html#seo-audit" class="nav-search-btn" aria-label="Search and Instant SEO Audit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="nav-search-btn__text">Search</span>
+      </a>
+
+      <a href="index.html#seo-audit" class="nav-audit-pill btn btn--primary btn--sm" aria-label="Run Free SEO Audit">
+        <span>Free SEO Audit</span>
+        <span class="btn__arrow">⚡</span>
+      </a>
+
+      <div class="theme-toggle-wrap">
+        <div class="theme-toggle" id="themeToggle" role="region" aria-label="Theme selector">
+          <div class="theme-toggle__active-icon" aria-hidden="true">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
+            <svg class="icon-coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+            <svg class="icon-icecream" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11c0-2.8 2.2-5 5-5s5 2.2 5 5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="m8.5 13 3.5 8 3.5-8"/></svg>
+          </div>
+          <div class="theme-toggle__options" role="radiogroup" aria-label="Select theme">
+            <button class="theme-opt-btn" type="button" data-set-theme="light" data-tooltip="Light" aria-label="Light theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+            </button>
+            <button class="theme-opt-btn" type="button" data-set-theme="dark" data-tooltip="Dark" aria-label="Dark theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
+            </button>
+            <button class="theme-opt-btn" type="button" data-set-theme="espresso" data-tooltip="Espresso" aria-label="Espresso theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+            </button>
+            <button class="theme-opt-btn" type="button" data-set-theme="lune" data-tooltip="Luné" aria-label="Luné theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11c0-2.8 2.2-5 5-5s5 2.2 5 5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="m8.5 13 3.5 8 3.5-8"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Quick Jump Bar -->
+  <div class="mobile-quick-bar" id="mobileQuickBar" aria-label="Mobile Quick Jump">
+    <div class="mobile-quick-bar__inner">
+      <a href="index.html#seo-audit" class="mobile-quick-chip mobile-quick-chip--highlight">⚡ Free Audit</a>
+      <a href="index.html#pricing" class="mobile-quick-chip mobile-quick-chip--highlight">🎁 Free Website</a>
+      <a href="index.html#services" class="mobile-quick-chip">Services</a>
+      <a href="index.html#pricing" class="mobile-quick-chip">Pricing</a>
+      <a href="index.html#why-us" class="mobile-quick-chip">Why Us</a>
+      <a href="index.html#process" class="mobile-quick-chip">Process</a>
+      <a href="index.html#faq" class="mobile-quick-chip">FAQ</a>
+      <a href="<?php echo home_url('/contact/'); ?>" class="mobile-quick-chip">Contact</a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#home" class="mobile-link">Home</a>
+  <a href="index.html#services" class="mobile-link">Services</a>
+  <a href="index.html#pricing" class="mobile-link">Pricing &amp; Free Offer</a>
+  <a href="index.html#why-us" class="mobile-link">Why Us</a>
+  <a href="index.html#process" class="mobile-link">Process</a>
+  <a href="index.html#faq" class="mobile-link">FAQ</a>
+  <a href="<?php echo home_url('/contact/'); ?>" class="mobile-link">Contact Us</a>
+  <a href="index.html#seo-audit" class="btn btn--primary btn--block">Free Instant SEO Audit <span class="btn__arrow">⚡</span></a>
+</div>
+
+<main>
+    <!-- Legal Hero -->
+    <section class="page-hero">
+      <div class="container text-center">
+        <div class="breadcrumbs">
+          <a href="<?php echo home_url('/'); ?>">Home</a>
+          <span>/</span>
+          <span>Legal</span>
+          <span>/</span>
+          <span class="current">Cookie Policy</span>
+        </div>
+        <h1 class="h1">Cookie <span class="text-serif">Policy.</span></h1>
+        <div class="legal-meta">
+          <span class="legal-badge">Transparency First</span>
+          <span>•</span>
+          <span>Last Updated: August 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Legal Layout -->
+    <section class="section pt-0">
+      <div class="container">
+        <div class="legal-layout">
+          
+          <!-- Sticky Table of Contents -->
+          <aside class="legal-sidebar">
+            <h4>Contents</h4>
+            <nav class="legal-nav-list">
+              <a href="#what-are-cookies" class="legal-nav-link active">1. What Are Cookies?</a>
+              <a href="#cookies-we-use" class="legal-nav-link">2. Cookies We Use</a>
+              <a href="#cookie-table" class="legal-nav-link">3. Cookie Breakdown</a>
+              <a href="#managing-cookies" class="legal-nav-link">4. Managing Preferences</a>
+              <a href="#browser-controls" class="legal-nav-link">5. Browser Controls</a>
+              <a href="#policy-updates" class="legal-nav-link">6. Updates & Contact</a>
+            </nav>
+          </aside>
+
+          <!-- Legal Document Body -->
+          <article class="legal-article">
+            <h2 id="what-are-cookies">1. What Are Cookies?</h2>
+                    Cookies are small text files placed on your device (computer, tablet, or mobile phone) when you visit a website. They allow the website to recognize your device, remember your preferences (such as dark/light theme choices), and understand how you interact with our pages to deliver a smoother, faster experience.
+            </p>
+            <p>
+              At <strong>Wizhy Web Studio (WWS)</strong> (<a href="https://web.wizhy.in">web.wizhy.in</a>), we prioritize your digital privacy. We keep cookie usage to an absolute minimum and never deploy invasive tracking pixels or cross-site behavioral ad trackers.
+            </p>
+
+            <h2 id="cookies-we-use">2. Categories of Cookies We Use</h2>
+            
+            <div class="policy-card-grid">
+              <div class="policy-mini-card">
+                <h4>🛡️ Essential Cookies</h4>
+                <p style="color:var(--text-secondary);font-size:0.88rem;">Strictly necessary for the website to function securely. They remember your cookie consent preferences and dark/light color mode preference. These cannot be disabled.</p>
+              </div>
+              <div class="policy-mini-card">
+                <h4>📊 Analytics Cookies</h4>
+                <p style="color:var(--text-secondary);font-size:0.88rem;">Anonymous aggregate statistics via Google Analytics to help us understand which case studies and services are most useful, measure page load speeds, and optimize user experience.</p>
+              </div>
+            </div>
+
+            <h2 id="cookie-table">3. Detailed Cookie Breakdown</h2>
+            <div style="overflow-x:auto;margin:24px 0;">
+              <table style="width:100%;border-collapse:collapse;font-size:0.9rem;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+                <thead>
+                  <tr style="background:var(--surface-2);text-align:left;border-bottom:1.5px solid var(--border);">
+                    <th style="padding:14px 16px;">Cookie Name</th>
+                    <th style="padding:14px 16px;">Type</th>
+                    <th style="padding:14px 16px;">Duration</th>
+                    <th style="padding:14px 16px;">Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:12px 16px;font-family:var(--font-mono);font-size:0.85rem;color:var(--accent-1);">wizhy_theme</td>
+                    <td style="padding:12px 16px;">Essential</td>
+                    <td style="padding:12px 16px;">1 Year</td>
+                    <td style="padding:12px 16px;color:var(--text-secondary);">Remembers your dark / light theme preference.</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:12px 16px;font-family:var(--font-mono);font-size:0.85rem;color:var(--accent-1);">wizhy_cookie_consent</td>
+                    <td style="padding:12px 16px;">Essential</td>
+                    <td style="padding:12px 16px;">6 Months</td>
+                    <td style="padding:12px 16px;color:var(--text-secondary);">Records your cookie banner consent acceptance or dismissal.</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px 16px;font-family:var(--font-mono);font-size:0.85rem;color:var(--accent-1);">_ga / _ga_*</td>
+                    <td style="padding:12px 16px;">Analytics</td>
+                    <td style="padding:12px 16px;">2 Years</td>
+                    <td style="padding:12px 16px;color:var(--text-secondary);">Google Analytics anonymous visit count & performance telemetry (IP anonymized).</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="managing-cookies">4. How to Manage Your Cookie Consent</h2>
+            <p>
+              When you first visit Wizhy Web Studio, you are presented with our floating cookie banner after scrolling past the hero section. You have complete control to:
+            </p>
+            <ul>
+              <li><strong>Accept:</strong> Enables anonymous analytics to help us measure site performance and Core Web Vitals.</li>
+              <li><strong>Decline:</strong> Blocks all non-essential analytics cookies while preserving essential site navigation and theme switching.</li>
+            </ul>
+
+            <div class="policy-callout">
+              <h4>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Resetting Your Preferences
+              </h4>
+              <p>
+                You can clear cookies at any time from your browser settings. The consent banner will reappear on your next visit, allowing you to choose again.
+              </p>
+            </div>
+
+            <h2 id="browser-controls">5. Browser Controls & Disabling Cookies</h2>
+            <p>
+              Most modern web browsers allow you to manage or block cookies through their settings:
+            </p>
+            <ul>
+              <li><strong>Google Chrome:</strong> Settings → Privacy and security → Third-party cookies.</li>
+              <li><strong>Mozilla Firefox:</strong> Settings → Privacy & Security → Enhanced Tracking Protection.</li>
+              <li><strong>Apple Safari:</strong> Preferences → Privacy → Block all cookies.</li>
+              <li><strong>Microsoft Edge:</strong> Settings → Cookies and site permissions → Manage and delete cookies.</li>
+            </ul>
+
+            <h2 id="policy-updates">6. Policy Updates & Official Contact</h2>
+            <p>
+              We may update this Cookie Policy periodically to reflect technological improvements or regulatory updates under the DPDP Act. For questions regarding our cookie practices:
+            </p>
+            <ul>
+              <li><strong>Entity:</strong> Wizhy Web Studio</li>
+              <li><strong>Email:</strong> <a href="mailto:techwizhy@gmail.com">techwizhy@gmail.com</a></li>
+              <li><strong>Location:</strong> Chennai, Tamil Nadu, India</li>
+              <li><strong>Official Website:</strong> <a href="https://web.wizhy.in">https://web.wizhy.in</a></li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <!-- Col 1: Brand & Socials & Newsletter -->
+    <div class="footer__col footer__col--brand">
+      <a href="index.html#home" class="brand brand--footer" aria-label="Wizhy Web Studio"><span class="brand__mark"><img src="<?php echo get_template_directory_uri(); ?>/assets/wizhy-studio-logo.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" decoding="async"></span><span class="brand__text">Wizhy<em> Web Studio</em></span></a>
+      <p class="footer__tagline">Websites that don't just look good — they get found, rank on Google, and grow your business.</p>
+      
+      <div class="social-icons">
+        <a class="social-icon" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a class="social-icon" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a class="social-icon" href="#" aria-label="X (Twitter)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+        <a class="social-icon" href="#" aria-label="Behance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h5a3 3 0 0 1 0 6H3V8z"/><path d="M3 14h5.5a3.5 3.5 0 0 1 0 7H3v-7z"/><path d="M14 13h7a3.5 3.5 0 0 0-7 0v2a3.5 3.5 0 0 0 7 0"/><line x1="15" y1="8" x2="20" y2="8"/></svg></a>
+        <a class="social-icon" href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+      </div>
+
+      <p class="footer__cta-text" style="margin-top:20px;margin-bottom:8px;">Get our free website checklist &amp; growth tips:</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <label for="newsletterEmail" style="position:absolute;left:-9999px;">Email address</label>
+        <input type="email" id="newsletterEmail" name="newsletterEmail" placeholder="you@business.com" required autocomplete="email">
+        <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
+      </form>
+      <p class="newsletter-success" id="newsletterSuccess">✓ You're subscribed — welcome aboard!</p>
+    </div>
+
+    <!-- Col 2: Direct Contact Details (Point 3: Icon Speaks, No Redundant Label Words + Official WhatsApp Icon) -->
+    <div class="footer__col footer__col--contact">
+      <h4>Contact Details</h4>
+      <div class="footer-contact-list">
+        <a class="footer-contact-item" href="mailto:techwizhy@gmail.com" title="Email Us">
+          <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg></span>
+          <span>techwizhy@gmail.com</span>
+        </a>
+        <a class="footer-contact-item" href="https://wa.me/919870706956" target="_blank" rel="noopener" title="WhatsApp Us">
+          <span class="footer-contact-icon footer-contact-icon--wa"><svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.11 7.44C8.94 7.44 8.68 7.5 8.46 7.74C8.24 7.97 7.6 8.57 7.6 9.79C7.6 11 8.5 12.18 8.63 12.35C8.75 12.52 10.36 15 12.83 16.07C13.41 16.33 13.87 16.48 14.23 16.59C14.82 16.78 15.35 16.75 15.77 16.69C16.24 16.62 17.22 16.1 17.43 15.52C17.63 14.94 17.63 14.43 17.57 14.33C17.51 14.23 17.36 14.16 17.11 14.04C16.86 13.92 15.63 13.31 15.4 13.23C15.17 13.14 15.01 13.1 14.84 13.35C14.67 13.6 14.2 14.16 14.06 14.33C13.91 14.5 13.77 14.52 13.52 14.4C13.27 14.27 12.47 14.01 11.53 13.17C10.8 12.52 10.3 11.71 10.16 11.46C10.01 11.21 10.14 11.08 10.27 10.95C10.38 10.84 10.52 10.65 10.65 10.5C10.77 10.35 10.81 10.24 10.89 10.07C10.97 9.91 10.93 9.77 10.87 9.64C10.81 9.5 10.3 8.26 10.09 7.75C9.89 7.27 9.68 7.33 9.52 7.33C9.37 7.33 9.27 7.44 9.11 7.44Z"/></svg></span>
+          <span>+91 98707 06956</span>
+        </a>
+        <div class="footer-contact-item" title="Office Location">
+          <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span>Chennai, India</span>
+        </div>
+        <div class="footer-contact-item" title="Operating Hours">
+          <span class="footer-contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span>Mon – Sun, 9 AM – 10 PM IST</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Col 3: Quick Links -->
+    <div class="footer__col">
+      <h4>Quick Links</h4>
+      <a href="index.html#home">Home</a>
+      <a href="index.html#services">Services</a>`n      <a href="index.html#pricing">Pricing & Free Offer</a>
+      <a href="index.html#why-us">Why Us</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#testimonials">Testimonials</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="<?php echo home_url('/contact/'); ?>">Contact Us</a>
+    </div>
+
+    <!-- Col 4: Start a Project (Without "Available for Q3/Q4 Projects" - Point 2) -->
+    <div class="footer__col footer__col--cta">
+      <div class="footer-cta-card">
+        <h4>Start a Project</h4>
+        <p class="footer__cta-text">Have an ambitious project in mind? Let's turn it into a high-performing, high-ranking website.</p>
+        <div class="footer-cta-perks">
+          <span>⚡ 24hr Custom Quote</span>
+          <span>🔒 Zero Obligation</span>
+        </div>
+        <a href="<?php echo home_url('/contact/'); ?>" class="btn btn--primary btn--block btn--sm">Get a Custom Quote <span class="btn__arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legal & Compliance Bar (Points 2 & 6: 1-Line Desktop Layout, No Registration Text) -->
+  <div class="container">
+    <div class="footer-compliance-bar">
+      <span class="footer-compliance-copy">© <span id="year"></span> Wizhy Web Studio. All rights reserved.</span>
+      <span class="footer-compliance-divider">•</span>
+      <div class="footer-compliance-links">
+        <a href="<?php echo home_url('/privacy-policy/'); ?>">Privacy Policy</a>
+        <a href="<?php echo home_url('/terms/'); ?>">Terms &amp; Conditions</a>
+        <a href="<?php echo home_url('/refund-policy/'); ?>">Refund Policy</a>
+        <a href="<?php echo home_url('/cookie-policy/'); ?>">Cookie Policy</a>
+        <a href="<?php echo home_url('/delivery-policy/'); ?>">Service Delivery Policy</a>
+        <a href="<?php echo home_url('/contact/'); ?>">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ WHATSAPP FAB ============ -->
+<a href="https://wa.me/919870706956" target="_blank" rel="noopener" class="whatsapp-fab" id="whatsappFab" aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-5.9c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+</a>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+<div class="toast" id="toast"></div>
+
+<!-- ============ WIZAI CHAT ASSISTANT ============ -->
+<button class="wizhy-chat-fab" id="wizhyChatFab" aria-label="Open WizAI Assistant" aria-expanded="false">
+  <div class="wizhy-chat-fab__icon-wrap">
+    <span class="wizhy-avatar-fallback">WA</span>
+    <picture class="wizhy-avatar-pic">
+      <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizai-avatar-sm.webp" type="image/webp">
+      <img src="<?php echo get_template_directory_uri(); ?>/assets/wizai-avatar.png" alt="WizAI Logo" width="28" height="28" loading="lazy" decoding="async" onerror="if(this.closest)this.closest('.wizhy-avatar-pic').style.display='none';else this.style.display='none';">
+    </picture>
+    <span class="wizhy-chat-fab__status-dot"></span>
+  </div>
+  <span class="wizhy-chat-fab__label">Ask WizAI</span>
+</button>
+
+<div class="wizhy-chat-window" id="wizhyChatWindow" role="dialog" aria-label="WizAI Strategist Chat" aria-hidden="true" inert>
+  <div class="wizhy-chat-header">
+    <div class="wizhy-chat-header__info">
+      <div class="wizhy-chat-header__avatar">
+        <span class="wizhy-avatar-fallback">WizAI</span>
+        <picture class="wizhy-avatar-pic">
+          <source srcset="<?php echo get_template_directory_uri(); ?>/assets/wizai-avatar-sm.webp" type="image/webp">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/wizai-avatar.png" alt="WizAI Logo" width="38" height="38" loading="lazy" decoding="async" onerror="if(this.closest)this.closest('.wizhy-avatar-pic').style.display='none';else this.style.display='none';">
+        </picture>
+      </div>
+      <div class="wizhy-chat-header__titles">
+        <span class="wizhy-chat-header__name">WizAI</span>
+        <span class="wizhy-chat-header__status">Online</span>
+      </div>
+    </div>
+    <button class="wizhy-chat-header__close" id="wizhyChatClose" aria-label="Close Chat">✕</button>
+  </div>
+
+  <div class="wizhy-chat-messages" id="wizhyChatMessages">
+    <div class="wizhy-msg wizhy-msg--bot">
+      <div class="wizhy-msg__bubble">
+        Hi there! 👋 I am <strong>WizAI</strong>, your AI assistant at <strong>Wizhy Web Studio</strong>.<br><br>
+        Looking to claim our <strong>Free Website Offer</strong>, explore pricing packages, or run a free SEO audit? How can I help you today?
+      </div>
+      <span class="wizhy-msg__time">Just now</span>
+    </div>
+  </div>
+
+  <!-- Quick Suggestion Prompts -->
+  <div class="wizhy-chat-suggestions" id="wizhyChatSuggestions">
+    <button class="wizhy-chat-chip" data-prompt="Tell me about the First 10 Free Website offer!">🎁 Free Website Offer</button>
+    <button class="wizhy-chat-chip" data-prompt="What are your website packages & pricing?">💰 Website Packages</button>
+    <button class="wizhy-chat-chip" data-prompt="How does your 100/100 Google Lighthouse guarantee work?">⚡ 100/100 Speed</button>
+    <button class="wizhy-chat-chip" data-prompt="I want to discuss my project with you!">📞 Contact Team</button>
+  </div>
+
+  <div class="wizhy-chat-footer">
+    <form class="wizhy-chat-input-bar" id="wizhyChatForm">
+      <input type="text" class="wizhy-chat-input" id="wizhyChatInput" placeholder="Ask about websites, pricing, SEO..." autocomplete="off">
+      <button type="submit" class="wizhy-chat-send" id="wizhyChatSend" aria-label="Send Message">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </form>
+    <p class="wizhy-chat-badge">WizAI can make mistakes, so double-check it.</p>
+  </div>
+</div>
+
+<!-- ============ COOKIE CONSENT BANNER ============ -->
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie consent">
+  <div class="cookie-banner__content">
+    <span class="cookie-banner__icon" aria-hidden="true">🍪</span>
+    <p class="cookie-banner__text"><strong>We respect your privacy.</strong> We use minimal cookies to enhance speed and understand site usage anonymously. Learn more in our <a href="<?php echo home_url('/cookie-policy/'); ?>" style="color:var(--accent-1);text-decoration:underline;">Cookie Policy</a>.</p>
+  </div>
+  <div class="cookie-banner__actions">
+    <button class="btn btn--ghost btn--sm" id="cookieReject">Decline</button>
+    <button class="btn btn--primary btn--sm" id="cookieAccept">Accept</button>
+  </div>
+</div>
+
+<script src="<?php echo get_template_directory_uri(); ?>/js/script.min.js?v=4.4" defer></script>
+<?php wp_footer(); ?>
+</body>
+</html>
