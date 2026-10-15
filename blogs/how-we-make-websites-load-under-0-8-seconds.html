@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How We Make Client Websites Load Under 0.8s (And Score 100/100) | Wizhy Web Studio</title>
+  <meta name="author" content="Wizhy Web Studio">
+  <meta name="theme-color" content="#C8481E">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="A deep dive into sub-second asset delivery, AVIF/WebP image pipelines, critical CSS inlining, and why zero-framework vanilla builds beat heavy stacks.">
+  <link rel="canonical" href="https://web.wizhy.in/blogs/how-we-make-websites-load-under-0-8-seconds.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:site_name" content="Wizhy Web Studio">
+  <meta property="og:title" content="How We Make Client Websites Load Under 0.8s (And Score 100/100)">
+  <meta property="og:description" content="A deep dive into sub-second asset delivery, AVIF/WebP image pipelines, critical CSS inlining, and why zero-framework vanilla builds beat heavy stacks.">
+  <meta property="og:url" content="https://web.wizhy.in/blogs/how-we-make-websites-load-under-0-8-seconds.html">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How We Make Client Websites Load Under 0.8s (And Score 100/100)">
+  <meta name="twitter:description" content="A deep dive into sub-second asset delivery, AVIF/WebP image pipelines, critical CSS inlining, and why zero-framework vanilla builds beat heavy stacks.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8481E'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='serif' font-size='20' font-weight='bold' fill='%23FFF'%3EW%3C/text%3E%3C/svg%3E">
+
+  <!-- Critical Font Preloads -->
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/instrument-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/playfair-latin.woff2" crossorigin>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/style.min.css">
+  <link rel="stylesheet" href="../css/chat.css">
+  <link rel="stylesheet" href="../css/blog.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('wizhy-theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <nav class="nav-pill" id="navPill" aria-label="Primary Navigation">
+      <a href="../index.html#home" class="nav-link">Home</a>
+      <a href="../index.html#services" class="nav-link">Services</a>
+      <a href="../index.html#pricing" class="nav-link">Pricing</a>
+      <a href="../index.html#why-us" class="nav-link">Why Us</a>
+      <a href="../blog.html" class="nav-link active">Blog</a>
+      <a href="../contact.html" class="nav-link">Contact</a>
+    </nav>
+
+    <a href="../index.html#home" class="brand brand--center" aria-label="Wizhy Web Studio">
+      <span class="brand__mark">
+        <picture>
+          <source srcset="../assets/wizhy-studio-logo-sm.avif" type="image/avif">
+          <source srcset="../assets/wizhy-studio-logo-sm.webp" type="image/webp">
+          <img src="../assets/wizhy-studio-logo-sm.png" alt="Wizhy Logo" class="brand__logo" width="38" height="38">
+        </picture>
+      </span>
+      <span class="brand__text">Wizhy<em> Web Studio</em></span>
+    </a>
+
+    <div class="navbar__actions">
+      <a href="../index.html#seo-audit" class="nav-audit-pill btn btn--primary btn--sm">
+        <span>Free SEO Audit</span>
+        <span class="btn__arrow">⚡</span>
+      </a>
+
+      <!-- Theme Switcher -->
+      <div class="theme-toggle-wrap">
+        <div class="theme-toggle" id="themeToggle" role="region" aria-label="Theme selector">
+          <div class="theme-toggle__active-icon" aria-hidden="true">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
+            <svg class="icon-coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+            <svg class="icon-icecream" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 11c0-2.8 2.2-5 5-5s5 2.2 5 5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="m8.5 13 3.5 8 3.5-8"/></svg>
+          </div>
+          <div class="theme-toggle__options" role="radiogroup" aria-label="Select theme">
+            <button class="theme-opt-btn" type="button" data-set-theme="light" title="Light" aria-label="Light"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="dark" title="Dark" aria-label="Dark"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="espresso" title="Espresso" aria-label="Espresso"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="lune" title="Luné" aria-label="Luné"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ARTICLE CONTENT ============ -->
+<main id="main-content">
+  <article>
+    
+    <!-- Post Header -->
+    <header class="post-article-header">
+      <div class="container">
+        
+        <!-- Breadcrumb -->
+        <nav class="post-breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">Home</a>
+          <span>/</span>
+          <a href="../blog.html">Blog</a>
+          <span>/</span>
+          <span>Performance</span>
+        </nav>
+
+        <span class="blog-featured-badge">Performance</span>
+        <h1 class="post-title">How We Make Client Websites Load Under 0.8s (And Score 100/100)</h1>
+
+        <div class="post-meta-row">
+          <div class="post-meta-author">
+            <img class="post-meta-avatar" src="../assets/wizai-avatar-sm.webp" alt="Wizhy Dev Team">
+            <strong>Wizhy Dev Team</strong>
+          </div>
+          <span>•</span>
+          <time datetime="2026-10-15">Oct 15, 2026</time>
+          <span>•</span>
+          <span>5 min read</span>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Featured Cover Image -->
+    <div class="container">
+      <div class="post-cover-wrap">
+        <img class="post-cover-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Website speed analytics dashboard" loading="eager">
+      </div>
+    </div>
+
+    <!-- Article Content -->
+    <div class="container">
+      <div class="post-content-container">
+
+        <!-- Key Takeaways Callout -->
+        <div class="post-callout">
+          <p><strong>💡 Key Takeaways:</strong> Every 100ms delay in website load time costs up to 7% in conversions. By eliminating heavy JavaScript bundles, utilizing modern image compression (AVIF &amp; WebP), and inlining critical CSS, we achieve sub-second speeds on every client build.</p>
+        </div>
+
+        <p class="lead-text" style="font-size:1.2rem;font-weight:500;line-height:1.7;color:var(--text-primary);">
+          When a potential client clicks your Google link or ad, you have less than 2 seconds before their patience runs out. If your page stutters, layout shifts, or takes 4+ seconds to display content, over half of your visitors will bounce before seeing your offer.
+        </p>
+
+        <h2>1. The Problem With Modern Web Development</h2>
+        <p>
+          Over 90% of business websites created today are built on bloated frameworks or WordPress page builders that load 3MB to 8MB of unnecessary scripts. A visitor just wants to read about your services and fill a contact form, but their mobile device is forced to download 15 separate tracking scripts, huge font libraries, and uncompressed JPEG files.
+        </p>
+
+        <h2>2. Our 4-Pillar Speed Architecture</h2>
+        <p>
+          At Wizhy Web Studio, we take a different approach. Every website is engineered for speed from day one:
+        </p>
+
+        <ul>
+          <li><strong>Zero-Bloat Vanilla Core:</strong> We write clean, native HTML, CSS, and modern JavaScript without dragging 400KB of React or jQuery runtime dependencies into the browser.</li>
+          <li><strong>AVIF &amp; WebP Responsive Formats:</strong> Images are compressed automatically using Sharp into modern formats with exact srcset dimensions, slashing image payloads by over 75%.</li>
+          <li><strong>Self-Hosted WOFF2 Typography:</strong> We eliminate external Google Font DNS round-trips by serving optimized, subsetted WOFF2 files directly from our CDN.</li>
+          <li><strong>Strict Interaction to Next Paint (INP) Defense:</strong> Non-essential scripts are deferred or lazily executed only when the user interacts, keeping the main thread completely idle.</li>
+        </ul>
+
+        <h2>3. The Measurable Business Outcome</h2>
+        <p>
+          By achieving sub-0.8s load times and a perfect 100/100 score on Google Lighthouse, client bounce rates drop by an average of 42%, organic search rankings climb faster, and mobile conversions surge.
+        </p>
+
+        <!-- Social Share Bar -->
+        <div class="post-share-bar">
+          <span style="font-weight:700;font-size:0.95rem;">Share this article:</span>
+          <div style="display:flex;gap:10px;">
+            <a href="https://wa.me/?text=Check%20out%20this%20speed%20guide%20from%20Wizhy:%20https://web.wizhy.in/blogs/how-we-make-websites-load-under-0-8-seconds.html" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">WhatsApp</a>
+            <a href="https://twitter.com/intent/tweet?url=https://web.wizhy.in/blogs/how-we-make-websites-load-under-0-8-seconds.html&text=How%20to%20make%20websites%20load%20under%200.8s" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://web.wizhy.in/blogs/how-we-make-websites-load-under-0-8-seconds.html" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">LinkedIn</a>
+          </div>
+        </div>
+
+        <!-- Author Bio Box -->
+        <div class="post-author-box">
+          <img src="../assets/wizai-avatar-sm.webp" alt="Wizhy Dev Team" style="width:56px;height:56px;border-radius:50%;object-fit:cover;">
+          <div>
+            <h4 style="font-size:1.1rem;margin-bottom:4px;">Written by Wizhy Dev Team</h4>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">Performance architects and web engineers at Wizhy Web Studio. Obsessed with sub-second speeds and conversion rate optimization.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </article>
+
+  <!-- CTA Box Before Footer -->
+  <section class="section section--alt" style="padding:60px 0;">
+    <div class="container text-center" style="max-width:680px;margin:0 auto;">
+      <h3 style="font-family:var(--font-display);font-size:2rem;margin-bottom:12px;">Want a website that loads this fast and ranks?</h3>
+      <p style="color:var(--text-secondary);margin-bottom:24px;">Claim one of our 10 Free Custom Website spots or run an instant SEO audit.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="../index.html#pricing" class="btn btn--primary">Claim Free Website Offer 🎁</a>
+        <a href="../contact.html" class="btn btn--ghost">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__col footer__col--brand">
+      <a href="../index.html#home" class="brand brand--footer">
+        <span class="brand__text">Wizhy<em> Web Studio</em></span>
+      </a>
+      <p class="footer__tagline">Websites that don't just look good — they get found, rank on Google, and grow your business.</p>
+    </div>
+
+    <div class="footer__col">
+      <h4>Quick Links</h4>
+      <a href="../index.html#home">Home</a>
+      <a href="../index.html#services">Services</a>
+      <a href="../index.html#pricing">Pricing</a>
+      <a href="../blog.html">Blog &amp; Resources</a>
+      <a href="../contact.html">Contact Us</a>
+    </div>
+
+    <div class="footer__col footer__col--contact">
+      <h4>Contact Details</h4>
+      <p>techwizhy@gmail.com</p>
+      <p>+91 98707 06956</p>
+      <p>Chennai, India</p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p>&copy; 2026 Wizhy Web Studio. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/script.min.js" defer></script>
+</body>
+</html>

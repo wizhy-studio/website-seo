@@ -23,6 +23,8 @@ wordpress-telegram-notifier.php
 irrelevant/
 irrelevant/**
 *.zip
+scratch/
+scratch/**
 Archive/
 Archive/**
 Archive_zip/

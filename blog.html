@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog &amp; Resources | Wizhy Web Studio — Insights on Web Speed, Design &amp; SEO</title>
+  <meta name="author" content="Wizhy Web Studio">
+  <meta name="theme-color" content="#C8481E">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Explore technical breakdowns, SEO frameworks, Core Web Vitals optimization, and conversion strategies from the engineers at Wizhy Web Studio.">
+  <link rel="canonical" href="https://web.wizhy.in/blog.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:site_name" content="Wizhy Web Studio">
+  <meta property="og:title" content="Blog &amp; Resources | Wizhy Web Studio">
+  <meta property="og:description" content="Explore technical breakdowns, SEO frameworks, Core Web Vitals optimization, and conversion strategies from Wizhy Web Studio.">
+  <meta property="og:url" content="https://web.wizhy.in/blog.html">
+  <meta property="og:image" content="https://web.wizhy.in/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blog &amp; Resources | Wizhy Web Studio">
+  <meta name="twitter:description" content="Explore technical breakdowns, SEO frameworks, Core Web Vitals optimization, and conversion strategies from Wizhy Web Studio.">
+  <meta name="twitter:image" content="https://web.wizhy.in/assets/og-image.jpg">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8481E'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='serif' font-size='20' font-weight='bold' fill='%23FFF'%3EW%3C/text%3E%3C/svg%3E">
+
+  <!-- Critical Font Preloads -->
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/instrument-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/playfair-latin.woff2" crossorigin>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="css/blog.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('wizhy-theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <!-- Left: Navigation Links -->
+    <nav class="nav-pill" id="navPill" aria-label="Primary Navigation">
+      <a href="index.html#home" class="nav-link">Home</a>
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="index.html#pricing" class="nav-link">Pricing</a>
+      <a href="index.html#why-us" class="nav-link">Why Us</a>
+      <a href="index.html#process" class="nav-link">Process</a>
+      <a href="index.html#faq" class="nav-link">FAQ</a>
+      <a href="blog.html" class="nav-link active">Blog</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- Center: Brand Logo & Name -->
+    <a href="index.html#home" class="brand brand--center" aria-label="Wizhy Web Studio">
+      <span class="brand__mark">
+        <picture>
+          <source srcset="assets/wizhy-studio-logo-sm.avif" type="image/avif">
+          <source srcset="assets/wizhy-studio-logo-sm.webp" type="image/webp">
+          <img src="assets/wizhy-studio-logo-sm.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" fetchpriority="high">
+        </picture>
+      </span>
+      <span class="brand__text">Wizhy<em> Web Studio</em></span>
+    </a>
+
+    <!-- Right: Controls & CTAs -->
+    <div class="navbar__actions">
+      <a href="index.html#seo-audit" class="nav-search-btn" aria-label="Instant SEO Audit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="nav-search-btn__text">Search</span>
+      </a>
+
+      <a href="index.html#seo-audit" class="nav-audit-pill btn btn--primary btn--sm">
+        <span>Free SEO Audit</span>
+        <span class="btn__arrow">⚡</span>
+      </a>
+
+      <!-- Theme Switcher -->
+      <div class="theme-toggle-wrap">
+        <div class="theme-toggle" id="themeToggle" role="region" aria-label="Theme selector">
+          <div class="theme-toggle__active-icon" aria-hidden="true">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
+            <svg class="icon-coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+            <svg class="icon-icecream" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 11c0-2.8 2.2-5 5-5s5 2.2 5 5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="m8.5 13 3.5 8 3.5-8"/></svg>
+          </div>
+          <div class="theme-toggle__options" role="radiogroup" aria-label="Select theme">
+            <button class="theme-opt-btn" type="button" data-set-theme="light" title="Light" aria-label="Light"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="dark" title="Dark" aria-label="Dark"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="espresso" title="Espresso" aria-label="Espresso"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="lune" title="Luné" aria-label="Luné"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Quick Bar -->
+  <div class="mobile-quick-bar" id="mobileQuickBar" aria-label="Mobile Quick Jump">
+    <div class="mobile-quick-bar__inner">
+      <a href="index.html#pricing" class="mobile-quick-chip mobile-quick-chip--highlight">🎁 Free Website</a>
+      <a href="index.html#services" class="mobile-quick-chip">Services</a>
+      <a href="index.html#pricing" class="mobile-quick-chip">Pricing</a>
+      <a href="blog.html" class="mobile-quick-chip active" style="color:var(--accent-1);font-weight:700;">Blog</a>
+      <a href="contact.html" class="mobile-quick-chip">Contact</a>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu Drawer -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#home" class="mobile-link">Home</a>
+  <a href="index.html#services" class="mobile-link">Services</a>
+  <a href="index.html#pricing" class="mobile-link">Pricing &amp; Free Offer</a>
+  <a href="index.html#why-us" class="mobile-link">Why Us</a>
+  <a href="index.html#process" class="mobile-link">Process</a>
+  <a href="index.html#faq" class="mobile-link">FAQ</a>
+  <a href="blog.html" class="mobile-link active" style="color:var(--accent-1);font-weight:700;">Blog &amp; Resources</a>
+  <a href="contact.html" class="mobile-link">Contact</a>
+  <a href="index.html#seo-audit" class="btn btn--primary btn--block">Run Free Audit ⚡</a>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<main id="main-content">
+
+  <!-- Hero Header (Matches Image 2) -->
+  <header class="blog-hub-header">
+    <div class="container">
+      <span class="blog-hub-header__badge">Read Our Blog</span>
+      <h1 class="blog-hub-header__title">Browse Our Resources</h1>
+      <p class="blog-hub-header__subtitle">We provide tips, technical speed benchmarks, and growth frameworks from industry leaders. For real.</p>
+    </div>
+  </header>
+
+  <!-- 2-Column Hub Layout (Matches Image 2) -->
+  <div class="container">
+    <div class="blog-hub-layout">
+      
+      <!-- LEFT SIDEBAR: Search, Sort & Category Filter Navigation -->
+      <aside class="blog-hub-sidebar" id="blogSidebar">
+        
+        <!-- Search Widget -->
+        <div class="blog-sidebar-widget">
+          <label for="blogSearchInput" class="blog-sidebar-label">Search Article</label>
+          <div class="blog-search-box">
+            <svg class="blog-search-box__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="blogSearchInput" class="blog-search-box__input" placeholder="Search keywords..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Sort / Filter Dropdown -->
+        <div class="blog-sidebar-widget">
+          <label for="blogSortSelect" class="blog-sidebar-label">Filter &amp; Sort</label>
+          <select id="blogSortSelect" class="blog-filter-select">
+            <option value="newest">Most Recent</option>
+            <option value="oldest">Oldest First</option>
+            <option value="read-time">Quick Reads (&lt; 5 min)</option>
+          </select>
+        </div>
+
+        <!-- Browse By Categories -->
+        <div class="blog-sidebar-widget">
+          <span class="blog-sidebar-label">Browse By Categories</span>
+          <nav class="blog-cat-list" id="blogCategoryList" aria-label="Blog categories">
+            <!-- Dynamically populated by blog-hub.js -->
+          </nav>
+        </div>
+
+      </aside>
+
+      <!-- RIGHT MAIN CONTENT: Featured Post Hero + 2-Column Grid -->
+      <section class="blog-hub-main" aria-label="Blog Articles">
+        
+        <!-- Top: Large Featured Article Card (Matches Image 2 Hero Card) -->
+        <div id="blogFeaturedContainer"></div>
+
+        <!-- Bottom: 2-Column Grid of Blog Cards (Matches Image 2 Grid) -->
+        <div class="blog-articles-grid" id="blogGridContainer"></div>
+
+        <!-- Pagination Controls -->
+        <div class="blog-pagination" id="blogPagination"></div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Free Checklist / Newsletter Band -->
+  <section class="section section--alt" style="padding:60px 0;">
+    <div class="container text-center" style="max-width:680px;margin:0 auto;">
+      <h3 style="font-family:var(--font-display);font-size:1.8rem;margin-bottom:12px;">Get practical website checklists in your inbox</h3>
+      <p style="color:var(--text-secondary);margin-bottom:24px;">The 40-point technical launch checklist our developers use before every client go-live.</p>
+      <form class="newsletter-form" id="newsletterForm" style="max-width:440px;margin:0 auto;">
+        <label for="newsletterEmail" class="visually-hidden" style="position:absolute;left:-9999px;">Email address</label>
+        <input type="email" id="newsletterEmail" name="newsletterEmail" placeholder="you@business.com" required autocomplete="email">
+        <button type="submit" class="btn btn--primary btn--sm">Get PDF</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__col footer__col--brand">
+      <a href="index.html#home" class="brand brand--footer" aria-label="Wizhy Web Studio">
+        <span class="brand__mark">
+          <picture>
+            <source srcset="assets/wizhy-studio-logo-sm.avif" type="image/avif">
+            <source srcset="assets/wizhy-studio-logo-sm.webp" type="image/webp">
+            <img src="assets/wizhy-studio-logo-sm.png" alt="Wizhy Web Studio Logo" class="brand__logo" width="38" height="38" loading="lazy">
+          </picture>
+        </span>
+        <span class="brand__text">Wizhy<em> Web Studio</em></span>
+      </a>
+      <p class="footer__tagline">Websites that don't just look good — they get found, rank on Google, and grow your business.</p>
+    </div>
+
+    <div class="footer__col footer__col--contact">
+      <h4>Contact Details</h4>
+      <div class="footer-contact-list">
+        <a class="footer-contact-item" href="mailto:techwizhy@gmail.com">
+          <span>techwizhy@gmail.com</span>
+        </a>
+        <a class="footer-contact-item" href="https://wa.me/919870706956" target="_blank" rel="noopener">
+          <span>+91 98707 06956</span>
+        </a>
+        <div class="footer-contact-item">
+          <span>Chennai, India</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__col">
+      <h4>Quick Links</h4>
+      <a href="index.html#home">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#pricing">Pricing &amp; Free Offer</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="blog.html">Blog &amp; Resources</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+
+    <div class="footer__col footer__col--cta">
+      <div class="footer-cta-card">
+        <h4>Start a Project</h4>
+        <p class="footer__cta-text">Have an ambitious project in mind? Let's turn it into a high-performing website.</p>
+        <a href="contact.html" class="btn btn--primary btn--sm" style="margin-top:12px;">Get a Custom Quote</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p>&copy; 2026 Wizhy Web Studio. All rights reserved.</p>
+      <div class="footer__legal">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/blog-data.js" defer></script>
+<script src="js/blog-hub.js" defer></script>
+<script src="js/script.min.js" defer></script>
+</body>
+</html>

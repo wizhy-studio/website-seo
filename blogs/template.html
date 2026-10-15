@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{POST_TITLE}} | Wizhy Web Studio</title>
+  <meta name="author" content="Wizhy Web Studio">
+  <meta name="theme-color" content="#C8481E">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="{{POST_EXCERPT}}">
+  <link rel="canonical" href="https://web.wizhy.in/blogs/{{POST_SLUG}}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:site_name" content="Wizhy Web Studio">
+  <meta property="og:title" content="{{POST_TITLE}}">
+  <meta property="og:description" content="{{POST_EXCERPT}}">
+  <meta property="og:url" content="https://web.wizhy.in/blogs/{{POST_SLUG}}">
+  <meta property="og:image" content="{{POST_IMAGE}}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{POST_TITLE}}">
+  <meta name="twitter:description" content="{{POST_EXCERPT}}">
+  <meta name="twitter:image" content="{{POST_IMAGE}}">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8481E'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='serif' font-size='20' font-weight='bold' fill='%23FFF'%3EW%3C/text%3E%3C/svg%3E">
+
+  <!-- Critical Font Preloads -->
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/instrument-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/playfair-latin.woff2" crossorigin>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/style.min.css">
+  <link rel="stylesheet" href="../css/chat.css">
+  <link rel="stylesheet" href="../css/blog.css">
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('wizhy-theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <nav class="nav-pill" id="navPill" aria-label="Primary Navigation">
+      <a href="../index.html#home" class="nav-link">Home</a>
+      <a href="../index.html#services" class="nav-link">Services</a>
+      <a href="../index.html#pricing" class="nav-link">Pricing</a>
+      <a href="../index.html#why-us" class="nav-link">Why Us</a>
+      <a href="../blog.html" class="nav-link active">Blog</a>
+      <a href="../contact.html" class="nav-link">Contact</a>
+    </nav>
+
+    <a href="../index.html#home" class="brand brand--center" aria-label="Wizhy Web Studio">
+      <span class="brand__mark">
+        <picture>
+          <source srcset="../assets/wizhy-studio-logo-sm.avif" type="image/avif">
+          <source srcset="../assets/wizhy-studio-logo-sm.webp" type="image/webp">
+          <img src="../assets/wizhy-studio-logo-sm.png" alt="Wizhy Logo" class="brand__logo" width="38" height="38">
+        </picture>
+      </span>
+      <span class="brand__text">Wizhy<em> Web Studio</em></span>
+    </a>
+
+    <div class="navbar__actions">
+      <a href="../index.html#seo-audit" class="nav-audit-pill btn btn--primary btn--sm">
+        <span>Free SEO Audit</span>
+        <span class="btn__arrow">⚡</span>
+      </a>
+
+      <!-- Theme Switcher -->
+      <div class="theme-toggle-wrap">
+        <div class="theme-toggle" id="themeToggle" role="region" aria-label="Theme selector">
+          <div class="theme-toggle__active-icon" aria-hidden="true">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
+            <svg class="icon-coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+            <svg class="icon-icecream" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 11c0-2.8 2.2-5 5-5s5 2.2 5 5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="m8.5 13 3.5 8 3.5-8"/></svg>
+          </div>
+          <div class="theme-toggle__options" role="radiogroup" aria-label="Select theme">
+            <button class="theme-opt-btn" type="button" data-set-theme="light" title="Light"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="dark" title="Dark"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="espresso" title="Espresso"></button>
+            <button class="theme-opt-btn" type="button" data-set-theme="lune" title="Luné"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ARTICLE CONTENT ============ -->
+<main id="main-content">
+  <article>
+    
+    <!-- Post Header -->
+    <header class="post-article-header">
+      <div class="container">
+        
+        <!-- Breadcrumb -->
+        <nav class="post-breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">Home</a>
+          <span>/</span>
+          <a href="../blog.html">Blog</a>
+          <span>/</span>
+          <span>{{POST_CATEGORY}}</span>
+        </nav>
+
+        <span class="blog-featured-badge">{{POST_CATEGORY}}</span>
+        <h1 class="post-title">{{POST_TITLE}}</h1>
+
+        <div class="post-meta-row">
+          <div class="post-meta-author">
+            <img class="post-meta-avatar" src="../assets/wizai-avatar-sm.webp" alt="Author avatar">
+            <strong>{{AUTHOR_NAME}}</strong>
+          </div>
+          <span>•</span>
+          <time datetime="{{POST_ISO_DATE}}">{{POST_DATE}}</time>
+          <span>•</span>
+          <span>{{POST_READ_TIME}}</span>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Featured Cover Image -->
+    <div class="container">
+      <div class="post-cover-wrap">
+        <img class="post-cover-img" src="{{POST_IMAGE}}" alt="{{POST_TITLE}}" loading="eager">
+      </div>
+    </div>
+
+    <!-- Article Content -->
+    <div class="container">
+      <div class="post-content-container">
+
+        <!-- Key Takeaways Callout -->
+        <div class="post-callout">
+          <p><strong>💡 Key Takeaways:</strong> {{POST_KEY_TAKEAWAY}}</p>
+        </div>
+
+        <p class="lead-text" style="font-size:1.2rem;font-weight:500;line-height:1.7;color:var(--text-primary);">
+          {{POST_LEAD_PARAGRAPH}}
+        </p>
+
+        <h2>1. The Problem With Most Approaches</h2>
+        <p>
+          Write your first section breakdown here. Explain why typical websites struggle with this issue, what common pitfalls occur, and how they negatively impact business growth.
+        </p>
+
+        <h2>2. Our Proven Step-by-Step Methodology</h2>
+        <p>
+          Detail your actionable advice, code techniques, design principles, or technical workflows.
+        </p>
+
+        <ul>
+          <li><strong>Point 1:</strong> First crucial insight or action step.</li>
+          <li><strong>Point 2:</strong> Second actionable technique with measurable outcome.</li>
+          <li><strong>Point 3:</strong> Final optimization rule.</li>
+        </ul>
+
+        <h2>3. Key Results &amp; Real-World Impact</h2>
+        <p>
+          Summarize the benefits: speed improvements, conversion lifts, or higher search rankings.
+        </p>
+
+        <!-- Social Share Bar -->
+        <div class="post-share-bar">
+          <span style="font-weight:700;font-size:0.95rem;">Share this article:</span>
+          <div style="display:flex;gap:10px;">
+            <a href="https://wa.me/?text={{POST_SHARE_URL}}" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">WhatsApp</a>
+            <a href="https://twitter.com/intent/tweet?url={{POST_SHARE_URL}}&text={{POST_TITLE}}" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{POST_SHARE_URL}}" target="_blank" rel="noopener" class="btn btn--ghost btn--sm">LinkedIn</a>
+          </div>
+        </div>
+
+        <!-- Author Bio Box -->
+        <div class="post-author-box">
+          <img src="../assets/wizai-avatar-sm.webp" alt="Author" style="width:56px;height:56px;border-radius:50%;object-fit:cover;">
+          <div>
+            <h4 style="font-size:1.1rem;margin-bottom:4px;">Written by {{AUTHOR_NAME}}</h4>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">Engineer &amp; strategist at Wizhy Web Studio. Building lightning-fast websites that rank on Google and convert visitors.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </article>
+
+  <!-- CTA Box Before Footer -->
+  <section class="section section--alt" style="padding:60px 0;">
+    <div class="container text-center" style="max-width:680px;margin:0 auto;">
+      <h3 style="font-family:var(--font-display);font-size:2rem;margin-bottom:12px;">Want a website that loads this fast and ranks?</h3>
+      <p style="color:var(--text-secondary);margin-bottom:24px;">Claim one of our 10 Free Custom Website spots or run an instant SEO audit.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="../index.html#pricing" class="btn btn--primary">Claim Free Website Offer 🎁</a>
+        <a href="../contact.html" class="btn btn--ghost">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__col footer__col--brand">
+      <a href="../index.html#home" class="brand brand--footer">
+        <span class="brand__text">Wizhy<em> Web Studio</em></span>
+      </a>
+      <p class="footer__tagline">Websites that don't just look good — they get found, rank on Google, and grow your business.</p>
+    </div>
+
+    <div class="footer__col">
+      <h4>Quick Links</h4>
+      <a href="../index.html#home">Home</a>
+      <a href="../index.html#services">Services</a>
+      <a href="../index.html#pricing">Pricing</a>
+      <a href="../blog.html">Blog &amp; Resources</a>
+      <a href="../contact.html">Contact Us</a>
+    </div>
+
+    <div class="footer__col footer__col--contact">
+      <h4>Contact Details</h4>
+      <p>techwizhy@gmail.com</p>
+      <p>+91 98707 06956</p>
+      <p>Chennai, India</p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p>&copy; 2026 Wizhy Web Studio. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/script.min.js" defer></script>
+</body>
+</html>

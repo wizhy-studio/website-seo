@@ -205,9 +205,11 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Serve static files
+  // Serve static files (with clean URL support e.g. /blog -> blog.html)
   let filePath = path.join(__dirname, url.pathname === '/' ? 'index.html' : url.pathname);
-  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+  if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {
+    filePath = filePath + '.html';
+  } else if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
     filePath = path.join(__dirname, 'index.html');
   }
 
