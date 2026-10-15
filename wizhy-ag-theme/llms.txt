@@ -22,6 +22,8 @@ Wizhy Web Studio (WWS) designs, engineers, and scales high-performance digital e
 
 ## Key Pages & Documentation
 - [Home Page](https://web.wizhy.in/): Overview of services, tech stack, bento grid showcase, instant free SEO audit tool, and client reviews.
+- [Blog Hub](https://web.wizhy.in/blog-hub/): Wizhy Web Studio Blog Hub page.
+- [Blog](https://web.wizhy.in/blog/): Wizhy Web Studio Blog page.
 - [Contact & Project Consultation](https://web.wizhy.in/contact/): Direct quote inquiries, consultation booking, and project kickoff.
 - [Cookie Policy](https://web.wizhy.in/cookie-policy/): Privacy, analytical speed tracking, and anonymous usage details.
 - [Delivery Policy](https://web.wizhy.in/delivery-policy/): Turnaround timelines, staging review, and live handover procedures.
