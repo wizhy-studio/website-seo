@@ -22,12 +22,12 @@ Wizhy Web Studio (WWS) designs, engineers, and scales high-performance digital e
 
 ## Key Pages & Documentation
 - [Home Page](https://web.wizhy.in/): Overview of services, tech stack, bento grid showcase, instant free SEO audit tool, and client reviews.
-- [Contact & Consultation](https://web.wizhy.in/contact/): Direct booking, custom quote requests, and instant project kickoff.
-- [Cookie Policy](https://web.wizhy.in/cookie-policy/): Privacy and cookie compliance.
-- [Privacy Policy](https://web.wizhy.in/privacy-policy/): GDPR and data protection compliance.
-- [Terms & Conditions](https://web.wizhy.in/terms/): Transparent contract, licensing, and client rights.
-- [Refund Policy](https://web.wizhy.in/refund-policy/): Clear milestone-based satisfaction guarantee.
-- [Delivery Policy](https://web.wizhy.in/delivery-policy/): Timelines, staging review, and live handover procedures.
+- [Contact & Project Consultation](https://web.wizhy.in/contact/): Direct quote inquiries, consultation booking, and project kickoff.
+- [Cookie Policy](https://web.wizhy.in/cookie-policy/): Privacy, analytical speed tracking, and anonymous usage details.
+- [Delivery Policy](https://web.wizhy.in/delivery-policy/): Turnaround timelines, staging review, and live handover procedures.
+- [Privacy Policy](https://web.wizhy.in/privacy-policy/): GDPR and user data protection commitments.
+- [Refund Policy](https://web.wizhy.in/refund-policy/): Transparent milestone-based satisfaction and refund policies.
+- [Terms & Conditions](https://web.wizhy.in/terms/): Service contracts, IP ownership, and licensing terms.
 
 ## Core Services & Capabilities
 - **Bespoke UI/UX Design**: Modern, responsive design with micro-interactions, dark/light/espresso themes, and mobile-first typography.
