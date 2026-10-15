@@ -180,6 +180,7 @@
 <!-- Primary Stylesheet (Preloaded for 1.1s FCP & 0 CLS) -->
 <link rel="preload" href="<?php echo get_template_directory_uri(); ?>/css/style.min.css?v=5.0" as="style">
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/style.min.css?v=5.0">
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/blog.css">
 
 <!-- Asynchronously Loaded Stylesheets (Zero render blocking) -->
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/chat.css" media="print" onload="this.media='all'">
@@ -234,6 +235,7 @@
       <a href="#why-us" class="nav-link">Why Us</a>
       <a href="#process" class="nav-link">Process</a>
       <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#blog" class="nav-link">Blog</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
 
@@ -307,6 +309,7 @@
       <a href="#why-us" class="mobile-quick-chip">Why Us</a>
       <a href="#process" class="mobile-quick-chip">Process</a>
       <a href="#faq" class="mobile-quick-chip">FAQ</a>
+      <a href="#blog" class="mobile-quick-chip">Blog</a>
       <a href="#contact" class="mobile-quick-chip">Contact</a>
     </div>
   </div>
@@ -320,6 +323,7 @@
   <a href="#process" class="mobile-link">Process</a>
   <a href="#testimonials" class="mobile-link">Testimonials</a>
   <a href="#faq" class="mobile-link">FAQ</a>
+  <a href="#blog" class="mobile-link">Blog &amp; Insights</a>
   <a href="#contact" class="mobile-link">Contact</a>
   <a href="#seo-audit" class="btn btn--primary btn--block">Run Free Audit ⚡</a>
 </div>
@@ -1426,6 +1430,9 @@
   </div>
 </section>
 
+<!-- ============ BLOG & INSIGHTS (IMAGE 1 LAYOUT) ============ -->
+<?php get_template_part('template-parts/section-blog-showcase'); ?>
+
 <!-- ============ CTA BAND ============ -->
 <section class="cta-band">
   <div class="cta-band__marquee" aria-hidden="true">GROW&nbsp;&nbsp;•&nbsp;&nbsp;RANK&nbsp;&nbsp;•&nbsp;&nbsp;CONVERT&nbsp;&nbsp;•&nbsp;&nbsp;REPEAT&nbsp;&nbsp;•&nbsp;&nbsp;GROW&nbsp;&nbsp;•&nbsp;&nbsp;RANK&nbsp;&nbsp;•&nbsp;&nbsp;CONVERT&nbsp;&nbsp;•&nbsp;&nbsp;REPEAT&nbsp;&nbsp;•</div>
@@ -1775,6 +1782,7 @@
       <a href="index.html#process">Process</a>
       <a href="index.html#testimonials">Testimonials</a>
       <a href="index.html#faq">FAQ</a>
+      <a href="<?php echo home_url('/blog/'); ?>">Blog &amp; Insights</a>
       <a href="<?php echo home_url('/contact/'); ?>">Contact Us</a>
     </div>
 
