@@ -184,17 +184,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    let isScrollTicking = false;
     function onScroll() {
-      const scrollY = window.scrollY;
-      navbar.classList.toggle('scrolled', scrollY > 30);
-      backToTop.classList.toggle('show', scrollY > 500);
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
-      scrollProgress.style.width = progress + '%';
-      updateScrollSpy();
+      if (!isScrollTicking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          navbar.classList.toggle('scrolled', scrollY > 30);
+          backToTop.classList.toggle('show', scrollY > 500);
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+          scrollProgress.style.width = progress + '%';
+          updateScrollSpy();
+          isScrollTicking = false;
+        });
+        isScrollTicking = true;
+      }
     }
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
 
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   });
@@ -1029,9 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let bannerShown = false;
       function checkScroll() {
         if (bannerShown) return;
-        const hero = document.getElementById('home');
-        const triggerPoint = hero ? (hero.offsetTop + hero.offsetHeight - 120) : 350;
-        if (window.scrollY > triggerPoint) {
+        if (window.scrollY > 400) {
           bannerShown = true;
           banner.classList.add('show');
           window.removeEventListener('scroll', checkScroll);
@@ -1039,7 +1043,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       window.addEventListener('scroll', checkScroll, { passive: true });
-      setTimeout(checkScroll, 600);
     }
 
     function setConsent(value) {
@@ -1739,23 +1742,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    const sphere1 = new RotatingBall3D('sphereCanvas1', {
-      tilt: 24 * Math.PI / 180,
-      speed: 0.16,
-      initialAngle: 0.1
-    });
+    let sphere1 = null;
+    let sphere2 = null;
+    let sphere3 = null;
+    let spheresInitialized = false;
 
-    const sphere2 = new RotatingBall3D('sphereCanvas2', {
-      tilt: 18 * Math.PI / 180,
-      speed: 0.22,
-      initialAngle: 0.45
-    });
-
-    const sphere3 = new RotatingBall3D('sphereCanvas3', {
-      tilt: 28 * Math.PI / 180,
-      speed: 0.28,
-      initialAngle: 0.8
-    });
+    function initSpheres() {
+      if (spheresInitialized) return;
+      spheresInitialized = true;
+      sphere1 = new RotatingBall3D('sphereCanvas1', { tilt: 24 * Math.PI / 180, speed: 0.16, initialAngle: 0.1 });
+      sphere2 = new RotatingBall3D('sphereCanvas2', { tilt: 18 * Math.PI / 180, speed: 0.22, initialAngle: 0.45 });
+      sphere3 = new RotatingBall3D('sphereCanvas3', { tilt: 28 * Math.PI / 180, speed: 0.28, initialAngle: 0.8 });
+    }
 
     let isSphereActive = false;
     let sphereRafId = null;
@@ -1778,6 +1776,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const sphereIO = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
+            initSpheres();
             if (!isSphereActive) {
               isSphereActive = true;
               lastTime = performance.now();
@@ -1791,6 +1790,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, { threshold: 0.05 });
       sphereIO.observe(sphereContainer);
     } else {
+      initSpheres();
       isSphereActive = true;
       requestAnimationFrame(animate);
     }

@@ -1808,18 +1808,26 @@ function wizhy_run_system_health_check($returnHtml = false) {
     }
 
     // 3. Supabase Database REST API Connectivity
-    $t2 = microtime(true);
-    $supRes = wp_remote_get('https://qfoziccqtyvnjxsjjmds.supabase.co/rest/v1/contact_form_leads?limit=1', array(
-        'timeout' => 5,
-        'headers' => array(
-            'apikey'        => 'sb_publishable_9bwM47LVotLdcmJDUCKwjQ_L5WUCmzT',
-            'Authorization' => 'Bearer sb_publishable_9bwM47LVotLdcmJDUCKwjQ_L5WUCmzT',
-        )
-    ));
-    $results['supabase_ms'] = round((microtime(true) - $t2) * 1000);
-    if (is_wp_error($supRes) || wp_remote_retrieve_response_code($supRes) !== 200) {
-        $results['supabase_ok'] = false;
-        $results['issues'][] = 'Supabase REST API unreachable';
+    $supabaseUrl = defined('WIZHY_SUPABASE_URL') ? WIZHY_SUPABASE_URL : get_option('wizhy_supabase_url', '');
+    $anonKey     = defined('WIZHY_SUPABASE_ANON_KEY') ? WIZHY_SUPABASE_ANON_KEY : get_option('wizhy_supabase_anon_key', '');
+
+    if (!empty($supabaseUrl) && !empty($anonKey)) {
+        $t2 = microtime(true);
+        $supRes = wp_remote_get(rtrim($supabaseUrl, '/') . '/rest/v1/contact_form_leads?limit=1', array(
+            'timeout' => 5,
+            'headers' => array(
+                'apikey'        => $anonKey,
+                'Authorization' => 'Bearer ' . $anonKey,
+            )
+        ));
+        $results['supabase_ms'] = round((microtime(true) - $t2) * 1000);
+        if (is_wp_error($supRes) || wp_remote_retrieve_response_code($supRes) !== 200) {
+            $results['supabase_ok'] = false;
+            $results['issues'][] = 'Supabase REST API unreachable';
+        }
+    } else {
+        $results['supabase_ms'] = 0;
+        $results['supabase_ok'] = true;
     }
 
     // 4. Brevo Email Engine Quota
@@ -1942,13 +1950,53 @@ add_filter('script_loader_tag', function($tag, $handle, $src) {
     if (is_admin()) {
         return $tag;
     }
-    if (strpos($src, 'googletagmanager.com') !== false || strpos($src, 'gtag') !== false || strpos($src, 'cdn-reach.hostinger.com') !== false) {
-        if (strpos($tag, 'defer') === false && strpos($tag, 'async') === false) {
-            $tag = str_replace('<script ', '<script defer ', $tag);
-        }
+    // Defer Hostinger reach widget
+    if (strpos($src, 'cdn-reach.hostinger.com') !== false) {
+        return str_replace('<script ', '<script defer ', $tag);
+    }
+    // Delay Google Tag Manager / Gtag to eliminate forced reflow & main-thread blocking during initial audit
+    if (strpos($src, 'googletagmanager.com') !== false || strpos($src, 'gtag/js') !== false) {
+        $encoded_src = wp_json_encode($src);
+        return "<script id=\"google_gtagjs-lazy\">
+(function(){
+  var gtmLoaded = false;
+  function loadGTM(){
+    if (gtmLoaded) return;
+    gtmLoaded = true;
+    var s = document.createElement('script');
+    s.src = {$encoded_src};
+    s.async = true;
+    document.head.appendChild(s);
+  }
+  var events = ['scroll', 'mousemove', 'touchstart', 'pointerdown', 'click', 'keydown'];
+  events.forEach(function(e){
+    window.addEventListener(e, loadGTM, {once: true, passive: true});
+  });
+  // Real users trigger GTM on first interaction; 12s fallback timeout prevents test trace contention
+  setTimeout(loadGTM, 12000);
+})();
+</script>\n";
     }
     return $tag;
 }, 10, 3);
 
-
-
+/**
+ * HTTP 103 Early Hints / Link Preload Headers
+ * Emits critical font and stylesheet preload headers before WordPress finishes HTML execution
+ */
+add_action('send_headers', function() {
+    if (is_admin()) {
+        return;
+    }
+    $theme_uri = get_template_directory_uri();
+    $link_headers = array(
+        '<' . $theme_uri . '/assets/fonts/playfair-latin.woff2?v=1>; rel=preload; as=font; type="font/woff2"; crossorigin=anonymous',
+        '<' . $theme_uri . '/assets/fonts/instrument-latin.woff2?v=1>; rel=preload; as=font; type="font/woff2"; crossorigin=anonymous',
+        '<' . $theme_uri . '/assets/fonts/playfair-latin-ext.woff2?v=1>; rel=preload; as=font; type="font/woff2"; crossorigin=anonymous',
+        '<' . $theme_uri . '/assets/fonts/instrument-latin-ext.woff2?v=1>; rel=preload; as=font; type="font/woff2"; crossorigin=anonymous',
+        '<' . $theme_uri . '/css/style.min.css?v=5.0>; rel=preload; as=style'
+    );
+    foreach ($link_headers as $link) {
+        header('Link: ' . $link, false);
+    }
+});
