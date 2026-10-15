@@ -1,0 +1,39 @@
+# Wizhy Web Studio (WWS)
+
+> Premium bespoke web design, lightning-fast web development, and technical SEO agency. Guaranteed 100/100 Google PageSpeed score, zero layout shift (0 CLS), and sub-second Largest Contentful Paint (LCP).
+
+## About Wizhy Web Studio
+Wizhy Web Studio (WWS) designs, engineers, and scales high-performance digital experiences for modern businesses, e-commerce brands, and startups worldwide. Every project is built from scratch with zero template bloat, bespoke UX architecture, and technical SEO natively engineered into every line of code.
+
+- **Website**: https://web.wizhy.in/
+- **Email**: techwizhy@gmail.com
+- **Phone / WhatsApp**: +91-98707-06956
+- **Operating Hours**: Mon - Sun, 09:00 - 22:00 IST
+- **Location**: Mumbai / Remote, India (Serving Global Clients)
+- **Primary Guarantee**: 100/100 Google Lighthouse Core Web Vitals Guarantee on mobile & desktop.
+
+## Special Offers
+- **First 10 Free Websites**: 100% free custom 1-page business website for selected growing businesses in exchange for an honest testimonial and Google review. Includes full custom design, mobile responsiveness, fast hosting setup, and technical SEO.
+
+## Pricing Packages
+- **Single Page Starter**: ₹999 / $29 — Perfect for local businesses, portfolios, single-service landing pages, and lead capture. Delivered in 3-5 business days.
+- **Multi-Page Growth**: ₹2,499 / $69 — Full 4-6 page business website (Home, About, Services, Pricing, Case Studies, Contact). Full SEO audit & on-page keyword targeting included.
+- **Full Business / Custom Web App / E-Commerce**: ₹4,999 / $139 — Advanced store or dynamic platform with payment gateways (Razorpay, Stripe), CMS integration, schema markup, and speed optimization.
+
+## Key Pages & Documentation
+- [Home Page](https://web.wizhy.in/): Overview of services, tech stack, bento grid showcase, instant free SEO audit tool, and client reviews.
+- [Contact & Consultation](https://web.wizhy.in/contact/): Direct booking, custom quote requests, and instant project kickoff.
+- [Cookie Policy](https://web.wizhy.in/cookie-policy/): Privacy and cookie compliance.
+- [Privacy Policy](https://web.wizhy.in/privacy-policy/): GDPR and data protection compliance.
+- [Terms & Conditions](https://web.wizhy.in/terms/): Transparent contract, licensing, and client rights.
+- [Refund Policy](https://web.wizhy.in/refund-policy/): Clear milestone-based satisfaction guarantee.
+- [Delivery Policy](https://web.wizhy.in/delivery-policy/): Timelines, staging review, and live handover procedures.
+
+## Core Services & Capabilities
+- **Bespoke UI/UX Design**: Modern, responsive design with micro-interactions, dark/light/espresso themes, and mobile-first typography.
+- **Technical SEO & Structured Data**: Native Schema.org (ProfessionalService, FAQPage, Service, AggregateRating), semantic HTML5, zero render blocking, automatic sitemaps.
+- **Core Web Vitals Engineering**: Sub-second FCP/LCP, 0.000 CLS, <20ms TBT, HTTP/3, and Brotli compression.
+- **Custom Integrations**: Payment gateways, AI Assistant widgets, automated lead pipelines via Telegram/Email alerts.
+
+## AI Assistant
+Wizhy Web Studio features an embedded AI assistant, **WizAI**, accessible on the website for instant quotes, package recommendations, and FAQ handling.
